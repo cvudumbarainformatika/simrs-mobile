@@ -1,55 +1,44 @@
-import { View, Text, SafeAreaView, Image, ScrollView, StyleSheet } from 'react-native'
-import React from 'react'
+import { View, Text, SafeAreaView, Image, ScrollView, StyleSheet, TouchableOpacity, Alert } from 'react-native'
+import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { LinearGradient } from "expo-linear-gradient";
 import tw from '../constants/tw'
+
+
 import AppInput from '../components/~global/AppInput';
+import AppBtn from '../components/~global/AppBtn';
+import AppLoader from '../components/~global/AppLoader';
 
 const LoginScreen = (props) => {
-
+  // STATE
   const navigation = useNavigation()
-  return (
-    // <SafeAreaView>
-    //   <View className="bg-white min-h-full flex flex-col">
-    //     <View className="">
-    //       <LinearGradient
-    //           colors={[tw.color('secondary'), tw.color('primary')]}
-    //           start={{ x: 1, y: 0 }}
-    //           end={{x:1,y:1}}
-    //           className="h-64 w-full rounded-tl-[180px] rounded-br-[160px] inset-0 flex justify-center items-center ">
-    //           <Image
-    //               className="w-16 h-16 mb-2"
-    //               source={require("../assets/static/logo-rsud.png")}
-    //           />
-    //           <Text className="text-white">UOBK RSUD MOHAMMAD SALEH</Text>
-    //           <Text className="text-white font-bold text-xl">SIMRS</Text>
-    //           <Text className="text-white text-xs">Sistem Informasi Management Rumah Sakit</Text>
-    //       </LinearGradient>
-    //     </View>
-    //     <View className="flex-grow justify-center items-center">
-    //       <View style={tw`p-4 bg-white w-full`}>
-    //         <AppInput icon="email" placeholder="Email" />
-    //         <AppInput icon="email" placeholder="Email" />
-    //       </View>
-    //     </View>
-    //     <View className="bg-secondary h-24 rounded-tl-full overflow-hidden left-72">
-    //       <LinearGradient className="h-24 ring-warning ring-inset"
-    //           colors={[tw.color('secondary'), tw.color('primary')]}
-    //           start={{ x: 1, y: 0 }}
-    //           end={{x:1,y:0.9}}
-    //       />
-    //     </View>
-    //   </View>
-    // </SafeAreaView>
+  const [loading, setLoading] = useState(false)
 
+
+
+  // METHODE
+  const login = () => {
+    setLoading(true)
+    setTimeout(() => {
+      Alert.alert('Success','Success Brooo')
+      setLoading(false)
+    }, 3000)
+  }
+
+  const registerClicked = () => {
+    navigation.navigate('Register')
+  }
+
+  return (
     <View style={styles.container}>
+      <AppLoader visible={loading} />
       <View style={styles.parentContainer}>
         <LinearGradient
           colors={[tw.color('secondary'), tw.color('primary')]}
           start={{ x: 1, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={styles.topPlace}>
-          <View style={tw`flex-1 justify-center items-center pt-8`}>
+          <View style={tw`flex-1 justify-center items-center pt-4`}>
             <Image
                 className="w-16 h-16 mb-2"
                 source={require("../assets/static/logo-rsud.png")}
@@ -59,16 +48,44 @@ const LoginScreen = (props) => {
             <Text className="text-white text-xs">Sistem Informasi Management Rumah Sakit</Text>
           </View>
         </LinearGradient>
+        <LinearGradient 
+          style={styles.bottomPlace}
+          colors={[tw.color('secondary'), tw.color('primary')]}
+          start={{ x: 1, y: 0 }}
+          end={{x:1,y:0.9}}
+        />
+
+        <View className="flex-1 items-center  absolute bottom-32 w-full">
+          <View style={tw`w-full p-8`}>
+            <View style={tw.style('items-center')}>
+              <Text style={tw.style(' text-gray-dark pb-4')}>Silahkan Anda Login Terlebih dahulu</Text>
+            </View>
+            <AppInput icon="email" placeholder="Email" />
+            <AppInput icon="key" placeholder="Password" password />
+
+            <AppBtn label="Login" width="w-full" margin="mt-8"
+                clicked={() => {
+                    login();
+                }}
+            />
+
+            <View style={tw`flex-row items-center justify-center pt-8`}>
+              <Text style={tw.style('text-xs text-gray-dark')}>Belum Punya Akun? </Text>
+              <TouchableOpacity onPress={registerClicked}>
+                <Text style={tw.style('text-xs text-primary')}> Register disini</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          
+        </View>
       </View>
-    </View>
-    
+      </View>
   )
 }
 
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      justifyContent: 'center',
     },
   
   parentContainer: {
@@ -87,7 +104,7 @@ const styles = StyleSheet.create({
 
   topPlace: {
     borderBottomLeftRadius: 180,
-    borderTopRightRadius:180,
+    borderBottomRightRadius:180,
     width: '100%',
     height: 300,
     position: "absolute",
@@ -96,13 +113,13 @@ const styles = StyleSheet.create({
     overflow: 'hidden'
   },
   bottomPlace: {
-    borderBottomLeftRadius: 180,
-    borderTopRightRadius:180,
+    borderTopLeftRadius: 98/100 * 390,
+    borderTopLeftRadius:180,
     width: '100%',
-    height: 300,
+    height: 100,
     position: "absolute",
-    top: 0,
-    right: 0,
+    bottom: 0,
+    left: '70%',
     overflow: 'hidden'
   }
   });

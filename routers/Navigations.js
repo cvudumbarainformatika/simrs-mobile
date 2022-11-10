@@ -6,6 +6,7 @@ import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/
 
 import HomeScreen from '../screens/HomeScreen';
 import LoginScreen from '../screens/LoginScreen';
+import RegisterScreen from '../screens/RegisterScreen';
 
 // TRANSITIONS =======================
 const config = {
@@ -45,10 +46,12 @@ const LoginNavigator = () => {
       <LoginStack.Navigator
           screenOptions={{
             gestureEnabled: true,
-            headerShown:false
+            headerShown: false,
+            gestureDirection: 'horizontal',
         }}
       >
-      <LoginStack.Screen name="LoginScreen" component={LoginScreen} />
+      <LoginStack.Screen name="Login" component={LoginScreen} options={transition} />
+      <LoginStack.Screen name="Register" component={RegisterScreen} options={transition} />
     </LoginStack.Navigator>
   )
 }
