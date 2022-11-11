@@ -55,7 +55,7 @@ const LoginScreen = (props) => {
           end={{x:1,y:0.9}}
         />
 
-        <View className="flex-1 items-center  absolute bottom-32 w-full">
+        <View className="flex-1 items-center  absolute bottom-16 w-full">
           <View style={tw`w-full p-8`}>
             <View style={tw.style('items-center')}>
               <Text style={tw.style(' text-gray-dark pb-4')}>Silahkan Anda Login Terlebih dahulu</Text>
@@ -64,7 +64,7 @@ const LoginScreen = (props) => {
             <AppInput icon="key" placeholder="Password" password />
 
             <View style={tw.style('mt-4')}>
-              <AppBtn label="Login"
+              <AppBtn label="Login" fullwidth
                   clicked={() => {
                       login();
                   }}

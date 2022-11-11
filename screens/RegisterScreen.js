@@ -12,7 +12,7 @@ const RegisterScreen = () => {
     // STATE
     const navigation = useNavigation()
     const [loading, setLoading] = useState(false);
-    const [alert, setAlert] = useState(false);
+    const [alerts, setAlerts] = useState(false);
 
 
     // METHODE
@@ -20,14 +20,15 @@ const RegisterScreen = () => {
         setLoading(true)
         setTimeout(() => {
             setLoading(false)
-            setAlert(true)
+            setAlerts(true)
         }, 3000)
     }
+
     return (
         <SafeAreaView>
             <View style={tw.style('h-full')}>
                 <AppLoader visible={loading} />
-                <AppAlert visible={alert} />
+                <AppAlert visible={alerts} status="Success" msg="Success Broo" onOk={ ()=> setAlerts(false) } />
                 <View style={tw.style('flex-row p-4')}>
                     <AppBtn icon="keyboard-backspace" round color="dark"
                         clicked={() => {
@@ -35,7 +36,7 @@ const RegisterScreen = () => {
                         }}
                     />
                 </View>
-                <View style={tw.style('flex-row items-center py-4 px-8')}>
+                <View style={tw.style('flex-row items-center py-2 px-8')}>
                     <View style={tw.style('flex-1')}>
                         <View  style={tw.style('border-2 p-4 rounded-4 ')}>
                             <Text style={tw.style('font-bold')}>
@@ -56,7 +57,7 @@ const RegisterScreen = () => {
                         source={require('../assets/static/mad_saleh_menunjuk.png')}
                     />
                 </View>
-                <View style={tw.style('p-8')}>
+                <View style={tw.style('px-8 py-4')}>
                     <AppInput placeholder="Masukkan Nip Anda" />
                     <AppInput placeholder="Masukkan Tanggal Lahir Anda" />
                 </View>

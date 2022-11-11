@@ -16,10 +16,12 @@ const AppBtn = (props) => {
   return (
     <TouchableOpacity
         onPress={props.clicked}
-      style={tw`bg-${props.color ? props.color : 'primary'} 
-        ${props.round?'px-1 py-1':'px-4 py-3'} flex self-center ${props.round ? 'rounded-full' : 'rounded'}`}
+        style={tw`bg-${props.color ? props.color : 'primary'} 
+        ${props.round ? 'px-1 py-1' : 'px-4 py-3'} flex self-center ${props.round ? 'rounded-full' : 'rounded'}
+        ${props.fullwidth? 'w-full':''}
+        `}
     >
-      <View style={tw.style('flex-row items-center')}>
+      <View style={tw.style('flex-row items-center justify-center')}>
         {props.icon && (
           <Icon
             name={props.icon}
