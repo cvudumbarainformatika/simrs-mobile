@@ -8,7 +8,6 @@ import tw from '../constants/tw'
 import AppInput from '../components/~global/AppInput';
 import AppBtn from '../components/~global/AppBtn';
 import AppLoader from '../components/~global/AppLoader';
-import AppAlert from '../components/~global/AppAlert';
 
 const LoginScreen = (props) => {
   // STATE
@@ -23,7 +22,6 @@ const LoginScreen = (props) => {
     setTimeout(() => {
       Alert.alert('Success','Success Brooo')
       setLoading(false)
-      setAlert(true)
     }, 3000)
   }
 

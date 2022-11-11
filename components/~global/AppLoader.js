@@ -1,14 +1,15 @@
-import { View, Text, ActivityIndicator } from 'react-native'
+import { View, Text, ActivityIndicator, useWindowDimensions } from 'react-native'
 import React from 'react'
 import tw from '../../constants/tw';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const AppLoader = ({ visible = false }) => {
+  const { height, width } = useWindowDimensions();
   return (
       visible && (
           <View style={
               [
-                tw`w-full h-full absolute z-10 bg-black/50 flex justify-center`
+                tw`w-full h-full absolute z-10 bg-black/50 flex justify-center`,{ height, width }
               ]}>
               
               <View style={tw`bg-white flex flex-row items-center justify-center mx-16 p-4 rounded`}>
