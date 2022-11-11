@@ -8,6 +8,7 @@ import tw from '../constants/tw'
 import AppInput from '../components/~global/AppInput';
 import AppBtn from '../components/~global/AppBtn';
 import AppLoader from '../components/~global/AppLoader';
+import AppAlert from '../components/~global/AppAlert';
 
 const LoginScreen = (props) => {
   // STATE
@@ -22,6 +23,7 @@ const LoginScreen = (props) => {
     setTimeout(() => {
       Alert.alert('Success','Success Brooo')
       setLoading(false)
+      setAlert(true)
     }, 3000)
   }
 
@@ -63,11 +65,13 @@ const LoginScreen = (props) => {
             <AppInput icon="email" placeholder="Email" />
             <AppInput icon="key" placeholder="Password" password />
 
-            <AppBtn label="Login" width="w-full" margin="mt-8"
-                clicked={() => {
-                    login();
-                }}
-            />
+            <View style={tw.style('mt-4')}>
+              <AppBtn label="Login"
+                  clicked={() => {
+                      login();
+                  }}
+              />
+            </View>
 
             <View style={tw`flex-row items-center justify-center pt-8`}>
               <Text style={tw.style('text-xs text-gray-dark')}>Belum Punya Akun? </Text>
