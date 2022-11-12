@@ -1,15 +1,16 @@
-import { View, Text, Image, ScrollView } from 'react-native'
+import { View, Text, Image, ScrollView, Keyboard } from 'react-native'
 import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 
 
 import { SafeAreaView } from 'react-native-safe-area-context'
 import tw from '../constants/tw'
-import { AppInput, BottomTwoBtn } from '../components'
+import { AppInput, AppLoader, BottomTwoBtn } from '../components'
 
 const RegistrasiPasswordScreen = () => {
 
     const navigation = useNavigation();
+    const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState({});
     const [inputs, setInputs] = useState({
         username: '',
@@ -23,11 +24,40 @@ const RegistrasiPasswordScreen = () => {
     function handleError(msg, input) {
         setErrors(states => ({ ...states, [input]: msg }))
     }
+    function validate() {
+        Keyboard.dismiss();
+        let valid = true;
+        if (!inputs.username) {
+            handleError('Harap diisi terlebih dahulu', 'username')
+            valid = false
+        }
+        if (!inputs.password) {
+            handleError('Harap diisi terlebih dahulu', 'password')
+            valid = false
+        }
+
+        if (valid) {
+            lanjut()
+        }
+    }
+
+    function simpanData() {
+        setLoading(true)
+        setTimeout(() => {
+            validate()
+            setLoading(false)
+        }, 500)
+    }
+
+    function lanjut() {
+        navigation.navigate('Login')
+    }
 
   return (
-    <SafeAreaView style={tw`flex-1`}>
+      <SafeAreaView style={tw`flex-1`}>
+          {loading && (<AppLoader visible={loading} />)}
           <View style={tw`p-4`}>
-                <Text style={tw`font-bold text-lg mb-4`}>Konfirmasi Password Anda</Text>
+                <Text style={tw`font-bold text-lg mb-4`}>Konfirmasi Password Anda 🔐</Text>
                 {/* MAD SALEH INFO */}
                 <View style={tw`flex-row`}>
                   <Image
@@ -50,7 +80,7 @@ const RegistrasiPasswordScreen = () => {
                                 Anda boleh mengganti Username dan Password yang telah diberikan..
                             </Text>
                             <Text style={tw.style('italic pt-2')}>
-                                Jika Setuju ... Klik <Text style={tw`font-bold`}>OK. </Text> Login sesuai username dan password Anda.
+                                Klik <Text style={tw`font-bold`}>OK. </Text> jika setuju.
                             </Text>
                             <Text style={tw.style('italic pt-2')}>
                                 Klik <Text style={tw`font-bold`}>Kembali </Text> untuk Batal.
@@ -60,7 +90,7 @@ const RegistrasiPasswordScreen = () => {
               </View>
               
               <ScrollView style={tw`px-4 mt-8`}>
-                  <Text style={tw`font-bold text-lg mb-4`}>Username dan Password 🤫</Text>
+                  <Text style={tw`font-bold text-lg mb-4`}>Username dan Password 🤐</Text>
                   <AppInput placeholder="Masukkan Username Anda"
                         value={inputs.username}
                         changed={(val) => handleOnChanged(val, 'username')}
@@ -81,7 +111,8 @@ const RegistrasiPasswordScreen = () => {
               </ScrollView>
             </View>
           <BottomTwoBtn
-            onDismiss={()=> navigation.navigate('Login')}
+              onDismiss={() => navigation.navigate('Login')}
+              onOk={()=> simpanData()}
           />
     </SafeAreaView>
   )
