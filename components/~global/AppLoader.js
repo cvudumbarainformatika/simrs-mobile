@@ -1,4 +1,4 @@
-import { View, Text, ActivityIndicator, useWindowDimensions } from 'react-native'
+import { View, Text, ActivityIndicator, useWindowDimensions, StyleSheet } from 'react-native'
 import React from 'react'
 import tw from '../../constants/tw';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -7,10 +7,7 @@ const AppLoader = ({ visible = false }) => {
   const { height, width } = useWindowDimensions();
   return (
       visible && (
-          <View style={
-              [
-                tw`w-full h-full absolute z-10 bg-black/50 flex justify-center`,{ height, width }
-              ]}>
+          <View style={[styles.container, {height, width}]}>
               
               <View style={tw`bg-white flex flex-row items-center justify-center mx-16 p-4 rounded`}>
                   <Text style={tw`ml-4 pt-4`}>Loading ...</Text>
@@ -22,5 +19,17 @@ const AppLoader = ({ visible = false }) => {
     )
   )
 }
+
+const styles = StyleSheet.create({
+    container: {
+        position: "absolute",
+        zIndex: 10,
+        width: "100%",
+        height: "100%",
+        backgroundColor: 'rgba(0,0,0,0.6)',
+        justifyContent:'center'
+    },
+  });
+
 
 export default AppLoader

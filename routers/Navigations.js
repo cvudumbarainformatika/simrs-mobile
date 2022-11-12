@@ -7,6 +7,7 @@ import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/
 import HomeScreen from '../screens/HomeScreen';
 import LoginScreen from '../screens/LoginScreen';
 import RegisterScreen from '../screens/RegisterScreen';
+import RegistrasiPasswordScreen from '../screens/RegistrasiPasswordScreen';
 
 // TRANSITIONS =======================
 const config = {
@@ -52,6 +53,7 @@ const LoginNavigator = () => {
       >
       <LoginStack.Screen name="Login" component={LoginScreen} options={transition} />
       <LoginStack.Screen name="Register" component={RegisterScreen} options={transition} />
+      <LoginStack.Screen name="RegistrasiPassword" component={RegistrasiPasswordScreen} options={transition} />
     </LoginStack.Navigator>
   )
 }

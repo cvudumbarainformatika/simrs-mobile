@@ -1,23 +1,25 @@
-import { View, Text, Image, ScrollView, Keyboard } from 'react-native'
+import { View, Text, Image, ScrollView, Keyboard} from 'react-native'
 import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
-import tw from '../constants/tw'
-import AppBtn from '../components/~global/AppBtn'
-import AppInput from '../components/~global/AppInput'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import AppLoader from '../components/~global/AppLoader'
-import AppAlert from '../components/~global/AppAlert'
+import tw from '../constants/tw'
+
+import { AppBtn, AppInput, AppLoader, AppAlert } from '../components/~global'
+import {BottomTwoBtn} from '../components'
+import ModalConfirmKaryawan from '../components/authentifikasi/ModalConfirmKaryawan'
 
 const RegisterScreen = () => {
     // STATE
     const navigation = useNavigation()
+
     const [loading, setLoading] = useState(false);
     const [alerts, setAlerts] = useState(false);
+    const [modal, setModal] = useState(false);
+    const [errors, setErrors] = useState({});
     const [inputs, setInputs] = useState({
         nip: '',
         tgllahir:''
     })
-    const [errors, setErrors] = useState({});
 
 
     // METHODE
@@ -47,7 +49,7 @@ const RegisterScreen = () => {
     }
 
     function lanjut() {
-        console.log(inputs)
+        setModal(true)
     }
 
     function handleOnChanged(text, input) {
@@ -57,30 +59,31 @@ const RegisterScreen = () => {
         setErrors(states => ({ ...states, [input]: msg }))
     }
 
+    function toConfirmPassword() {
+        setModal(false)
+        navigation.navigate('RegistrasiPassword');
+    }
+
     return (
-        <SafeAreaView>
-            {
-                (loading || alerts)  && (
-                    <View style={tw.style('h-full')}>
-                        <AppLoader visible={loading} />
-                        <AppAlert visible={alerts} status="Success" msg="Success Broo" onOk={ ()=> setAlerts(false) } />
-                    </View>
-                )
-            }
+        <SafeAreaView style={{ flex: 1 }}>
+            {loading && (<AppLoader visible={loading} />)}
+            {modal && (<ModalConfirmKaryawan visible={modal}
+                onDismiss={() => setModal(false)}
+                onOk={() => {
+                    toConfirmPassword()
+                }}
+            />)}
+            {alerts && (<AppAlert visible={alerts} status="Success" msg="Success Broo" onOk={ ()=> setAlerts(false) } />)}
             
             <ScrollView >
                 <View style={tw.style('flex-row p-4')}>
-                    <AppBtn icon="keyboard-backspace" round color="dark"
-                        clicked={() => {
-                            navigation.navigate('Login')     
-                        }}
-                    />
+                    <Text style={tw`font-bold text-lg`}>Cari Data Kepegawaian</Text>
                 </View>
                 <View style={tw.style('flex-row items-center py-2 px-8')}>
                     <View style={tw.style('flex-1')}>
                         <View  style={tw.style('border-2 p-4 rounded-4 ')}>
                             <Text style={tw.style('font-bold')}>
-                                Masukkan Nip dan tanggal Lahir Anda, lalu ikuti
+                                Masukkan Nip dan tanggal Lahir Anda, lalu Klik Cari data dan ikuti
                                 langkah selanjutnya
                             </Text>
                             <Text style={tw.style('italic pt-2 text-gray-dark')}>
@@ -118,13 +121,12 @@ const RegisterScreen = () => {
                         }}
                     />
                 </View>
-
-                <AppBtn label="Submit"
-                    clicked={() => {
-                        submitClicked()   
-                    }}
-                />
             </ScrollView>
+            
+            <BottomTwoBtn labelBtnOk="Cari Data"
+                onOk={()=> submitClicked()}
+                onDismiss={() => navigation.navigate('Login')}
+            />
         </SafeAreaView>
 
         
