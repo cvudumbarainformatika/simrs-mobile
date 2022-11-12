@@ -1,15 +1,12 @@
-import { View, Text, Easing } from 'react-native'
+import { Easing } from 'react-native'
 import React from 'react'
 
 import { NavigationContainer } from '@react-navigation/native';
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack';
 
-// import HomeScreen from '../screens/HomeScreen';
-// import LoginScreen from '../screens/LoginScreen';
-// import RegisterScreen from '../screens/RegisterScreen';
-// import RegistrasiPasswordScreen from '../screens/RegistrasiPasswordScreen';
-
 import { LoginScreen, RegisterScreen, RegistrasiPasswordScreen } from '../screens'
+
+import { ROUTES } from '../constants';
 
 // TRANSITIONS =======================
 const config = {
@@ -42,21 +39,30 @@ const transition = {
 }
 
 // Auth ROUTE =======================================
-const LoginStack = createStackNavigator();
+const Stack = createStackNavigator();
 
 const LoginNavigator = () => {
+  console.log(Stack)
   return (
-      <LoginStack.Navigator
+      <Stack.Navigator
           screenOptions={{
             gestureEnabled: true,
             headerShown: false,
             gestureDirection: 'horizontal',
-        }}
+      }}
+      initialRouteName={ROUTES.LOGIN}
       >
-      <LoginStack.Screen name="Login" component={LoginScreen} options={transition} />
-      <LoginStack.Screen name="Register" component={RegisterScreen} options={transition} />
-      <LoginStack.Screen name="RegistrasiPassword" component={RegistrasiPasswordScreen} options={transition} />
-    </LoginStack.Navigator>
+      <Stack.Screen name={ROUTES.LOGIN} component={LoginScreen} options={transition} />
+      <Stack.Screen name={ROUTES.REGISTER} component={RegisterScreen} options={transition} />
+      <Stack.Screen name={ROUTES.REGISTRASIPASSWORD} component={RegistrasiPasswordScreen}
+        options={[
+          transition,
+          ({route}) => ({
+            title: route.params.userId
+          })
+        ]}
+      />
+    </Stack.Navigator>
   )
 }
 
@@ -65,9 +71,8 @@ const LoginNavigator = () => {
 
 
 // +++++++++++++++++++++++===================END ROUTE
-const Stack = createStackNavigator()
 
-const Navigations = () => {
+const AuthNavigator = () => {
   return (
     <NavigationContainer>
         <LoginNavigator />
@@ -75,4 +80,4 @@ const Navigations = () => {
   )
 }
 
-export default Navigations
+export default AuthNavigator

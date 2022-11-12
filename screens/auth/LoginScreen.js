@@ -1,13 +1,11 @@
-import { View, Text, SafeAreaView, Image, ScrollView, StyleSheet, TouchableOpacity, Alert, StatusBar } from 'react-native'
+import { View, Text, SafeAreaView, Image, ScrollView, StyleSheet, TouchableOpacity, Alert } from 'react-native'
 import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { LinearGradient } from "expo-linear-gradient";
-import tw from '../constants/tw'
 
 
-import AppInput from '../components/~global/AppInput';
-import AppBtn from '../components/~global/AppBtn';
-import AppLoader from '../components/~global/AppLoader';
+import { tw,IMGS } from '../../constants';
+import { AppInput,AppBtn,AppLoader } from '../../components';
 
 const LoginScreen = (props) => {
   // STATE
@@ -41,7 +39,7 @@ const LoginScreen = (props) => {
           <View style={tw`flex-1 justify-center items-center pt-4`}>
             <Image
                 className="w-16 h-16 mb-2"
-                source={require("../assets/static/logo-rsud.png")}
+                source={IMGS.logo}
             />
             <Text className="text-white">UOBK RSUD MOHAMMAD SALEH</Text>
             <Text className="text-white font-bold text-xl">SIMRS</Text>

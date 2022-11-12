@@ -1,6 +1,7 @@
 import { View, Text, useWindowDimensions, StyleSheet, Image } from 'react-native'
 import React from 'react'
-import tw from '../../constants/tw';
+
+import { tw,IMGS } from '../../constants';
 import BottomTwoBtn from '../~global/layouts/BottomTwoBtn';
 
 const ModalConfirmKaryawan = ({
@@ -15,7 +16,7 @@ const ModalConfirmKaryawan = ({
             <View style={tw`bg-white flex items-center justify-center mx-10 rounded`}>
                 <View style={tw`w-28 h-28 bg-gray rounded-full items-center justify-center absolute -top-16 border-4 border-white overflow-hidden`}>
                     <Image
-                        source={require('../../assets/static/avatar-male.png')}
+                        source={IMGS.avatarMale}
                         style={tw`h-32 w-32`}
                     />
                 </View>

@@ -1,9 +1,11 @@
 import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-import Navigations from './routers/Navigations';
+// import Navigations from './routers/Navigations';
 
 import { NativeWindStyleSheet } from "nativewind";
+import AuthNavigator from './routers/AuthNavigator';
+
 NativeWindStyleSheet.setOutput({
   default: "native",
 });
@@ -12,7 +14,7 @@ NativeWindStyleSheet.setOutput({
 export default function App() {
   return (
     <SafeAreaProvider>
-      <Navigations />
+      <AuthNavigator />
     </SafeAreaProvider>
   );
 }

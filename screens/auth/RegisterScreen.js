@@ -2,11 +2,11 @@ import { View, Text, Image, ScrollView, Keyboard} from 'react-native'
 import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import tw from '../constants/tw'
 
-import { AppBtn, AppInput, AppLoader, AppAlert } from '../components/~global'
-import {BottomTwoBtn} from '../components'
-import ModalConfirmKaryawan from '../components/authentifikasi/ModalConfirmKaryawan'
+
+import { tw,IMGS,ROUTES } from '../../constants'
+import { AppBtn, AppInput, AppLoader, AppAlert, BottomTwoBtn } from '../../components'
+import ModalConfirmKaryawan from '../../components/authentifikasi/ModalConfirmKaryawan'
 
 const RegisterScreen = () => {
     // STATE
@@ -61,7 +61,9 @@ const RegisterScreen = () => {
 
     function toConfirmPassword() {
         setModal(false)
-        navigation.navigate('RegistrasiPassword');
+        navigation.navigate(ROUTES.REGISTRASIPASSWORD, {
+            userId: 'xenter0001'
+        });
     }
 
     return (
@@ -97,7 +99,7 @@ const RegisterScreen = () => {
                     </View>
                     <Image
                         style={tw.style('w-40 h-64')}
-                        source={require('../assets/static/mad_saleh_menunjuk.png')}
+                        source={IMGS.madSalehMenunjuk}
                     />
                 </View>
 
@@ -125,7 +127,7 @@ const RegisterScreen = () => {
             
             <BottomTwoBtn labelBtnOk="Cari Data"
                 onOk={()=> submitClicked()}
-                onDismiss={() => navigation.navigate('Login')}
+                onDismiss={() => navigation.navigate(ROUTES.LOGIN)}
             />
         </SafeAreaView>
 

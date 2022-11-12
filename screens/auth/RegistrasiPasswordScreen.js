@@ -1,15 +1,16 @@
 import { View, Text, Image, ScrollView, Keyboard } from 'react-native'
 import React, { useState } from 'react'
-import { useNavigation } from '@react-navigation/native'
-
-
+import { useNavigation, useRoute } from '@react-navigation/native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import tw from '../constants/tw'
-import { AppInput, AppLoader, BottomTwoBtn } from '../components'
+
+
+import { tw,IMGS, ROUTES } from '../../constants'
+import { AppInput, AppLoader, BottomTwoBtn } from '../../components'
 
 const RegistrasiPasswordScreen = () => {
 
     const navigation = useNavigation();
+    const route = useRoute()
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState({});
     const [inputs, setInputs] = useState({
@@ -50,7 +51,7 @@ const RegistrasiPasswordScreen = () => {
     }
 
     function lanjut() {
-        navigation.navigate('Login')
+        navigation.navigate(ROUTES.LOGIN)
     }
 
   return (
@@ -65,7 +66,7 @@ const RegistrasiPasswordScreen = () => {
                         tw.style('w-16 h-24'),
                         { transform: [{ scaleX: -1 }] }
                         ]}
-                        source={require('../assets/static/mad_saleh_menunjuk.png')}
+                        source={IMGS.madSalehMenunjuk}
                   />
                   <View style={tw.style('flex-1')}>
                         <View style={tw.style('border-2 p-4 rounded-4 bg-secondary')}>
@@ -107,11 +108,13 @@ const RegistrasiPasswordScreen = () => {
                         onFocus={() => {
                             handleError(null,'password')
                         }}
-                    />
+                  />
+                  
+                  <Text>Params : { route.params.userId }</Text>
               </ScrollView>
             </View>
           <BottomTwoBtn
-              onDismiss={() => navigation.navigate('Login')}
+              onDismiss={() => navigation.navigate(ROUTES.LOGIN)}
               onOk={()=> simpanData()}
           />
     </SafeAreaView>
