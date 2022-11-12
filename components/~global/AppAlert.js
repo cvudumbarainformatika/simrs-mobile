@@ -1,4 +1,4 @@
-import { View, Text, useWindowDimensions } from 'react-native'
+import { View, Text, useWindowDimensions, StyleSheet } from 'react-native'
 import React from 'react'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import tw from '../../constants/tw'
@@ -13,7 +13,7 @@ const AppAlert = ({
     const { height, width } = useWindowDimensions();
     return (
       visible && (
-        <View style={[tw`w-full h-full absolute z-10 bg-black/50 flex-1 justify-center`, {height, width}]}>
+        <View style={[styles.container, {height, width}]}>
               
             <View style={tw`bg-white flex items-center justify-center mx-10 p-4 rounded`}>
                     <Text style={tw`py-4`}>{msg}</Text>
@@ -30,5 +30,17 @@ const AppAlert = ({
       )
   )
 }
+
+
+const styles = StyleSheet.create({
+    container: {
+        position: "absolute",
+        zIndex: 10,
+        width: "100%",
+        height: "100%",
+        backgroundColor: 'rgba(0,0,0,0.5)',
+        justifyContent:'center'
+    },
+  });
 
 export default AppAlert

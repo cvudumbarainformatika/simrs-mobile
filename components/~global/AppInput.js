@@ -35,6 +35,7 @@ const AppInput = ({
           onBlur={() => {
             setIsFocused(false)
           }}
+          onChangeText ={props.changed}
           className="flex-1" {...props}
         />
         {password && (

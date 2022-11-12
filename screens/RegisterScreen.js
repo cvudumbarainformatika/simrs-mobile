@@ -1,4 +1,4 @@
-import { View, Text, Image } from 'react-native'
+import { View, Text, Image, ScrollView, Keyboard } from 'react-native'
 import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import tw from '../constants/tw'
@@ -13,22 +13,62 @@ const RegisterScreen = () => {
     const navigation = useNavigation()
     const [loading, setLoading] = useState(false);
     const [alerts, setAlerts] = useState(false);
+    const [inputs, setInputs] = useState({
+        nip: '',
+        tgllahir:''
+    })
+    const [errors, setErrors] = useState({});
 
 
     // METHODE
+
+    function validate() {
+        Keyboard.dismiss();
+        let valid = true;
+        if (!inputs.nip) {
+            handleError('Harap diisi terlebih dahulu', 'nip')
+            valid = false
+        }
+        if (!inputs.tgllahir) {
+            handleError('Harap diisi terlebih dahulu', 'tgllahir')
+            valid = false
+        }
+
+        if (valid) {
+            lanjut()
+        }
+    }
     function submitClicked() {
         setLoading(true)
         setTimeout(() => {
+            validate()
             setLoading(false)
-            setAlerts(true)
-        }, 3000)
+        }, 500)
+    }
+
+    function lanjut() {
+        console.log(inputs)
+    }
+
+    function handleOnChanged(text, input) {
+        setInputs(states => ({ ...states, [input]: text }))
+    }
+    function handleError(msg, input) {
+        setErrors(states => ({ ...states, [input]: msg }))
     }
 
     return (
         <SafeAreaView>
-            <View style={tw.style('h-full')}>
-                <AppLoader visible={loading} />
-                <AppAlert visible={alerts} status="Success" msg="Success Broo" onOk={ ()=> setAlerts(false) } />
+            {
+                (loading || alerts)  && (
+                    <View style={tw.style('h-full')}>
+                        <AppLoader visible={loading} />
+                        <AppAlert visible={alerts} status="Success" msg="Success Broo" onOk={ ()=> setAlerts(false) } />
+                    </View>
+                )
+            }
+            
+            <ScrollView >
                 <View style={tw.style('flex-row p-4')}>
                     <AppBtn icon="keyboard-backspace" round color="dark"
                         clicked={() => {
@@ -57,9 +97,26 @@ const RegisterScreen = () => {
                         source={require('../assets/static/mad_saleh_menunjuk.png')}
                     />
                 </View>
+
+                {/* ================================================================================== FORM INPUT */}
                 <View style={tw.style('px-8 py-4')}>
-                    <AppInput placeholder="Masukkan Nip Anda" />
-                    <AppInput placeholder="Masukkan Tanggal Lahir Anda" />
+                    <AppInput placeholder="Masukkan Nip Anda"
+                        value={inputs.nip}
+                        changed={(val) => handleOnChanged(val, 'nip')}
+                        error={errors.nip}
+                        onFocus={() => {
+                            handleError(null,'nip')
+                        }}
+
+                    />
+                    <AppInput placeholder="Masukkan Tanggal Lahir Anda"
+                        value={inputs.tgllahir}
+                        changed={(val) => handleOnChanged(val, 'tgllahir')}
+                        error={errors.tgllahir}
+                        onFocus={() => {
+                            handleError(null,'tgllahir')
+                        }}
+                    />
                 </View>
 
                 <AppBtn label="Submit"
@@ -67,8 +124,10 @@ const RegisterScreen = () => {
                         submitClicked()   
                     }}
                 />
-            </View>
+            </ScrollView>
         </SafeAreaView>
+
+        
     )
 }
 
