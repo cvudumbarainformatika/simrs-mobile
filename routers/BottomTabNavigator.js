@@ -7,6 +7,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 import { ROUTES, tw } from '../constants';
 import { AbsenScreen, HistoryScreen, HomeScreen, JadwalScreen, SettingsScreen } from '../screens';
+import SettingsNavigator from './SettingsNavigator';
 // import CustomBottomTabBar from '../components/CustomBottomTabBar';
 
 // CUSTOM TAB BAR =======================
@@ -59,17 +60,18 @@ const BottomTabNavigator = () => {
         
       >
         <Tab.Screen name={ROUTES.HOME_TAB} component={HomeScreen} />
-        <Tab.Screen name={ ROUTES.JADWAL } component={JadwalScreen} />
-        <Tab.Screen name={ROUTES.ABSEN} component={AbsenScreen}
+        <Tab.Screen name={ ROUTES.JADWAL_TAB } component={JadwalScreen} />
+        <Tab.Screen name={ROUTES.ABSEN_TAB} component={AbsenScreen}
         options={{
+          unmountOnBlur:true,
           tabBarIcon: ({ focused }) => (
             <Icon name={'qrcode-scan'} size={28} color={`${ focused? tw.color('gray-light') : tw.color('gray') }`} />
           ),
           tabBarButton: (props) => (<CustomTab {...props} />) 
             }}
         />
-        <Tab.Screen name={ ROUTES.HISTORY } component={HistoryScreen} />
-        <Tab.Screen name={ ROUTES.SETTINGS } component={SettingsScreen}  />
+        <Tab.Screen name={ ROUTES.HISTORY_TAB } component={HistoryScreen} />
+        <Tab.Screen name={ ROUTES.SETTINGS_TAB } component={SettingsNavigator}  />
     </Tab.Navigator>
   )
 }
