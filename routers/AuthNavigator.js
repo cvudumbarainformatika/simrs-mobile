@@ -1,13 +1,14 @@
-import { Easing } from 'react-native'
-import React from 'react'
+import { Easing, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
 
 import { NavigationContainer } from '@react-navigation/native';
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack';
 
 import { LoginScreen, RegisterScreen, RegistrasiPasswordScreen } from '../screens'
 
-import { ROUTES } from '../constants';
+import { ROUTES, tw } from '../constants';
 import BottomTabNavigator from './BottomTabNavigator';
+import { AppLoader } from '../components';
 
 // TRANSITIONS =======================
 const config = {
@@ -76,6 +77,23 @@ const LoginNavigator = () => {
 
 const AuthNavigator = () => {
   // isAuthenticated = is...
+  const [isLoading, setIsLoading] = useState(true);
+  const [userToken, setUserToken] = useState(null);
+
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false)
+    },1000)
+  }, [])
+
+  if (isLoading) {
+    return (
+      <View style={tw`flex-1 bg-primary`}>
+        <AppLoader visible={isLoading} />
+      </View>
+    )
+  }
   return (
     <NavigationContainer>
         {/* {isAuthenticated? LoginNavigator : BottomTabNavigator} */}

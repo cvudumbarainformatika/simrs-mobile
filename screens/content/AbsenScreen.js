@@ -53,8 +53,6 @@ const AbsenScreen = () => {
             <View style={styles.layerRight} />
           </View>
           <View style={styles.layerBottom} />
-          
-          {/* <View style={styles.barcodebox}></View> */}
         </BarCodeScanner>
       
       {/* setelah scann */}
@@ -62,7 +60,6 @@ const AbsenScreen = () => {
       <AppConfirm visible={scanned} status="Success" msg={msg} labelBtnBack="Scan Lagi!" labelBtnOk="OK"
         onDismiss={() => {
           setScanned(false)
-          // navigation.navigate(ROUTES.HOME_TAB)
         }}
       
         onOk={() => {
