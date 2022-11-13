@@ -7,6 +7,7 @@ import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/
 import { LoginScreen, RegisterScreen, RegistrasiPasswordScreen } from '../screens'
 
 import { ROUTES } from '../constants';
+import BottomTabNavigator from './BottomTabNavigator';
 
 // TRANSITIONS =======================
 const config = {
@@ -42,7 +43,7 @@ const transition = {
 const Stack = createStackNavigator();
 
 const LoginNavigator = () => {
-  console.log(Stack)
+  // console.log(Stack)
   return (
       <Stack.Navigator
           screenOptions={{
@@ -62,6 +63,7 @@ const LoginNavigator = () => {
           })
         ]}
       />
+      <Stack.Screen name={ROUTES.HOME} component={BottomTabNavigator} options={transition} />
     </Stack.Navigator>
   )
 }
@@ -73,8 +75,10 @@ const LoginNavigator = () => {
 // +++++++++++++++++++++++===================END ROUTE
 
 const AuthNavigator = () => {
+  // isAuthenticated = is...
   return (
     <NavigationContainer>
+        {/* {isAuthenticated? LoginNavigator : BottomTabNavigator} */}
         <LoginNavigator />
     </NavigationContainer>
   )

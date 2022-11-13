@@ -7,15 +7,20 @@ export default {
   HOME_TAB: 'Home Tab',
   HOME_DRAWER: 'Home Drawer',
 
-  WALLET: 'Wallet',
-  WALLET_DRAWER: 'Wallet Drawer',
+  ABSEN: 'Absen',
+  ABSEN_TAB: 'Absen',
+  ABSEN_DRAWER: 'Absen Drawer',
 
-  NOTIFICATIONS: 'Notifications',
-  NOTIFICATIONS_DRAWER: 'Notifications Drawer',
+  JADWAL: 'Jadwal',
+  JADWAL_TAB: 'Jadwal',
+  JADWAL_DRAWER: 'Jadwal Drawer',
+
+  HISTORY: 'History',
+  HISTORY_TAB: 'History',
+  HISTORY_DRAWER: 'History Drawer',
 
   SETTINGS: 'Settings',
-  ACCOUNT_SETTINGS: 'Account Settings',
-  SETTINGS_NAVIGATOR: 'Settings Navigator',
+  SETTINGS_TAB: 'Settings',
 
   SETTINGS_DETAIL: 'Settings Detail',
   PROFILE: 'My Profile',

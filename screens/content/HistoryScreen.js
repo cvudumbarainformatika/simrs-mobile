@@ -2,12 +2,12 @@ import { View, Text } from 'react-native'
 import React from 'react'
 import { tw } from '../../constants'
 
-const HomeScreen = () => {
+const HistoryScreen = () => {
   return (
     <View style={tw`flex-1 bg-gray-light justify-center items-center`}>
-      <Text>HomeScreen</Text>
+      <Text>HistoryScreen</Text>
     </View>
   )
 }
 
-export default HomeScreen
+export default HistoryScreen

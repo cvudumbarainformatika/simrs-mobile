@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native'
 import { LinearGradient } from "expo-linear-gradient";
 
 
-import { tw,IMGS } from '../../constants';
+import { tw,IMGS, ROUTES } from '../../constants';
 import { AppInput,AppBtn,AppLoader } from '../../components';
 
 const LoginScreen = (props) => {
@@ -18,9 +18,9 @@ const LoginScreen = (props) => {
   const login = () => {
     setLoading(true)
     setTimeout(() => {
-      Alert.alert('Success','Success Brooo')
       setLoading(false)
-    }, 3000)
+      navigation.navigate(ROUTES.HOME)
+    }, 1000)
   }
 
   const registerClicked = () => {
@@ -53,7 +53,7 @@ const LoginScreen = (props) => {
           end={{x:1,y:0.9}}
         />
 
-        <View className="flex-1 items-center  absolute bottom-16 w-full">
+        <View className="flex-1 items-center  absolute bottom-10 w-full">
           <View style={tw`w-full p-8`}>
             <View style={tw.style('items-center')}>
               <Text style={tw.style(' text-gray-dark pb-4')}>Silahkan Anda Login Terlebih dahulu</Text>
