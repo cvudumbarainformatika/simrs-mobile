@@ -9,10 +9,10 @@ const AppAlert = ({
     msg = 'Maaf, Data tidak ditemukan',
     ...props
 }) => {
-    const { height, width } = useWindowDimensions();
+    // const { height, width } = useWindowDimensions();
     return (
       visible && (
-        <View style={[styles.container, {height, width}]}>
+        <View style={[styles.container]}>
               
                 <View style={tw`bg-white flex items-center justify-center mx-10 rounded`}>
                     <View style={tw`bg-${status === 'Error'? 'negative':'primary'} w-14 h-14 rounded-full items-center justify-center absolute -top-8 border-4 border-white`}>

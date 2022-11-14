@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native'
 import { LinearGradient } from "expo-linear-gradient";
 
 
-import { tw,IMGS, ROUTES } from '../../constants';
+import { IMGS, ROUTES, tw } from '../../constants';
 import { AppInput,AppBtn,AppLoader } from '../../components';
 
 const LoginScreen = (props) => {
@@ -28,7 +28,7 @@ const LoginScreen = (props) => {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={tw`flex-1`}>
       <AppLoader visible={loading} />
       <View style={styles.parentContainer}>
         <LinearGradient
