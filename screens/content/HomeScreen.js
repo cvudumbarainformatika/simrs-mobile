@@ -33,7 +33,7 @@ const HomeScreen = () => {
             {/* JIKA LIBUR */}
             <View style={tw`flex-1 items-center`}>
               <Text style={tw`text-negative font-bold`}>Tidak Ada Jadwal</Text>
-              <View style={tw`rounded-r-lg p-2 w-full items-center bg-dark`}>
+              <View style={tw`rounded-r-lg p-2 w-full items-center bg-negative`}>
                 <Text style={tw`text-white text-[20px] `}>🕒  Libur</Text>
               </View>
             </View>
