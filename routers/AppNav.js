@@ -1,11 +1,24 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+
+import React, { useContext } from 'react'
+import { NavigationContainer } from '@react-navigation/native'
+import { AuthContext } from '../context/AuthContext'
+import { AppLoader } from '../components'
+
+import AppStack from './AppStack'
+import AuthStack from './AuthStack'
 
 const AppNav = () => {
+
+  const { isLoading, userToken } = useContext(AuthContext);
+
+  if (isLoading) {
+      return (<AppLoader visible={isLoading} />)
+  }
+
   return (
-    <View>
-      <Text>AppNav</Text>
-    </View>
+    <NavigationContainer>
+      { userToken === null? <AuthStack /> : <AppStack/> }
+    </NavigationContainer>
   )
 }
 

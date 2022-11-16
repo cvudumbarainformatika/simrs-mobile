@@ -1,10 +1,12 @@
 import { View, Text } from 'react-native'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { ROUTES, tw } from '../../constants'
 import { AppBtn } from '../../components'
 import AppSheet from '../../components/~global/AppSheet'
+import { AuthContext } from '../../context/AuthContext'
 
 const SettingsScreen = ({ navigation }) => {
+  const { logout } = useContext(AuthContext);
   const [sheet, setSheet] = useState(false)
   return (
     <View style={tw`flex-1`}>
@@ -16,8 +18,10 @@ const SettingsScreen = ({ navigation }) => {
           <AppBtn label="HOME"
             clicked={()=> navigation.navigate(ROUTES.HOME_TAB)}
           />
-          <AppBtn label="OPEN SHEET"
-            clicked={()=> setSheet(true)}
+        </View>
+        <View style={tw`mt-2`}>
+          <AppBtn label="LOGOUT"
+            clicked={()=> {logout()}}
           />
         </View>
       </View>

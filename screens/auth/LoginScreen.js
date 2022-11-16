@@ -1,26 +1,51 @@
-import { View, Text, SafeAreaView, Image, ScrollView, StyleSheet, TouchableOpacity, Alert } from 'react-native'
-import React, { useState } from 'react'
+import { View, Text, SafeAreaView, Image, ScrollView, StyleSheet, TouchableOpacity, Alert, Keyboard } from 'react-native'
+import React, { useContext, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { LinearGradient } from "expo-linear-gradient";
 
 
 import { IMGS, ROUTES, tw } from '../../constants';
 import { AppInput,AppBtn,AppLoader } from '../../components';
+import { AuthContext } from '../../context/AuthContext';
 
 const LoginScreen = (props) => {
   // STATE
   const navigation = useNavigation()
+  const {login} = useContext(AuthContext)
   const [loading, setLoading] = useState(false)
+  const [errors, setErrors] = useState({});
 
+  const [inputs, setInputs] = useState({
+        username: '',
+        password:''
+  })
 
+  function handleOnChanged(text, input) {
+        setInputs(states => ({ ...states, [input]: text }))
+    }
+    function handleError(msg, input) {
+        setErrors(states => ({ ...states, [input]: msg }))
+    }
 
-  // METHODE
-  const login = () => {
-    setLoading(true)
-    setTimeout(() => {
-      setLoading(false)
-      navigation.navigate(ROUTES.HOME)
-    }, 1000)
+  function validate() {
+      Keyboard.dismiss();
+      let valid = true;
+      if (!inputs.username) {
+          handleError('Harap diisi terlebih dahulu', 'username')
+          valid = false
+      }
+      if (!inputs.password) {
+          handleError('Harap diisi terlebih dahulu', 'password')
+          valid = false
+      }
+
+      if (valid) {
+          lanjut()
+      }
+  }
+
+  function lanjut() {
+    login(inputs.username, inputs.password)
   }
 
   const registerClicked = () => {
@@ -58,14 +83,26 @@ const LoginScreen = (props) => {
             <View style={tw.style('items-center')}>
               <Text style={tw.style(' text-gray-dark pb-4')}>Silahkan Anda Login Terlebih dahulu</Text>
             </View>
-            <AppInput icon="email" placeholder="Email" />
-            <AppInput icon="key" placeholder="Password" password />
+            <AppInput icon="account-outline" placeholder="Username"
+              value={inputs.username}
+              changed={(val) => handleOnChanged(val, 'username')}
+              error={errors.username}
+              onFocus={() => {
+                  handleError(null,'username')
+              }}
+            />
+            <AppInput icon="key" placeholder="Password" password
+              value={inputs.password}
+              changed={(val) => handleOnChanged(val, 'password')}
+              error={errors.password}
+              onFocus={() => {
+                  handleError(null,'password')
+              }}
+            />
 
             <View style={tw.style('mt-4')}>
               <AppBtn label="Login" fullwidth
-                  clicked={() => {
-                      login();
-                  }}
+                clicked={()=> validate()}
               />
             </View>
 
