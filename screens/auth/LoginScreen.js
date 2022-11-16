@@ -5,7 +5,7 @@ import { LinearGradient } from "expo-linear-gradient";
 
 
 import { IMGS, ROUTES, tw } from '../../constants';
-import { AppInput,AppBtn,AppLoader } from '../../components';
+import { AppInput,AppBtn,AppLoader, AppAlert } from '../../components';
 import { AuthContext } from '../../context/AuthContext';
 
 const LoginScreen = (props) => {
@@ -13,6 +13,7 @@ const LoginScreen = (props) => {
   const navigation = useNavigation()
   const {login} = useContext(AuthContext)
   const [loading, setLoading] = useState(false)
+  const [err, setErr] = useState(false)
   const [errors, setErrors] = useState({});
 
   const [inputs, setInputs] = useState({
@@ -55,6 +56,7 @@ const LoginScreen = (props) => {
   return (
     <View style={tw`flex-1`}>
       <AppLoader visible={loading} />
+      <AppAlert visible={err} onOk={()=>setErr(false) } />
       <View style={styles.parentContainer}>
         <LinearGradient
           colors={[tw.color('secondary'), tw.color('primary')]}

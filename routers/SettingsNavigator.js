@@ -8,6 +8,7 @@ import { HomeScreen, SettingsScreen } from '../screens'
 
 import { ROUTES } from '../constants';
 import SettingsDetailScreen from '../screens/settings/SettingsDetailScreen';
+import Logout from '../screens/Logout';
 
 // TRANSITIONS =======================
 const config = {
@@ -55,6 +56,7 @@ const SettingsNavigator = () => {
       >
       <Stack.Screen name={ROUTES.SETTINGS} component={SettingsScreen} options={transition} />
       <Stack.Screen name={ROUTES.SETTINGS_DETAIL} component={SettingsDetailScreen} options={transition} />
+      <Stack.Screen name={ROUTES.LOGOUT} component={Logout} options={transition} />
     </Stack.Navigator>
   )
 }

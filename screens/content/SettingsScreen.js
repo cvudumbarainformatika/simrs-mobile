@@ -3,10 +3,10 @@ import React, { useContext, useState } from 'react'
 import { ROUTES, tw } from '../../constants'
 import { AppBtn } from '../../components'
 import AppSheet from '../../components/~global/AppSheet'
-import { AuthContext } from '../../context/AuthContext'
+// import { AuthContext } from '../../context/AuthContext'
 
 const SettingsScreen = ({ navigation }) => {
-  const { logout } = useContext(AuthContext);
+  // const { logout } = useContext(AuthContext);
   const [sheet, setSheet] = useState(false)
   return (
     <View style={tw`flex-1`}>
@@ -21,7 +21,7 @@ const SettingsScreen = ({ navigation }) => {
         </View>
         <View style={tw`mt-2`}>
           <AppBtn label="LOGOUT"
-            clicked={()=> {logout()}}
+            clicked={()=> navigation.navigate(ROUTES.LOGOUT)}
           />
         </View>
       </View>

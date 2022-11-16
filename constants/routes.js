@@ -1,7 +1,9 @@
 export default {
   LOGIN: 'Login',
   REGISTER: 'Register',
-  REGISTRASIPASSWORD:'RegistrasiPassword',
+  REGISTRASIPASSWORD: 'RegistrasiPassword',
+  
+  LOGOUT: 'Logout',
 
   HOME: 'Home',
   HOME_TAB: 'Home Tab',
