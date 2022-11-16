@@ -9,6 +9,7 @@ import { LoginScreen, RegisterScreen, RegistrasiPasswordScreen } from '../screen
 import { ROUTES, tw } from '../constants';
 import BottomTabNavigator from './BottomTabNavigator';
 import { AppLoader } from '../components';
+import { AuthProvider } from '../context/AuthContext';
 
 // TRANSITIONS =======================
 const config = {
@@ -76,29 +77,14 @@ const LoginNavigator = () => {
 // +++++++++++++++++++++++===================END ROUTE
 
 const AuthNavigator = () => {
-  // isAuthenticated = is...
-  const [isLoading, setIsLoading] = useState(true);
-  const [userToken, setUserToken] = useState(null);
-
-
-  useEffect(() => {
-    setTimeout(() => {
-      setIsLoading(false)
-    },1000)
-  }, [])
-
-  if (isLoading) {
-    return (
-      <View style={tw`flex-1 bg-primary`}>
-        <AppLoader visible={isLoading} />
-      </View>
-    )
-  }
   return (
-    <NavigationContainer>
-        {/* {isAuthenticated? LoginNavigator : BottomTabNavigator} */}
-        <LoginNavigator />
-    </NavigationContainer>
+    <AuthProvider>
+
+      <NavigationContainer>
+          {/* {isAuthenticated? LoginNavigator : BottomTabNavigator} */}
+          <LoginNavigator />
+      </NavigationContainer>
+    </AuthProvider>
   )
 }
 
