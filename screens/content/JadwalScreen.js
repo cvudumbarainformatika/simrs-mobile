@@ -37,16 +37,15 @@ const DATA = [
 
 
 const Item = ({ title }) => (
-  <View style={tw`bg-white mx-2 mt-2`}>
-    <View style={tw`flex-row justify-between items-center`}>
-      <View style={tw`bg-primary p-2 rounded-l w-25 h-full`}>
-        <Text style={tw`text-white font-bold`}>{title}</Text>
+  <View style={tw`p-1 mt-1`}>
+    <View style={tw`flex-row items-center justify-between p-1 border-b-{1px} border-gray-light`}>
+      <View>
+        <Text style={tw`font-bold`}>{ title }</Text>
+        <Text>{ 'Ini nanti tempat nama shift' }</Text>
       </View>
-      <View style={tw`p-3 rounded-r flex-1`}>
-        <View style={tw`flex-col items-end`}>
-          <Text>Jam Masuk</Text>
-          <Text>Jam Pulang</Text>
-        </View>
+      <View>
+        <Text>Waktu Masuk: 07:00</Text>
+        <Text>Waktu Pulang: 16:00</Text>
       </View>
     </View>
   </View>
@@ -57,7 +56,9 @@ const JadwalScreen = () => {
   return (
     <SafeAreaView style={[tw`flex-1 bg-gray-light`]}>
       <HeaderUser />
-      <View>
+      <View style={tw`bg-white m-2 p-3 pb-8 rounded-lg`}>
+        <Text style={tw`self-center font-bold mb-3`}>Jadwal Masuk Pegawai</Text>
+        <View style={tw`border-b-{1px} border-gray`}></View>
         <FlatList
           data={DATA}
           renderItem={renderItem}

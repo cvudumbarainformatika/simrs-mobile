@@ -6,6 +6,11 @@ import BottomTwoBtn from '../~global/layouts/BottomTwoBtn';
 
 const ModalConfirmKaryawan = ({
     visible = false,
+    id = '',
+    nip = '',
+    nip_baru = '',
+    nama = '',
+    foto='',
     ...props
 }) => {
     const { height, width } = useWindowDimensions();

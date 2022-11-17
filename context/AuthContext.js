@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Device from 'expo-device';
 import axios from 'axios';
 import { BASE } from '../config';
-import api from '../helpers/axiosInterceptor';
+import {api} from '../helpers/axiosInterceptor';
 
 export const AuthContext = createContext();
 
@@ -39,12 +39,24 @@ export const AuthProvider = ({ children }) => {
 
     const logout = async () => {
         setIsLoading(true);
+        await api.get(`${BASE}/v2/user/logout`).then(resp => {
+            removeToken()
+            setIsLoading(false)
+        }).catch(err => {
+            console.log(err)
+            setIsLoading(false)
+        })
+    }
+
+    const removeToken = async () => {
+        setIsLoading(true);
         await AsyncStorage.removeItem('userToken');
         await AsyncStorage.removeItem('user');
         setUserToken(null)
         setUser(null)
-        setIsLoading(false)
-        // console.log(userToken)
+        setTimeout(() => {
+            setIsLoading(false)
+        },300)
     }
 
     const isLoggedIn = async () => {
@@ -53,10 +65,10 @@ export const AuthProvider = ({ children }) => {
             let userInfo = await AsyncStorage.getItem('user');
             let token = await AsyncStorage.getItem('userToken');
             userInfo = JSON.parse(userInfo)
-            userInfo === null ? setUser(null): setUser(userInfo)
-            token === null ? setUserToken(null): setUserToken(token)
+            setUser(userInfo)
+            setUserToken(token)
             setIsLoading(false)
-            console.log('setUser:', user)
+            console.log('setUser:', userInfo)
         } catch (e) {
             console.log(`isLoggedIn Error ${e}`)
             setIsLoading(false)
@@ -71,7 +83,7 @@ export const AuthProvider = ({ children }) => {
 
 
     return (
-        <AuthContext.Provider value={{login, logout, alerts, isLoading, userToken, user}}>
+        <AuthContext.Provider value={{login, logout, removeToken, alerts, isLoading, userToken, user}}>
             {children}
         </AuthContext.Provider>
     )

@@ -14,7 +14,7 @@ const api = axios.create({
 })
 
 api.interceptors.request.use(
-async (config) => {
+    async (config) => {
    
         const token = await AsyncStorage.getItem('userToken')
         if (token) {
@@ -23,20 +23,22 @@ async (config) => {
 
         return config;
 
-}, (error) => {
-    Promise.reject(error)
+    }, (error) => {
+        console.log('interceptors.request:', error)
+        Promise.reject(error)
 })
 
 api.interceptors.response.use(response => new Promise((resolve, reject) => {
     resolve(response);
 }), error => {
+    console.log('interceptors.response:', error.response.data)
     if (!error.response) {
         return new Promise((resolve, reject) => {
             reject(error)
         })
     }
 
-    if (error.response.status === 401 || error.response.statusText === 'Unauthorized' || error.response.data.message === 'Unauthenticated.') {
+    if (error.response.status === 401 ) {
         navigate(ROUTES.LOGOUT, {tokenExpired: true})
     } else {
         return new Promise((resolve, reject) => {
@@ -45,4 +47,4 @@ api.interceptors.response.use(response => new Promise((resolve, reject) => {
     }
 })
 
-export default api;
+export { api };

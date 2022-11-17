@@ -3,9 +3,9 @@ import React, { useContext, useEffect } from 'react'
 import { AuthContext } from '../context/AuthContext'
 
 const Logout = () => {
-    const {logout} = useContext(AuthContext)
+    const {removeToken} = useContext(AuthContext)
     useEffect(() => {
-        logout();
+        removeToken();
     },[])
     return <ActivityIndicator />;
 }

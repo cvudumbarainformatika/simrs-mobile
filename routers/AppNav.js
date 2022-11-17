@@ -6,6 +6,8 @@ import { AppLoader } from '../components'
 
 import AppStack from './AppStack'
 import AuthStack from './AuthStack'
+import { Provider } from 'react-redux'
+import { store } from '../redux'
 
 const AppNav = () => {
 
@@ -16,9 +18,11 @@ const AppNav = () => {
   }
 
   return (
-    <NavigationContainer>
-      { userToken === null? <AuthStack /> : <AppStack/> }
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+        { userToken !== null? <AppStack/> : <AuthStack /> }
+      </NavigationContainer>
+    </Provider>
   )
 }
 

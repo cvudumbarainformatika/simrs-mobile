@@ -1,12 +1,15 @@
 import { View, Text, Image, ScrollView, Keyboard} from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 
 import { tw,IMGS,ROUTES } from '../../constants'
-import { AppBtn, AppInput, AppLoader, AppAlert, BottomTwoBtn } from '../../components'
+import { AppInput, AppLoader, AppAlert, BottomTwoBtn } from '../../components'
 import ModalConfirmKaryawan from '../../components/authentifikasi/ModalConfirmKaryawan'
+import { api } from '../../helpers/axiosInterceptor'
+import { BASE } from '../../config'
+// import { useSelector } from 'react-redux'
 
 const RegisterScreen = () => {
     // STATE
@@ -20,9 +23,19 @@ const RegisterScreen = () => {
         nip: '',
         tgllahir:''
     })
+    const [details, setDetails] = useState({
+        id : '',
+        nip : '',
+        nip_baru : '',
+        nama : '',
+        foto:'',
+    });
 
 
     // METHODE
+
+    useEffect(() => {
+    }, [])
 
     function validate() {
         Keyboard.dismiss();
@@ -36,20 +49,30 @@ const RegisterScreen = () => {
             valid = false
         }
 
-        if (valid) {
-            lanjut()
-        }
+        return valid;
     }
-    function submitClicked() {
+    async function submitClicked() {
+        let valid = validate();
         setLoading(true)
-        setTimeout(() => {
-            validate()
-            setLoading(false)
-        }, 500)
+        if (valid) {
+            let form = {
+                nip: inputs.nip,
+                tgllahir:inputs.tgllahir
+            }
+            await api.post(`/v2/data/cari-pegawai`, form)
+                .then(resp => {
+                    console.log(resp.data)
+                    setLoading(false)
+                }).catch(err => {
+                console.log(err)
+                    setLoading(false)
+            })
+        }
+
     }
 
-    function lanjut() {
-        setModal(true)
+    function handleOnChanged(value, input) {
+        setInputs(states => ({ ...states, [input]: text }))
     }
 
     function handleOnChanged(text, input) {
@@ -79,7 +102,7 @@ const RegisterScreen = () => {
             
             <ScrollView >
                 <View style={tw.style('flex-row p-4')}>
-                    <Text style={tw`font-bold text-lg`}>Cari Data Kepegawaian</Text>
+                    <Text style={tw`font-bold text-lg`}>Cari Data Kepegawaian </Text>
                 </View>
                 <View style={tw.style('flex-row items-center py-2 px-8')}>
                     <View style={tw.style('flex-1')}>
