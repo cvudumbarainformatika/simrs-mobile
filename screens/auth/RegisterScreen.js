@@ -16,22 +16,25 @@ const RegisterScreen = () => {
     const navigation = useNavigation()
 
     const [loading, setLoading] = useState(false);
-    const [alerts, setAlerts] = useState(false);
     const [modal, setModal] = useState(false);
     const [errors, setErrors] = useState({});
     const [inputs, setInputs] = useState({
-        nip: '',
+        nip: '012001141074',
         tgllahir:''
     })
     const [details, setDetails] = useState({
         id : '',
         nip : '',
-        nip_baru : '',
         nama : '',
-        foto:'',
+        foto: '',
+        user:null
     });
 
-
+    const [alerts, setAlerts] = useState(false);
+    const [msg, setMsg] = useState({
+        status: 'Error',
+        msg: 'Error Brooo'
+    })
     // METHODE
 
     useEffect(() => {
@@ -62,18 +65,43 @@ const RegisterScreen = () => {
             await api.post(`/v2/data/cari-pegawai`, form)
                 .then(resp => {
                     console.log(resp.data)
-                    setLoading(false)
+                    let det = resp.data
+                    
+                    
+                    if (det) {
+
+                        if (det.message) {
+                            msg.msg = det.message
+                            setLoading(false)
+                            setAlerts(true)
+                            return
+                        }
+
+                        setDetails({
+                            id: det.id,
+                            nip:det.nip,
+                            nama: det.nama,
+                            foto:det.foto
+                        })
+                        setLoading(false)
+                        setModal(true)
+                        
+                    } 
+                    
+                    // setLoading(false)
                 }).catch(err => {
-                console.log(err)
+                    console.log(err)
+                    msg.msg = 'Error, Ada Kesalahan mungkin dikarenakan Jaringan... Harap ulangi'
+                    setAlerts(true)
                     setLoading(false)
             })
         }
-
+        setLoading(false)
     }
 
-    function handleOnChanged(value, input) {
-        setInputs(states => ({ ...states, [input]: text }))
-    }
+    // function handleOnChanged(value, input) {
+    //     setInputs(states => ({ ...states, [input]: text }))
+    // }
 
     function handleOnChanged(text, input) {
         setInputs(states => ({ ...states, [input]: text }))
@@ -85,20 +113,32 @@ const RegisterScreen = () => {
     function toConfirmPassword() {
         setModal(false)
         navigation.navigate(ROUTES.REGISTRASIPASSWORD, {
-            userId: 'xenter0001'
+            pegawai_id: details.id,
+            nip: details.nip,
+            nama:details.nama
         });
     }
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
             {loading && (<AppLoader visible={loading} />)}
+
+            {/* CONFIRMASI USER ============================================================================ */}
+
             {modal && (<ModalConfirmKaryawan visible={modal}
+                nip={details.nip}
+                nama={details.nama}
+                id={details.id}
+                foto={details.foto}
+                user={details.user}
                 onDismiss={() => setModal(false)}
                 onOk={() => {
                     toConfirmPassword()
                 }}
             />)}
-            {alerts && (<AppAlert visible={alerts} status="Success" msg="Success Broo" onOk={ ()=> setAlerts(false) } />)}
+
+            {/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++========================ALERT */}
+            {alerts && (<AppAlert visible={alerts} status={msg.status} msg={msg.msg} onOk={ ()=> setAlerts(false) } />)}
             
             <ScrollView >
                 <View style={tw.style('flex-row p-4')}>
@@ -137,7 +177,7 @@ const RegisterScreen = () => {
                         }}
 
                     />
-                    <AppInput placeholder="Masukkan Tanggal Lahir Anda"
+                    <AppInput placeholder="Tanggal Lahir , Format: yyyy-mm-dd"
                         value={inputs.tgllahir}
                         changed={(val) => handleOnChanged(val, 'tgllahir')}
                         error={errors.tgllahir}

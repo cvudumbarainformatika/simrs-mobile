@@ -1,22 +1,37 @@
-import { View, Text, Image, ScrollView, Keyboard } from 'react-native'
+import { View, Text, Image, ScrollView, Keyboard, TouchableOpacity} from 'react-native'
 import React, { useState } from 'react'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import Clipboard from '@react-native-clipboard/clipboard'
+import * as Device from 'expo-device';
 
 
 import { tw,IMGS, ROUTES } from '../../constants'
-import { AppInput, AppLoader, BottomTwoBtn } from '../../components'
+import { AppAlert, AppInput, AppLoader, BottomTwoBtn } from '../../components'
+import { api } from '../../helpers/axiosInterceptor'
 
 const RegistrasiPasswordScreen = () => {
 
     const navigation = useNavigation();
     const route = useRoute()
+
+
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState({});
     const [inputs, setInputs] = useState({
-        username: '',
-        password: ''
+        username: route.params.nip,
+        password: '',
+        pegawai_id: route.params.pegawai_id,
+        device: Device.osInternalBuildId,
+        nama:route.params.nama
+        
     });
+
+    const [alerts, setAlerts] = useState(false);
+    const [msg, setMsg] = useState({
+        status: 'Error',
+        msg: 'Error Brooo'
+    })
 
     // METHOD
     function handleOnChanged(text, input) {
@@ -38,25 +53,48 @@ const RegistrasiPasswordScreen = () => {
         }
 
         if (valid) {
-            lanjut()
+            simpanData()
         }
     }
 
-    function simpanData() {
+    async function simpanData() {
         setLoading(true)
-        setTimeout(() => {
-            validate()
+        await api.post(`/v2/register`, inputs).then(resp => {
+            
             setLoading(false)
-        }, 500)
+            setMsg({
+                status: 'Success',
+                msg:'Anda Sudah Bisa Login. Terimakasih'
+            })
+            setAlerts(true)
+
+        }).catch(e => {
+            setLoading(false)
+            setMsg({
+                status: 'Error',
+                msg:'Ada Kesalahan Silahkan Ulangi'
+            })
+            setAlerts(true)
+        })
     }
 
     function lanjut() {
-        navigation.navigate(ROUTES.LOGIN)
+        if (msg.status === 'Success') {
+            setAlerts(false)
+            navigation.navigate(ROUTES.LOGIN)
+        }
+        setAlerts(false)
+        
+    }
+
+    const copyToClipboard = () => {
+        Clipboard.setString(inputs.username)
     }
 
   return (
       <SafeAreaView style={tw`flex-1`}>
           {loading && (<AppLoader visible={loading} />)}
+          <AppAlert visible={alerts} status={ msg.status } msg={msg.msg} onOk={()=> lanjut()} />
           <View style={tw`p-4`}>
                 <Text style={tw`font-bold text-lg mb-4`}>Konfirmasi Password Anda 🔐</Text>
                 {/* MAD SALEH INFO */}
@@ -92,15 +130,22 @@ const RegistrasiPasswordScreen = () => {
               
               <ScrollView style={tw`px-4 mt-8`}>
                   <Text style={tw`font-bold text-lg mb-4`}>Username dan Password 🤐</Text>
-                  <AppInput placeholder="Masukkan Username Anda"
+                  {/* <AppInput placeholder="Masukkan Username Anda"
+                        editable={inputs.username.length === 0}
                         value={inputs.username}
                         changed={(val) => handleOnChanged(val, 'username')}
                         error={errors.username}
                         onFocus={() => {
                             handleError(null,'username')
-                        }}
+                      }}
 
-                    />
+                    /> */}
+                  <View style={tw`mb-2`}>
+                        <Text style={tw`font-bold`}>Username Anda:</Text>
+                        <TouchableOpacity onPress={() => copyToClipboard}>
+                            <Text>  📋  {inputs.username}</Text>
+                        </TouchableOpacity>
+                  </View>
                     <AppInput placeholder="Masukkan Password Anda"
                         value={inputs.password}
                         changed={(val) => handleOnChanged(val, 'password')}
@@ -110,12 +155,11 @@ const RegistrasiPasswordScreen = () => {
                         }}
                   />
                   
-                  <Text>Params : { route.params.userId }</Text>
               </ScrollView>
             </View>
           <BottomTwoBtn
               onDismiss={() => navigation.navigate(ROUTES.LOGIN)}
-              onOk={()=> simpanData()}
+              onOk={()=> validate()}
           />
     </SafeAreaView>
   )

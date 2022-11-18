@@ -13,13 +13,14 @@ export const AuthProvider = ({ children }) => {
     const [alerts, setAlerts] = useState(false);
     const [userToken, setUserToken] = useState(null);
     const [user, setUser] = useState(null);
+    const [pegawai, setPegawai] = useState(null);
 
 
     const login = async (username, password) => {
         let device = Device.osInternalBuildId
         let email = username + '@app.com'
         setIsLoading(true);
-        api.post(`${BASE}/v2/login`, {
+        await api.post(`/v2/login`, {
             email,password,device
         }).then(resp => {
             let token = resp.data.token
@@ -28,6 +29,8 @@ export const AuthProvider = ({ children }) => {
             AsyncStorage.setItem('user', JSON.stringify(userInfo))
             setUserToken(token)
             setUser(userInfo)
+
+            getMe()
             setIsLoading(false)
             // console.log(token)
         }).catch(e => {
@@ -37,9 +40,17 @@ export const AuthProvider = ({ children }) => {
         })
     }
 
+    const getMe = async () => {
+        await api.get(`/v2/user/me`).then(resp => {
+        setPegawai(resp.data.result)
+        }).catch(err => {
+        console.log(err)
+        })
+    }
+
     const logout = async () => {
         setIsLoading(true);
-        await api.get(`${BASE}/v2/user/logout`).then(resp => {
+        await api.get(`/v2/user/logout`).then(resp => {
             removeToken()
             setIsLoading(false)
         }).catch(err => {
@@ -67,6 +78,8 @@ export const AuthProvider = ({ children }) => {
             userInfo = JSON.parse(userInfo)
             setUser(userInfo)
             setUserToken(token)
+
+            getMe()
             setIsLoading(false)
             console.log('setUser:', userInfo)
         } catch (e) {
@@ -83,7 +96,7 @@ export const AuthProvider = ({ children }) => {
 
 
     return (
-        <AuthContext.Provider value={{login, logout, removeToken, alerts, isLoading, userToken, user}}>
+        <AuthContext.Provider value={{login, logout, removeToken, alerts, isLoading, userToken, user, pegawai}}>
             {children}
         </AuthContext.Provider>
     )

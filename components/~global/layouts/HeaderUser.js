@@ -1,13 +1,16 @@
 import { View, Text, Image, TouchableOpacity } from 'react-native'
-import React, { useContext} from 'react'
+import React, { useContext, useEffect, useState} from 'react'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { IMGS, tw } from '../../../constants'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { AuthContext } from '../../../context/AuthContext'
+import { api } from '../../../helpers/axiosInterceptor'
+import AppLoader from '../AppLoader'
+import { PATH_IMG100 } from '../../../config'
 
 const HeaderUser = (props) => {
 
-  const { user } = useContext(AuthContext)
+  const { pegawai } = useContext(AuthContext)
   
   return (
     <>
@@ -16,15 +19,15 @@ const HeaderUser = (props) => {
               <View style={tw`mr-2`}>
                   <View style={tw`h-10 w-10 bg-gray-light border-2 border-primary rounded-full overflow-hidden items-center justify-center`}>
                       <Image 
-                            source={IMGS.avatarMale}
-                            style={[tw`h-10 w-10`, {resizeMode:'cover'}]}
+                            source={ pegawai? {uri:`${PATH_IMG100}/${pegawai.nip}/${pegawai.foto}`} : IMGS.avatarMale}
+                            style={[tw`h-10 w-10`, {resizeMode:'contain'}]}
                         />
                   </View>
               </View>
                 <View style={tw`flex-1`}>
                     <Text className="font-bold text-gray text-xs -mb-1">Selamat Datang, 👋</Text>
                     <View className="flex-row items-center"> 
-                    <Text className="font-bold text-lg mr-1">{ user.nama }</Text>
+                    <Text className="font-bold text-lg mr-1">{ pegawai? pegawai.nama:'tunggu ...' }</Text>
                     </View>
               </View>
               <TouchableOpacity

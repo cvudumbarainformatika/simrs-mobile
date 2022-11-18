@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { BASE } from '../config';
 import { ROUTES } from '../constants';
-import { navigate } from '../screens/content/RootNavigators';
+import * as RootNavigation from '../routers/RootNavigation.js';
 
 
 
@@ -31,20 +31,23 @@ api.interceptors.request.use(
 api.interceptors.response.use(response => new Promise((resolve, reject) => {
     resolve(response);
 }), error => {
-    console.log('interceptors.response:', error.response.data)
+
     if (!error.response) {
         return new Promise((resolve, reject) => {
             reject(error)
         })
     }
 
-    if (error.response.status === 401 ) {
-        navigate(ROUTES.LOGOUT, {tokenExpired: true})
+    if (error.response.status === 401 || error.response.status === 402) {
+        console.log('interceptors.response: hahaa')
+        RootNavigation.navigate(ROUTES.LOGOUT, { tokenExpiry:true });
     } else {
         return new Promise((resolve, reject) => {
             reject(error)
         })
     }
+
+    
 })
 
 export { api };

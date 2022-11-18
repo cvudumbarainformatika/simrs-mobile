@@ -8,6 +8,7 @@ import AppStack from './AppStack'
 import AuthStack from './AuthStack'
 import { Provider } from 'react-redux'
 import { store } from '../redux'
+import { navigationRef } from './RootNavigation'
 
 const AppNav = () => {
 
@@ -19,7 +20,7 @@ const AppNav = () => {
 
   return (
     <Provider store={store}>
-      <NavigationContainer>
+      <NavigationContainer ref={navigationRef}>
         { userToken !== null? <AppStack/> : <AuthStack /> }
       </NavigationContainer>
     </Provider>

@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import { ROUTES } from '../constants'
 import BottomTabNavigator from './BottomTabNavigator'
 import { TRANSITION_HORIZONTAL } from '../constants/transitions'
+import Logout from '../screens/Logout'
 
 const AppStack = () => {
 
@@ -18,6 +19,7 @@ const AppStack = () => {
       initialRouteName={ROUTES.HOME}
     >
       <Stack.Screen name={ROUTES.HOME} component={BottomTabNavigator} options={ TRANSITION_HORIZONTAL } />
+      <Stack.Screen name={ROUTES.LOGOUT} component={Logout} options={TRANSITION_HORIZONTAL} />
     </Stack.Navigator>
   )
 }
