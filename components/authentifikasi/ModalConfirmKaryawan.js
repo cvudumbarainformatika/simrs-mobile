@@ -1,9 +1,10 @@
-import { View, Text, useWindowDimensions, StyleSheet, Image } from 'react-native'
+import { View, Text, useWindowDimensions, StyleSheet, Image, TouchableOpacity } from 'react-native'
 import React from 'react'
 
 import { tw,IMGS } from '../../constants';
 import BottomTwoBtn from '../~global/layouts/BottomTwoBtn';
 import { PATH_IMG100 } from '../../config';
+import { AppBtn } from '../~global';
 
 const ModalConfirmKaryawan = ({
     visible = false,
@@ -42,10 +43,17 @@ const ModalConfirmKaryawan = ({
                               <Text style={tw`text-negative`}>KAMU SUDAH TEREGISTRASI</Text>
                       }
                   </View>
-                  <BottomTwoBtn labelBtnBack="Bukan !" labelBtnOk="Benar"
+
+                  {user === null ? <BottomTwoBtn labelBtnBack="Bukan !" labelBtnOk="Benar"
                       onDismiss={props.onDismiss}
                       onOk={props.onOk}
-                  />
+                  /> : 
+                      <TouchableOpacity style={tw.style('p-3 w-full bg-gray-light border-primary border-t items-center')}
+                        onPress={props.onOk}
+                    >
+                        <Text style={tw`text-primary`}>OK</Text>
+                    </TouchableOpacity>
+                  }
             </View>
         </View>
       )

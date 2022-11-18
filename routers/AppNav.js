@@ -2,7 +2,7 @@
 import React, { useContext } from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { AuthContext } from '../context/AuthContext'
-import { AppLoader } from '../components'
+import { AppAlert, AppLoader } from '../components'
 
 import AppStack from './AppStack'
 import AuthStack from './AuthStack'
@@ -12,10 +12,19 @@ import { navigationRef } from './RootNavigation'
 
 const AppNav = () => {
 
-  const { isLoading, userToken } = useContext(AuthContext);
+  const { isLoading, userToken, alerts, msgError, msgOk, closeAlerts, resetDevice } = useContext(AuthContext);
 
   if (isLoading) {
       return (<AppLoader visible={isLoading} />)
+  }
+
+  
+
+  if (alerts) {
+    if (msgOk !== null) {
+      return (<AppAlert visible={alerts} status="Success" msg={msgOk} onOk={resetDevice}  />)
+    }
+    return (<AppAlert visible={alerts} status="Error" msg={msgError} onOk={closeAlerts}  />)
   }
 
   return (

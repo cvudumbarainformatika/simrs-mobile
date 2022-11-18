@@ -2,9 +2,8 @@
 import React, { createContext, useEffect, useState } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Device from 'expo-device';
-import axios from 'axios';
-import { BASE } from '../config';
 import {api} from '../helpers/axiosInterceptor';
+import * as RootNavigation from '../routers/RootNavigation.js';
 
 export const AuthContext = createContext();
 
@@ -14,6 +13,10 @@ export const AuthProvider = ({ children }) => {
     const [userToken, setUserToken] = useState(null);
     const [user, setUser] = useState(null);
     const [pegawai, setPegawai] = useState(null);
+
+    const [msgError, setMsgError] = useState(null)
+    const [msgOk, setMsgOk] = useState(null)
+    const [userId, setUserId] = useState(null)
 
 
     const login = async (username, password) => {
@@ -34,17 +37,49 @@ export const AuthProvider = ({ children }) => {
             setIsLoading(false)
             // console.log(token)
         }).catch(e => {
-            console.log(`Login Error ${e}`)
+            // if (e.response) {
+            //     console.log(e.response.data);
+            //     console.log(e.response.status);
+            //     console.log(e.response.headers);
+            // }
             setIsLoading(false)
             setAlerts(true)
+            if (e.response.status === 406) {
+                setMsgError('Maaf, Kamu sudah terdaftar pada device lain ... Harap menghubungi admin untuk mengganti device')
+                return
+            }
+            if (e.response.status === 410) {
+                // console.log(e.response)
+                setMsgOk('Klik OK untuk ganti device')
+                setUserId(e.response.data.id)
+                return
+            }
+        })
+    }
+
+    const resetDevice = async () => {
+        setIsLoading(true);
+        let form = {
+            id: userId,
+            device: Device.osInternalBuildId
+        }
+        await api.post(`/v2/reset-device`, form)
+        .then(resp => {
+            setIsLoading(false)
+            setAlerts(false)
+            setMsgOk(null)
+        }).catch(err => {
+            setAlerts(true)
+            setIsLoading(false)
+            setMsgError('Maaf, Ada Kesalahan silahkan diulangi')
         })
     }
 
     const getMe = async () => {
         await api.get(`/v2/user/me`).then(resp => {
-        setPegawai(resp.data.result)
+         resp? setPegawai(resp.data.result): setPegawai(null)
         }).catch(err => {
-        console.log(err)
+            console.log('me :',err)
         })
     }
 
@@ -72,6 +107,8 @@ export const AuthProvider = ({ children }) => {
 
     const isLoggedIn = async () => {
         setIsLoading(true)
+        setMsgOk(null)
+        setUserId(null)
         try {
             let userInfo = await AsyncStorage.getItem('user');
             let token = await AsyncStorage.getItem('userToken');
@@ -83,10 +120,15 @@ export const AuthProvider = ({ children }) => {
             setIsLoading(false)
             console.log('setUser:', userInfo)
         } catch (e) {
-            console.log(`isLoggedIn Error ${e}`)
+            console.log(`isLoggedIn Error : ${e}`)
             setIsLoading(false)
         }
 
+    }
+
+    const closeAlerts = () => {
+        setMsgOk(null)
+        setAlerts(false)
     }
 
     useEffect(() => {
@@ -96,7 +138,7 @@ export const AuthProvider = ({ children }) => {
 
 
     return (
-        <AuthContext.Provider value={{login, logout, removeToken, alerts, isLoading, userToken, user, pegawai}}>
+        <AuthContext.Provider value={{login, logout, removeToken, closeAlerts,resetDevice, alerts, isLoading, userToken, user, pegawai, msgError, msgOk}}>
             {children}
         </AuthContext.Provider>
     )

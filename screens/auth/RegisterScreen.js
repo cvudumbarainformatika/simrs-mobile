@@ -81,7 +81,8 @@ const RegisterScreen = () => {
                             id: det.id,
                             nip:det.nip,
                             nama: det.nama,
-                            foto:det.foto
+                            foto: det.foto,
+                            user:det.user
                         })
                         setLoading(false)
                         setModal(true)
@@ -111,6 +112,10 @@ const RegisterScreen = () => {
     }
 
     function toConfirmPassword() {
+        if (details.user !== null) {
+            setModal(false)
+            return
+        }
         setModal(false)
         navigation.navigate(ROUTES.REGISTRASIPASSWORD, {
             pegawai_id: details.id,
