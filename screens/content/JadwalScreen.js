@@ -1,76 +1,71 @@
-import { View, Text, StatusBar, SafeAreaView, StyleSheet, FlatList } from 'react-native'
+
 import React from 'react'
-import { tw } from '../../constants'
-import { HeaderUser } from '../../components'
+import { useEffect } from 'react';
+import { View, Text, StatusBar, SafeAreaView, StyleSheet, FlatList, TouchableOpacity} from 'react-native'
+import { ROUTES, tw } from '../../constants'
+import { AppLoader, HeaderUser } from '../../components'
+import { useDispatch, useSelector } from 'react-redux';
+import { getPegawai } from '../../redux/actions/pegawaiAction';
+import { fetchJadwals, fetchKategoryJadwals } from '../../redux/actions/jadwalActions';
+
+  
 
 
-const DATA = [
-  {
-    id: 1,
-    title: 'Senin',
-  },
-  {
-    id: 2,
-    title: 'Selasa',
-  },
-  {
-    id: 3,
-    title: 'Rabu',
-  },
-  {
-    id: 4,
-    title: 'Kamis',
-  },
-  {
-    id: 5,
-    title: 'Jumat',
-  },
-  {
-    id: 6,
-    title: 'Sabtu',
-  },
-  {
-    id: 7,
-    title: 'Minggu',
-  },
-];
+const JadwalScreen = ({ navigation }) => {
+
+  const dispatch = useDispatch();
+  const { pegawai } = useSelector(state => state.pegawaiReducer)
+  const {jadwals, loading} = useSelector(state=> state.jadwalReducer)
 
 
-const Item = ({ title }) => (
-  <View style={tw`p-1 mt-1`}>
-    <View style={tw`flex-row items-center justify-between p-1 border-b-{1px} border-gray-light`}>
-      <View>
-        <Text style={tw`font-bold`}>{ title }</Text>
-        <Text>{ 'Ini nanti tempat nama shift' }</Text>
+  useEffect(() => {
+    dispatch(fetchJadwals())
+    dispatch(fetchKategoryJadwals())
+    // console.log('jadwal:', jadwals)
+  },[])
+
+
+  const renderItem = ({ item }) => (
+    <TouchableOpacity style={tw`mt-1 bg-white`}
+      onPress={() => navigation.navigate(ROUTES.KATEGORY_JADWAL_SCREEN, {jadwal:item})}
+    >
+      <View style={tw`flex-row items-center justify-between p-4`}>
+        <View>
+          <Text style={tw`font-bold`}>{ item.hari }</Text>
+          <Text>{ item.kategory_id }</Text>
+        </View>
+        <View>
+          <Text style={tw`text-primary`}>🕒 Masuk: {item.masuk}</Text>
+          <Text style={tw`text-negative`}>🕒 Pulang: {item.pulang}</Text>
+        </View>
       </View>
-      <View>
-        <Text>Waktu Masuk: 07:00</Text>
-        <Text>Waktu Pulang: 16:00</Text>
-      </View>
-    </View>
-  </View>
-);
+    </TouchableOpacity>
+  );
 
-const JadwalScreen = () => {
-  const renderItem = ({ item }) => <Item title={item.title} />;
+
+
+
   return (
-    <SafeAreaView style={[tw`flex-1 bg-gray-light`]}>
+    <View style={[tw`bg-gray-light flex-1`]}>
+      <AppLoader visible={loading} />
       <HeaderUser />
-      <View style={tw`bg-white m-2 p-3 pb-8 rounded-lg`}>
-        <Text style={tw`self-center font-bold mb-3`}>Jadwal Masuk Pegawai</Text>
-        <View style={tw`border-b-{1px} border-gray`}></View>
-        <FlatList
-          data={DATA}
-          renderItem={renderItem}
-          keyExtractor={item => item.id}
-        />
-        {/* <Text>Keterangan</Text> */}
+      <View style={tw`bg-white`}>
+        <Text style={tw`self-center font-bold mb-3 pt-4`}>Jadwal Masuk Pegawai</Text>
       </View>
-    </SafeAreaView>
+      <FlatList
+        data={jadwals}
+        renderItem={renderItem}
+        keyExtractor={item => item.id}
+        contentContainerStyle={{paddingBottom:120}}
+      />
+      {/* <View style={tw`pt-40`} /> */}
+        {/* <Text>Keterangan</Text> */}
+    </View>
   )
 }
 
 export default JadwalScreen
+
 
 
 const styles = StyleSheet.create({

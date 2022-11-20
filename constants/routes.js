@@ -5,6 +5,7 @@ export default {
   
   LOGOUT: 'Logout',
 
+
   HOME: 'Home',
   HOME_TAB: 'Home Tab',
   HOME_DRAWER: 'Home Drawer',
@@ -13,9 +14,16 @@ export default {
   ABSEN_TAB: 'Absen',
   ABSEN_DRAWER: 'Absen Drawer',
 
-  JADWAL: 'Jadwal Tab',
-  JADWAL_TAB: 'Jadwal',
+  JADWAL: 'Jadwal',
+  JADWAL_TAB: 'Jadwal Tab',
   JADWAL_DRAWER: 'Jadwal Drawer',
+  JADWAL_SET: 'Jadwal Set',
+  
+
+  JADWAL_SET_TAB:'Jadwal Set tab',
+  JADWAL_SET_PILIH:'Jadwal Set pilih',
+  KATEGORY_JADWAL: 'Kategory Jadwal',
+  KATEGORY_JADWAL_SCREEN: 'Kategory Jadwal Screen',
 
   HISTORY: 'History',
   HISTORY_TAB: 'History Tab',

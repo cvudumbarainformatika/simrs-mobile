@@ -6,8 +6,12 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 
 import { ROUTES, tw } from '../constants';
-import { AbsenScreen, HistoryScreen, HomeScreen, JadwalScreen, SettingsScreen } from '../screens';
+import { AbsenScreen, HistoryScreen, HomeScreen } from '../screens';
 import SettingsNavigator from './SettingsNavigator';
+import JadwalNavigator from './JadwalNavigator';
+import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
+import HomeNavigator from './HomeNavigator';
+import SetJadwalNavigator from './SetJadwalNavigator';
 // import CustomBottomTabBar from '../components/CustomBottomTabBar';
 
 // CUSTOM TAB BAR =======================
@@ -22,12 +26,17 @@ const CustomTab = ({ children, onPress }) => (
     <TouchableOpacity
       onPress={onPress}
     >
-      <View style={tw`w-18 h-18 bg-primary rounded-full border-4 border-gray-light`}>
+      <View style={tw`w-18 h-18 bg-dark rounded-full border-4 border-gray-light`}>
         {children}
       </View>
     </TouchableOpacity>
   </View>
-  );
+);
+  
+const HiddenTab = ({ children }) => (
+  
+  <View />
+)
 
 
 const BottomTabNavigator = () => {
@@ -38,10 +47,12 @@ const BottomTabNavigator = () => {
       <Tab.Navigator
           screenOptions={({ route }) => ({
               headerShown: false,
-              tabBarActiveTintColor: tw.color('primary'),
+              tabBarActiveTintColor: tw.color('white'),
               tabBarShowLabel: false,
               tabBarInactiveTintColor: tw.color('gray'),
               tabBarStyle: styles.tabBarStyle,
+              tabBarHideOnKeyboard:true,
+              
               tabBarIcon: ({ color, size, focused }) => {
                   let iconName;
                   if (route.name === ROUTES.HOME_TAB) {
@@ -57,11 +68,13 @@ const BottomTabNavigator = () => {
                   return <Icon name={iconName} size={22} color={color} />
               }
          })}
-        
+        initialRouteName={ROUTES.HOME_TAB}
       >
-        <Tab.Screen name={ROUTES.HOME_TAB} component={HomeScreen} />
-        <Tab.Screen name={ ROUTES.JADWAL_TAB } component={JadwalScreen} />
-        <Tab.Screen name={ROUTES.ABSEN_TAB} component={AbsenScreen}
+      
+      <Tab.Screen name={ROUTES.HOME_TAB} component={HomeNavigator} />
+     
+      <Tab.Screen name={ROUTES.JADWAL_TAB} component={JadwalNavigator}/>
+      <Tab.Screen name={ROUTES.ABSEN_TAB} component={AbsenScreen}
         options={{
           unmountOnBlur:true,
           tabBarIcon: ({ focused }) => (
@@ -71,7 +84,13 @@ const BottomTabNavigator = () => {
             }}
         />
         <Tab.Screen name={ ROUTES.HISTORY_TAB } component={HistoryScreen} />
-        <Tab.Screen name={ ROUTES.SETTINGS_TAB } component={SettingsNavigator}  />
+      <Tab.Screen name={ROUTES.SETTINGS_TAB} component={SettingsNavigator} />
+       <Tab.Screen name={ROUTES.JADWAL_SET_TAB} component={SetJadwalNavigator}
+        options={{
+          tabBarStyle: { display: 'none' },
+          tabBarButton: (props) => (<HiddenTab {...props} />)
+        }}
+      />
     </Tab.Navigator>
   )
 }
@@ -81,8 +100,9 @@ export default BottomTabNavigator
 
 const styles = StyleSheet.create({
   tabBarStyle: {
-    position:'absolute',
-    backgroundColor: tw.color('white'),
+    position: 'absolute',
+    zIndex:9,
+    backgroundColor: tw.color('primary'),
     elevation: 0,
     borderTopWidth: 1,
     borderTopColor: tw.color('gray-light'),

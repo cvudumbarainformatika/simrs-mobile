@@ -1,18 +1,45 @@
-import { View, Text, Image, ScrollView } from 'react-native'
+import { View, Text, Image, ScrollView, BackHandler } from 'react-native'
 import React, { useContext } from 'react'
-import { tw } from '../../constants'
-import { GradientTop, HeaderUser } from '../../components'
+import { useState } from 'react'
+import { ROUTES, tw } from '../../constants'
+import { AppBtn, AppLoader, GradientTop, HeaderUser } from '../../components'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchJadwals } from '../../redux/actions/jadwalActions'
+import { useEffect } from 'react'
+import { useNavigation } from '@react-navigation/native'
 
 const HomeScreen = () => {
 
+  const navigation = useNavigation();
+
+  const dispatch = useDispatch()
+  const { jadwals,loading } = useSelector(state => state.jadwalReducer)
+
+  const [config, setConfig] = useState(true)
+
+  
+
+  useEffect(() => {
+    dispatch(fetchJadwals());
+    jadwals.length === 0?navigation.navigate(ROUTES.JADWAL_SET_TAB) : null
+    console.log('jadwal dari home screen :', jadwals.length)
+
+  }, [dispatch, jadwals.length])
+  
+
+  
+
   return (
     <View style={tw`flex-1 bg-gray-light`}>
+      {/* <ModalPengaturanJadwal visible={config} /> */}
+      <AppLoader visible={loading} />
       {/* <GradientTop  /> */}
       <HeaderUser bellClick={() => alert(`ini alert percobaan`)}/>
       <ScrollView>
-          {/* PRESENSI BULAN INI */}
+        {/* PRESENSI BULAN INI */}
+        {/* <AppBtn label="GG" clicked={()=> navigation.navigate(ROUTES.JADWAL_SET_TAB)} /> */}
         <View style={tw`px-3 pt-2`}>
           <Text style={tw`font-bold pb-1 text-gray-dark`}>Presensi Hari Ini 📅</Text>
           <View style={tw`bg-white p-3 pb-5 rounded`}>

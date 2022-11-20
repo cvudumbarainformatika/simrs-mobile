@@ -7,8 +7,10 @@ import { AppAlert, AppLoader } from '../components'
 import AppStack from './AppStack'
 import AuthStack from './AuthStack'
 import { Provider } from 'react-redux'
-import { store } from '../redux'
 import { navigationRef } from './RootNavigation'
+import { store } from '../redux/store'
+import HomeNavigator from './HomeNavigator'
+import SetJadwalNavigator from './SetJadwalNavigator'
 
 const AppNav = () => {
 
@@ -30,7 +32,9 @@ const AppNav = () => {
   return (
     <Provider store={store}>
       <NavigationContainer ref={navigationRef}>
-        { userToken !== null? <AppStack/> : <AuthStack /> }
+        {
+          userToken !== null ? <AppStack /> : <AuthStack />
+        }
       </NavigationContainer>
     </Provider>
   )

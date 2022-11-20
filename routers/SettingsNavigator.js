@@ -59,21 +59,4 @@ const SettingsNavigator = () => {
     </Stack.Navigator>
   )
 }
-
-
-
-
-
-// +++++++++++++++++++++++===================END ROUTE
-
-// const SettingsNavigator = () => {
-//   // isAuthenticated = is...
-//   return (
-//     <NavigationContainer>
-//         {/* {isAuthenticated? LoginNavigator : BottomTabNavigator} */}
-//         <MainNavigator />
-//     </NavigationContainer>
-//   )
-// }
-
 export default SettingsNavigator
