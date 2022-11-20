@@ -3,7 +3,9 @@ import { api } from "../../helpers/axiosInterceptor"
 
 export const GET_JADWALS = 'GET_JADWALS'
 export const REFRESH_JADWAL = 'REFRESH_JADWAL'
+export const TUTUP_LOADING = 'TUTUP_LOADING'
 export const POST_JADWAL_SUCCESS = 'POST_JADWAL_SUCCESS'
+export const UPDATE_JADWAL_SUCCESS = 'UPDATE_JADWAL_SUCCESS'
 export const UBAH_STATUS_KE_IDLE = 'UBAH_STATUS_KE_IDLE'
 export const JADWAL_LOADING = 'JADWAL_LOADING'
 
@@ -57,5 +59,18 @@ export const postAwalJadwal = (form) => {
 export const changeStatusAlertToIdle = () => {
     return async (dispatch, getState) => { 
         dispatch({ type: UBAH_STATUS_KE_IDLE })
+    }
+}
+
+
+export const updateJadwalToDb = (form) => {
+    return async (dispatch) => {
+        dispatch({ type: REFRESH_JADWAL })
+        try {
+            const resp = await api.post('/v2/absensi/jadwal/update', form)
+            dispatch({ type: UPDATE_JADWAL_SUCCESS, payload: resp.data.data })
+        } catch (error) {
+            dispatch({type:ERROR_KATEGORY_JADWALS, payload:error.response})
+        }
     }
 }

@@ -17,6 +17,9 @@ import jadwalReducer from "./reducers/jadwalReducer";
 //     // devTools: true
 // });
 
-const rootReducer = combineReducers({ pegawaiReducer, jadwalReducer })
+const rootReducer = combineReducers({
+    pegawaiReducer,
+    jadwalReducer
+})
 
 export const store = createStore(rootReducer, applyMiddleware(thunk))

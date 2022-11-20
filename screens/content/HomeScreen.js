@@ -15,7 +15,7 @@ const HomeScreen = () => {
   const navigation = useNavigation();
 
   const dispatch = useDispatch()
-  const { jadwals,loading } = useSelector(state => state.jadwalReducer)
+  const { jadwals,loading,kategories } = useSelector(state => state.jadwalReducer)
 
   const [config, setConfig] = useState(true)
 
@@ -25,8 +25,9 @@ const HomeScreen = () => {
     dispatch(fetchJadwals());
     jadwals.length === 0?navigation.navigate(ROUTES.JADWAL_SET_TAB) : null
     console.log('jadwal dari home screen :', jadwals.length)
+    console.log('kategories dari home screen :', kategories.length)
 
-  }, [dispatch, jadwals.length])
+  }, [dispatch, jadwals.length, kategories.length])
   
 
   

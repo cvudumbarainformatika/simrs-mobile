@@ -1,5 +1,5 @@
 import {
-    GET_JADWALS, REFRESH_JADWAL, JADWAL_LOADING, POST_JADWAL_SUCCESS, UBAH_STATUS_KE_IDLE,
+    GET_JADWALS, REFRESH_JADWAL, JADWAL_LOADING, POST_JADWAL_SUCCESS, UPDATE_JADWAL_SUCCESS, UBAH_STATUS_KE_IDLE,
     GET_KATEGORY_JADWALS, SLICE_KATEGORY_JADWALS, LOADING_KATEGORY_JADWALS,ERROR_KATEGORY_JADWALS
 } from "../actions/jadwalActions"; 
 
@@ -22,7 +22,7 @@ function jadwalReducer(state = initialState, action) {
     switch (action.type) {
         // INI UNTUK JADWAL
         case REFRESH_JADWAL:
-            return { ...state, loading: action.payload, error:null, status: 'Idle' }
+            return { ...state, loading: true }
         case GET_JADWALS:
             return { ...state, jadwals: action.payload, loading:false, error:null, status: 'Idle' }
         
@@ -48,12 +48,24 @@ function jadwalReducer(state = initialState, action) {
                 error: null,
                 status: 'Success'
             }
+        case UPDATE_JADWAL_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                jadwals: state.jadwals.map(x => {
+                    if (x.id === action.payload.id) {
+                        return x = action.payload
+                    }
+
+                    return x
+                }),
+            }
         case UBAH_STATUS_KE_IDLE:
             return {
                ...state,
                 loading: false,
                 error: null,
-                status: 'Idle' 
+                status: 'Idle',
             }
         case ERROR_KATEGORY_JADWALS:
             return {...state, error: action.payload, loading:false, status: 'Error'}
@@ -61,5 +73,20 @@ function jadwalReducer(state = initialState, action) {
             return state
     }
 }
+
+
+export const updateJadwals = (state, payload) =>{
+    return state.map(jadwal => {
+        if (jadwal.id === payload.id) {
+            return {
+                ...jadwal,
+                jadwal: payload
+            }
+        };
+        return jadwal;
+      });
+}
+
+
 
 export default jadwalReducer;
