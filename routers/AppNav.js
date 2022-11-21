@@ -8,9 +8,7 @@ import AppStack from './AppStack'
 import AuthStack from './AuthStack'
 import { Provider } from 'react-redux'
 import { navigationRef } from './RootNavigation'
-import { store } from '../redux/store'
-import HomeNavigator from './HomeNavigator'
-import SetJadwalNavigator from './SetJadwalNavigator'
+import store  from '../redux/store'
 
 const AppNav = () => {
 

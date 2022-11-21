@@ -1,25 +1,29 @@
-// import { configureStore } from "@reduxjs/toolkit";
+// INI STORE LAMA =================================================================================
 
-import { applyMiddleware, combineReducers, legacy_createStore as createStore } from "redux";
-import thunk from "redux-thunk";
+// import { applyMiddleware, combineReducers, legacy_createStore as createStore } from "redux";
+// import thunk from "redux-thunk";
 
-import pegawaiReducer from "./reducers/pegawaiReducer";
-import jadwalReducer from "./reducers/jadwalReducer";
+// import pegawaiReducer from "./reducers/pegawaiReducer";
+// import jadwalReducer from "./reducers/jadwalReducer";
 
-// import jadwalReducer from './features/jadwalSlice'
-// import pegawaiReducer from "./features/pegawaiSlice";
+// const rootReducer = combineReducers({
+//     pegawaiReducer,
+//     jadwalReducer
+// })
 
-// export const store = configureStore({
-//     reducer: {
-//         jadwals: jadwalReducer,
-//         pegawai: pegawaiReducer
-//     },
-//     // devTools: true
-// });
+// export const store = createStore(rootReducer, applyMiddleware(thunk))
 
-const rootReducer = combineReducers({
-    pegawaiReducer,
-    jadwalReducer
+
+// ==========================================================================================INI STORE BARU
+import { configureStore } from '@reduxjs/toolkit'
+import jadwalsReducer from './features/jadwal/jadwalsReducer'
+import kategoryJadwalReducer from './features/jadwal/kategoryJadwalReducer'
+
+const store = configureStore({
+  reducer: {
+    jadwal: jadwalsReducer,
+    kategory: kategoryJadwalReducer,
+  },
 })
 
-export const store = createStore(rootReducer, applyMiddleware(thunk))
+export default store

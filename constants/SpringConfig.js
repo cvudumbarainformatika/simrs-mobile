@@ -10,10 +10,10 @@ export default {
         restSpeedThreshold: 0.01,
     },
     DUA : {
+        shiftness: 200,
         damping: 100,
         overshootClamping: true,
         restDisplacementThreshold: 0.1,
         restSpeedThreshold: 0.1,
-        shiftness: 200
     }
 }

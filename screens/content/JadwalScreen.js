@@ -5,8 +5,8 @@ import { View, Text, StatusBar, SafeAreaView, StyleSheet, FlatList, TouchableOpa
 import { ROUTES, tw } from '../../constants'
 import { AppLoader, HeaderUser } from '../../components'
 import { useDispatch, useSelector } from 'react-redux';
-import { getPegawai } from '../../redux/actions/pegawaiAction';
-import { fetchJadwals, fetchKategoryJadwals } from '../../redux/actions/jadwalActions';
+// import { getPegawai } from '../../redux/actions/pegawaiAction';
+// import { fetchJadwals, fetchKategoryJadwals } from '../../redux/actions/jadwalActions';
 import dayjs from 'dayjs'
 require('dayjs/locale/id')
   
@@ -16,7 +16,7 @@ const JadwalScreen = ({ navigation }) => {
 
   const dispatch = useDispatch();
   // const { pegawai } = useSelector(state => state.pegawaiReducer)
-  const { jadwals, loading } = useSelector(state => state.jadwalReducer)
+  // const { jadwals, loading } = useSelector(state => state.jadwalReducer)
 
   const [masuk, setMasuk] = useState(0)
   
@@ -29,10 +29,10 @@ const JadwalScreen = ({ navigation }) => {
   }
 
   useEffect(() => {
-    dispatch(fetchJadwals())
-    dispatch(fetchKategoryJadwals())
+    // dispatch(fetchJadwals())
+    // dispatch(fetchKategoryJadwals())
     // console.log('jadwal:', jadwals)
-  },[jadwals.length])
+  },[])
 
 
   const renderItem = ({ item }) => (

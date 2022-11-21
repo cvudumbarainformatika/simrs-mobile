@@ -2,20 +2,19 @@ import { View, Text, FlatList, BackHandler } from 'react-native'
 import React from 'react'
 import { ROUTES, tw } from '../../constants'
 import { AppAlert, AppBtn, AppLoader, BottomTwoBtn } from '../../components'
-import { useNavigation } from '@react-navigation/native'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
-import { changeStatusAlertToIdle, fetchKategoryJadwals, postAwalJadwal } from '../../redux/actions/jadwalActions'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import KategoriJadwal from '../../components/jadwal/KategoriJadwal'
 import { useState } from 'react'
 import { useCallback } from 'react'
 import { api } from '../../helpers/axiosInterceptor'
+import { getKategoriesAscync, setStatus } from '../../redux/features/jadwal/kategoryJadwalReducer'
+import KategoriJadwal from '../../components/jadwal/KategoriJadwal'
 
 const PilihJadwalScreen = ({ navigation }) => {
 
     const dispatch = useDispatch()
-    const { kategories, loading, error} = useSelector(state => state.jadwalReducer)
+    const { kategories, loading, error } = useSelector(state => state.kategory)
 
     const [kategori, setKategori] = useState(null)
     const [status, setStatus] = useState('Idle')
@@ -28,7 +27,7 @@ const PilihJadwalScreen = ({ navigation }) => {
         console.log('pilih jadwal :', kategori)
     }
 
-    const callbackKategori = useCallback((kategory_id)=> {selectedKategory(kategory_id)}, [])
+    const callbackKategori = useCallback((kategory_id)=> {selectedKategory(kategory_id)}, [kategori])
 
     const cutItems = () => {
         let newArr = []
@@ -49,7 +48,6 @@ const PilihJadwalScreen = ({ navigation }) => {
         let form = {
             kategory_id:kategori
         }
-        // console.log('sendData :', form)
         setProgress(true)
         await api.post('/v2/absensi/jadwal/simpan', form).then(() => {
             setStatus('Success')
@@ -67,10 +65,10 @@ const PilihJadwalScreen = ({ navigation }) => {
     }
     
     useEffect(() => {
-        dispatch(fetchKategoryJadwals())
-        console.log('pilih jadwal error :', error)
+        dispatch(getKategoriesAscync())
+        console.log('pilih jadwal status :', status)
         BackHandler.addEventListener('hardwareBackPress', () => {return false})
-    }, [dispatch])
+    }, [])
     
   return (
       <SafeAreaView style={tw`flex-1`}>

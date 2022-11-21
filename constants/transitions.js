@@ -26,19 +26,19 @@ export const closeSring = {
 const config = {
   animation: 'spring',
   config: {
-    stiffness: 1000,
+    stiffness: 300,
     damping: 50,
     mass: 1,
     overshootClamping: false,
-    restDisplacementThreshold: 0.01,
-    restSpeedThreshold: 0.01,
+    restDisplacementThreshold: 0.001,
+    restSpeedThreshold: 0.001,
   },
 };
 
 const closeConfig = {
     animation: 'timing',
     config: {
-        duration: 100,
+        duration: 50,
         easing: Easing.linear,
     }
 }

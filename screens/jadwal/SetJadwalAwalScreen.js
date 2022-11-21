@@ -5,22 +5,23 @@ import { IMGS, ROUTES, tw } from '../../constants'
 import { AppBtn, AppLoader } from '../../components'
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchJadwals } from '../../redux/actions/jadwalActions'
 import { useBackHandler } from '@react-native-community/hooks'
+import { getKategoriesAscync } from '../../redux/features/jadwal/kategoryJadwalReducer'
 
-const SetJadwalAwalScreen = ({navigation}) => {
-  // const navigation = useNavigation()
-  // const [loading, setLoading] = useState(false)
-    const dispatch = useDispatch()
-    const { jadwals, loading } = useSelector(state => state.jadwalReducer)
+const SetJadwalAwalScreen = ({ navigation }) => {
+  
+  const dispatch = useDispatch()
+  const { jadwals, loading } = useSelector(state=> state.jadwal) // state jadwal
+  // const { loading, status } = useSelector( state => state.kategory)   // panggil stte kategori juga
+  
+  const navigateToHome = () => {
+    jadwals.length > 0 ? navigation.navigate(ROUTES.HOME_TAB) : null
+  }
 
-    useEffect(() => {
-      dispatch(fetchJadwals())
-      jadwals.length > 0 ? navigation.navigate(ROUTES.HOME_TAB) : false
-    // return () => BackHandler.removeEventListener("hardwareBackPress", backAction);
-
-
-    }, [dispatch, jadwals.length])
+  useEffect(() => {
+    navigateToHome()
+    console.log('from set jadwal awal :', jadwals.length)
+  }, [jadwals.length])
   
     const backAction = () => {
         Alert.alert("Tunggu!", "Apakah Kamu ingin membatalkan dan keluar dari aplikasi?", [
@@ -64,7 +65,9 @@ const SetJadwalAwalScreen = ({navigation}) => {
           /> 
           <View style={tw`absolute bottom-4 right-4 left-4 flex-row justify-between`}>
               <AppBtn label="Logout" color="dark" clicked={()=> navigation.navigate(ROUTES.LOGOUT)} />
-              <AppBtn label="Lanjutkan" clicked={()=> navigation.navigate(ROUTES.JADWAL_SET_PILIH)} />
+        <AppBtn label="Lanjutkan" clicked={() => {
+                navigation.navigate(ROUTES.JADWAL_SET_PILIH)
+              }} />
           </View>
     </ScrollView>
   )

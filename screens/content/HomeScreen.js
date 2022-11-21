@@ -1,33 +1,43 @@
 import { View, Text, Image, ScrollView, BackHandler } from 'react-native'
 import React, { useContext } from 'react'
+import { useEffect } from 'react'
 import { useState } from 'react'
 import { ROUTES, tw } from '../../constants'
 import { AppBtn, AppLoader, GradientTop, HeaderUser } from '../../components'
+import { useNavigation } from '@react-navigation/native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchJadwals } from '../../redux/actions/jadwalActions'
-import { useEffect } from 'react'
-import { useNavigation } from '@react-navigation/native'
+import { getJadwalsAsync, showError, showJadwals, showLoading } from '../../redux/features/jadwal/jadwalsReducer'
+import { useCallback } from 'react'
+import { useMemo } from 'react'
 
 const HomeScreen = () => {
 
   const navigation = useNavigation();
 
   const dispatch = useDispatch()
-  const { jadwals,loading,kategories } = useSelector(state => state.jadwalReducer)
+  // const { jadwals } = useSelector(state => state.jadwalReducer) // INI YANG LAMA
+  // const loading = useSelector(showLoading)
+  // const jadwals = useSelector(showJadwals)
+  // const error = useSelector(showError)
+  const {jadwals, loading, error} = useSelector(state => state.jadwal)
 
-  const [config, setConfig] = useState(true)
+  const callFirst = () => {
+    dispatch(getJadwalsAsync());
+    console.log('error getJadwal dari home screen :', error)
+    jadwals.length > 0? false : navigation.navigate(ROUTES.JADWAL_SET_TAB)
 
-  
+  }
+
+  // const memJadwals = useMemo(() => {
+  //   callFirst()
+  // },[jadwals.length])
 
   useEffect(() => {
-    dispatch(fetchJadwals());
-    jadwals.length === 0?navigation.navigate(ROUTES.JADWAL_SET_TAB) : null
-    console.log('jadwal dari home screen :', jadwals.length)
-    console.log('kategories dari home screen :', kategories.length)
-
-  }, [dispatch, jadwals.length, kategories.length])
+    callFirst()
+    console.log('jadwal dari home effect :', jadwals.length)
+  }, [jadwals.length])
   
 
   

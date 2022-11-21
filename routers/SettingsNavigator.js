@@ -14,8 +14,8 @@ import Logout from '../screens/Logout';
 const config = {
   animation: 'spring',
   config: {
-    stiffness: 1000,
-    damping: 50,
+    stiffness: 200,
+    damping: 80,
     mass: 1,
     overshootClamping: false,
     restDisplacementThreshold: 0.01,
@@ -26,8 +26,8 @@ const config = {
 const closeConfig = {
   animation: 'timing',
   config: {
-    duration: 100,
-    easing: Easing.linear,
+    duration: 300,
+    easing: Easing.back(),
   }
 }
 
