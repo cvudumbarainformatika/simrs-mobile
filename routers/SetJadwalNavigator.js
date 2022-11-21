@@ -1,12 +1,8 @@
-import { Easing } from 'react-native'
 import React from 'react'
 
 import { ROUTES } from '../constants';
 import { TRANSITION_HORIZONTAL } from '../constants/transitions';
-import KategoriJadwalScreen from '../screens/jadwal/KategoriJadwalScreen';
-import { CardStyleInterpolators, createStackNavigator, TransitionPresets } from '@react-navigation/stack';
-import { JadwalScreen } from '../screens';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createStackNavigator } from '@react-navigation/stack';
 import SetJadwalAwalScreen from '../screens/jadwal/SetJadwalAwalScreen';
 import PilihJadwalScreen from '../screens/jadwal/PilihJadwalScreen';
 

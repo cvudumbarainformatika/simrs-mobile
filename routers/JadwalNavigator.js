@@ -2,7 +2,7 @@ import { Easing } from 'react-native'
 import React from 'react'
 
 import { ROUTES } from '../constants';
-import { TRANSITION_HORIZONTAL } from '../constants/transitions';
+import { closeSring, openSring, TRANSITION_HORIZONTAL, TRANSITION_VERTICAL } from '../constants/transitions';
 import KategoriJadwalScreen from '../screens/jadwal/KategoriJadwalScreen';
 import { CardStyleInterpolators, createStackNavigator, TransitionPresets } from '@react-navigation/stack';
 import { JadwalScreen } from '../screens';
@@ -22,15 +22,21 @@ const JadwalNavigator = () => {
       initialRouteName={ROUTES.JADWAL}
     >
       <Stack.Screen name={ROUTES.JADWAL} component={JadwalScreen} />
-      <Stack.Screen name={ROUTES.KATEGORY_JADWAL_SCREEN} component={KategoriJadwalScreen} options={{
-        headerMode:'screen',
-        headerShown:false,
-        presentation: 'transparentModal',
-        cardStyle: {
-          backgroundColor: 'transparent',
-        },
-        ...TransitionPresets.ModalSlideFromBottomIOS,
-      }} />
+      <Stack.Screen name={ROUTES.KATEGORY_JADWAL_SCREEN} component={KategoriJadwalScreen} options={
+          {
+            headerMode:'screen',
+            headerShown:false,
+            presentation: 'transparentModal',
+            cardStyle: {
+              backgroundColor: 'transparent',
+            },
+            transitionSpec: {
+              open: openSring,
+              close: closeSring
+            },
+            cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
+        }
+      } />
     </Stack.Navigator>
   )
 }

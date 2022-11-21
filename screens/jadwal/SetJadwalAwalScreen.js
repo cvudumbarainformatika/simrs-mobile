@@ -53,7 +53,7 @@ const SetJadwalAwalScreen = ({navigation}) => {
   return (
     <ScrollView contentContainerStyle={tw`flex-1 items-center justify-center`}>
         <AppLoader visible={loading} />
-          <View style={tw`h-32 w-48 rounded-full border-gray border-2 p-8`}>
+          <View style={tw`h-38 w-48 rounded-full border-gray border-2 p-8`}>
               <Text>Tinggal Selangkah lagi... Klik Lanjutkan untuk memilih Kategori jadwal Anda</Text>
           </View>
           <View style={tw`h-4 w-4 rounded-full border-gray border-2 right-9`} />
@@ -62,7 +62,8 @@ const SetJadwalAwalScreen = ({navigation}) => {
             style={tw.style('w-48 h-64')}
             source={IMGS.madSalehMinum}
           /> 
-          <View style={tw`absolute bottom-4 right-4`}>
+          <View style={tw`absolute bottom-4 right-4 left-4 flex-row justify-between`}>
+              <AppBtn label="Logout" color="dark" clicked={()=> navigation.navigate(ROUTES.LOGOUT)} />
               <AppBtn label="Lanjutkan" clicked={()=> navigation.navigate(ROUTES.JADWAL_SET_PILIH)} />
           </View>
     </ScrollView>

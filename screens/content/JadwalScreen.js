@@ -17,9 +17,16 @@ const JadwalScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   // const { pegawai } = useSelector(state => state.pegawaiReducer)
   const { jadwals, loading } = useSelector(state => state.jadwalReducer)
+
+  const [masuk, setMasuk] = useState(0)
   
   const [date, setDate] = useState(dayjs().locale('id'))
 
+
+  const updateMasuk = () => {
+    const arr = []
+    
+  }
 
   useEffect(() => {
     dispatch(fetchJadwals())
@@ -34,10 +41,23 @@ const JadwalScreen = ({ navigation }) => {
     >
       <View style={tw`flex-row items-center justify-between p-4`}>
         <View>
-          <Text style={tw`font-bold`}>{ item.hari }</Text>
-          {/* {item.status === '2' && (<Text>{item.kategory.nama}</Text>)}
-          {item.status !== '2' && (<Text>LIBUR</Text>)} */}
-          <Text>{item.kategory?item.kategory.nama: 'LIBUR'}</Text>
+          <View style={tw`flex-row items-center`}>
+            <View style={[tw`w-3 h-3 rounded-3 mr-1`,
+              { backgroundColor: item.kategory ? item.kategory.warna : tw.color('negative') }
+            ]} />
+            <Text style={{
+              fontWeight: 'bold',
+            }}>{ item.hari }</Text>
+          </View>
+          <Text style={{
+            fontSize:12,
+            // color: item.kategory ? item.kategory.warna : '',
+            borderWidth: 2,
+            paddingHorizontal: 10,
+            paddingVertical: 4,
+            borderColor: item.kategory ? item.kategory.warna : tw.color('negative'),
+            borderRadius: 20
+          }}>{item.kategory?item.kategory.nama: 'LIBUR'}</Text>
         </View>
         <View>
           <Text style={tw`text-primary text-xs`}>🕒 Masuk: {item.masuk}</Text>
@@ -54,8 +74,15 @@ const JadwalScreen = ({ navigation }) => {
     <View style={[tw`bg-gray-light flex-1`]}>
       <AppLoader visible={loading} />
       <HeaderUser />
-      <View style={tw`bg-white`}>
-        <Text style={tw`self-center font-bold mb-3 pt-4`}>Jadwal Masuk Pegawai </Text>
+      <View style={tw`bg-white flex-row p-2`}>
+        <View style={tw`bg-primary items-center justify-center rounded-2 w-14 h-14`}>
+          <Text style={{fontSize:24, color:'white', fontWeight:'bold'}}>7 </Text>
+          <Text style={{fontSize:9, color:'white'}}>Masuk</Text>
+        </View>
+        <View style={tw`bg-negative items-center justify-center rounded-2 ml-2 w-14 h-14`}>
+          <Text style={{fontSize:24, color:'white', fontWeight:'bold'}}>7 </Text>
+          <Text style={{fontSize:9, color:'white'}}>Libur</Text>
+        </View>
       </View>
       <FlatList
         data={jadwals}
