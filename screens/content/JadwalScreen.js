@@ -5,9 +5,9 @@ import { View, Text, StatusBar, SafeAreaView, StyleSheet, FlatList, TouchableOpa
 import { ROUTES, tw } from '../../constants'
 import { AppLoader, HeaderUser } from '../../components'
 import { useDispatch, useSelector } from 'react-redux';
-// import { getPegawai } from '../../redux/actions/pegawaiAction';
-// import { fetchJadwals, fetchKategoryJadwals } from '../../redux/actions/jadwalActions';
+
 import dayjs from 'dayjs'
+import { liburJadwalCount} from '../../redux/features/jadwal/jadwalsReducer';
 require('dayjs/locale/id')
   
 
@@ -16,28 +16,34 @@ const JadwalScreen = ({ navigation }) => {
 
   const dispatch = useDispatch();
   // const { pegawai } = useSelector(state => state.pegawaiReducer)
-  // const { jadwals, loading } = useSelector(state => state.jadwalReducer)
+  const { jadwals, loading } = useSelector(state => state.jadwal)
+  const { kategories } = useSelector(state => state.kategory)
 
-  const [masuk, setMasuk] = useState(0)
+  const [libur, setLibur] = useState(0);
+  const [masuk, setMasuk] = useState(7);
+
   
   const [date, setDate] = useState(dayjs().locale('id'))
 
 
-  const updateMasuk = () => {
-    const arr = []
-    
+  const updateLibur = () => {
+    let lib = jadwals.filter(x => x.status === '1').length
+    let mas = masuk - lib
+    setLibur(lib)
+    setMasuk(mas)
   }
 
   useEffect(() => {
-    // dispatch(fetchJadwals())
-    // dispatch(fetchKategoryJadwals())
-    // console.log('jadwal:', jadwals)
+    updateLibur()
+    // console.log('kategory from jadwal:', kategories)
   },[])
 
 
   const renderItem = ({ item }) => (
     <TouchableOpacity style={tw`mt-1 bg-white`}
-      onPress={() => navigation.navigate(ROUTES.KATEGORY_JADWAL_SCREEN, {jadwal:item})}
+      onPress={() => {
+        navigation.navigate(ROUTES.KATEGORY_JADWAL_SCREEN, { jadwal: item, kategories })
+      }}
     >
       <View style={tw`flex-row items-center justify-between p-4`}>
         <View>
@@ -76,11 +82,11 @@ const JadwalScreen = ({ navigation }) => {
       <HeaderUser />
       <View style={tw`bg-white flex-row p-2`}>
         <View style={tw`bg-primary items-center justify-center rounded-2 w-14 h-14`}>
-          <Text style={{fontSize:24, color:'white', fontWeight:'bold'}}>7 </Text>
+          <Text style={{fontSize:24, color:'white', fontWeight:'bold'}}> {masuk} </Text>
           <Text style={{fontSize:9, color:'white'}}>Masuk</Text>
         </View>
         <View style={tw`bg-negative items-center justify-center rounded-2 ml-2 w-14 h-14`}>
-          <Text style={{fontSize:24, color:'white', fontWeight:'bold'}}>7 </Text>
+          <Text style={{fontSize:24, color:'white', fontWeight:'bold'}}> {libur} </Text>
           <Text style={{fontSize:9, color:'white'}}>Libur</Text>
         </View>
       </View>

@@ -8,12 +8,12 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { useState } from 'react'
 import { useCallback } from 'react'
 import { api } from '../../helpers/axiosInterceptor'
-import { getKategoriesAscync, setStatus } from '../../redux/features/jadwal/kategoryJadwalReducer'
 import KategoriJadwal from '../../components/jadwal/KategoriJadwal'
 
 const PilihJadwalScreen = ({ navigation }) => {
 
     const dispatch = useDispatch()
+    const { jadwals} = useSelector(state => state.jadwal)
     const { kategories, loading, error } = useSelector(state => state.kategory)
 
     const [kategori, setKategori] = useState(null)
@@ -40,7 +40,6 @@ const PilihJadwalScreen = ({ navigation }) => {
             newArr.push(obj)
             return newArr
         }
-
         return newArr
     }
 
@@ -65,8 +64,7 @@ const PilihJadwalScreen = ({ navigation }) => {
     }
     
     useEffect(() => {
-        dispatch(getKategoriesAscync())
-        console.log('pilih jadwal status :', status)
+        console.log('pilih jadwal status :', kategories)
         BackHandler.addEventListener('hardwareBackPress', () => {return false})
     }, [])
     

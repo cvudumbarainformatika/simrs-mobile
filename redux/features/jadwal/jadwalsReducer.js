@@ -6,7 +6,11 @@ import { api } from "../../../helpers/axiosInterceptor"
 const initialState = {
     jadwals: [],
     error: null,
-    loading:false
+    loading: false,
+
+
+    libur: 0,
+    masuk: 0
 }
 
 
@@ -50,18 +54,13 @@ export const showJadwals = (state) => state.jadwal.jadwals;
 export const showLoading = (state) => state.jadwal.loading;
 export const showError = (state) => state.jadwal.error;
 
+
 export default jadwalsReducer.reducer;
 
-
-// API
-// INI DIKIRIM KE DISPATCH
-// export const getJadwalsAsync = () => async (dispatch) => {
-//     try {
-//         const response = await api.get('/v2/absensi/jadwal/by-user');
-//         dispatch(getJadwals(response.data));
-//     } catch (err) {
-//         dispatch(getError(err.response))
-//     }
+// export const liburJadwalCount = (state) => {
+//     let arr = [...state.jadwal.jadwals];
+//     let libur = arr.filter((x) => x.status === '2').length
+//     state.jadwal.libur = libur
 // };
 
 export const getJadwalsAsync = createAsyncThunk(

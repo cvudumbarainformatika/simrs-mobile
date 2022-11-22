@@ -9,6 +9,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
 import { useDispatch, useSelector } from 'react-redux'
 import { getJadwalsAsync, showError, showJadwals, showLoading } from '../../redux/features/jadwal/jadwalsReducer'
+import { getKategoriesAscync } from '../../redux/features/jadwal/kategoryJadwalReducer'
 import { useCallback } from 'react'
 import { useMemo } from 'react'
 
@@ -17,15 +18,13 @@ const HomeScreen = () => {
   const navigation = useNavigation();
 
   const dispatch = useDispatch()
-  // const { jadwals } = useSelector(state => state.jadwalReducer) // INI YANG LAMA
-  // const loading = useSelector(showLoading)
-  // const jadwals = useSelector(showJadwals)
-  // const error = useSelector(showError)
+
   const {jadwals, loading, error} = useSelector(state => state.jadwal)
+  const {kategories} = useSelector(state => state.kategory)
 
   const callFirst = () => {
     dispatch(getJadwalsAsync());
-    console.log('error getJadwal dari home screen :', error)
+    dispatch(getKategoriesAscync());
     jadwals.length > 0? false : navigation.navigate(ROUTES.JADWAL_SET_TAB)
 
   }
@@ -37,6 +36,7 @@ const HomeScreen = () => {
   useEffect(() => {
     callFirst()
     console.log('jadwal dari home effect :', jadwals.length)
+    console.log('kategori dari home effect :', kategories.length)
   }, [jadwals.length])
   
 

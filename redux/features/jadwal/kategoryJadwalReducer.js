@@ -49,7 +49,7 @@ export const kategoryJadwalsReducer = createSlice({
 export const { getKategories, setLoading, getError } = kategoryJadwalsReducer.actions;
 
 // INI DIKIRIM KE SELECTOR
-// export const showJadwals = (state) => state.jadwal.jadwals;
+
 // export const showLoading = (state) => state.jadwal.loading;
 // export const showError = (state) => state.jadwal.error;
 
