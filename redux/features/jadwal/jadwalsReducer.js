@@ -10,7 +10,10 @@ const initialState = {
 
 
     libur: 0,
-    masuk: 0
+    masuk: 0,
+    totalJam: 0,
+    totalMenit: 0,
+    totalJamMenit:0
 }
 
 
@@ -28,7 +31,9 @@ export const jadwalsReducer = createSlice({
         setStatus: (state, action) => { state.status = action.payload },
         
         setLibur: (state) =>  { state.libur = state.jadwals.filter(x => x.status === '1').length },
-        setMasuk: (state) =>  { state.masuk = state.jadwals.filter(x => x.status === '2').length }
+        setMasuk: (state) => { state.masuk = state.jadwals.filter(x => x.status === '2').length },
+        setTotalJam: (state) => state.jadwals.map(x => x.status === '2' || x.status === 2 ? x.jam : 0).reduce((r, x) => r + x),
+        setTotalMenit: (state) => state.jadwals.map(x => x.status === '2' || x.status === 2 ? x.menit : 0).reduce((r, x) => r + x)
 
     },
     extraReducers: (builder) => {
@@ -44,6 +49,9 @@ export const jadwalsReducer = createSlice({
             state.error = null;
             state.libur = state.jadwals.filter(x => x.status === '1').length
             state.masuk = state.jadwals.filter(x => x.status === '2').length
+            state.totalJam = state.jadwals.map(x => x.status === '2' || x.status === 2 ? x.jam : 0).reduce((r, x) => r + x),
+            state.totalMenit =  state.jadwals.map(x => x.status === '2' || x.status === 2 ? x.menit : 0).reduce((r, x) => r + x)
+
         })
         .addCase(getJadwalsAsync.rejected, (state, action) => {
             state.error = action.payload
@@ -59,8 +67,10 @@ export const jadwalsReducer = createSlice({
             .addCase(updateJadwalsAsync.fulfilled, (state, action) => {
             state.jadwals = [...state.jadwals]
             state.jadwals = state.jadwals.map(x => x.id === action.payload.id ? x = action.payload : x)
-            state.libur = action.payload.status === '1' || state.libur !== 0 ? state.libur + 1 : state.libur - 1
-            state.masuk = action.payload.status === '2' || state.masuk !== 7 ? state.masuk + 1 : state.masuk - 1
+            
+            state.libur = action.payload.status === '1' || action.payload.status === 1 ? state.libur + 1 : state.libur - 1
+                state.masuk = action.payload.status === '1' || action.payload.status === 1 ? state.masuk - 1 : state.masuk + 1
+                state.totalJam = state.jadwals.map(x => x.status === '2' || x.status === 2 ? x.jam : 0).reduce((r, x) => r + x)
             state.loading = false;
         })
 
@@ -71,7 +81,7 @@ export const jadwalsReducer = createSlice({
   },
 })  
 
-export const { getJadwals, setLoading, getError, setLibur, setMasuk } = jadwalsReducer.actions;
+export const { getJadwals, setLoading, getError, setLibur, setMasuk, setTotalJam } = jadwalsReducer.actions;
 
 // INI DIKIRIM KE SELECTOR
 export const showJadwals = (state) => state.jadwal.jadwals;
@@ -80,12 +90,6 @@ export const showError = (state) => state.jadwal.error;
 
 
 export default jadwalsReducer.reducer;
-
-// export const liburJadwalCount = (state) => {
-//     let arr = [...state.jadwal.jadwals];
-//     let libur = arr.filter((x) => x.status === '2').length
-//     state.jadwal.libur = libur
-// };
 
 export const getJadwalsAsync = createAsyncThunk(
     "jadwal/getJadwalsAsync", 
@@ -102,7 +106,8 @@ export const updateJadwalsAsync = createAsyncThunk(
     "jadwal/updateJadwalsAsync", 
   async (form) => {
     try {
-      const response = await api.post('/v2/absensi/jadwal/update', form);
+        const response = await api.post('/v2/absensi/jadwal/update', form);
+        // console.log('response',response.data.data);
       return response.data.data;
     } catch (error) {
         console.error(error);

@@ -7,7 +7,7 @@ import { AppLoader, HeaderUser } from '../../components'
 import { useDispatch, useSelector } from 'react-redux';
 
 import dayjs from 'dayjs'
-import { setLibur, setMasuk } from '../../redux/features/jadwal/jadwalsReducer';
+import { getJadwalsAsync, setLibur, setMasuk } from '../../redux/features/jadwal/jadwalsReducer';
 require('dayjs/locale/id')
   
 
@@ -16,7 +16,7 @@ const JadwalScreen = ({ navigation }) => {
 
   const dispatch = useDispatch();
   // const { pegawai } = useSelector(state => state.pegawaiReducer)
-  const { jadwals, loading, libur, masuk } = useSelector(state => state.jadwal)
+  const { jadwals, loading, libur, masuk, totalJam} = useSelector(state => state.jadwal)
   const { kategories } = useSelector(state => state.kategory)
 
   
@@ -24,15 +24,13 @@ const JadwalScreen = ({ navigation }) => {
 
   useEffect(() => {
     const updateLib = () => {
-      dispatch(setLibur())
-      dispatch(setMasuk())
+      dispatch(getJadwalsAsync())
     }
 
-    (() => {
-      updateLib()
-    })()
+    
+    updateLib()
 
-    console.log('masuk from jadwal:', masuk)
+    console.log('total Jam:', totalJam)
   },[])
 
 
@@ -42,7 +40,7 @@ const JadwalScreen = ({ navigation }) => {
         navigation.navigate(ROUTES.KATEGORY_JADWAL_SCREEN, { jadwal: item, kategories })
       }}
     >
-      <View style={tw`flex-row items-center justify-between p-4`}>
+      <View style={tw`flex-row items-center justify-between p-3`}>
         <View>
           <View style={tw`flex-row items-center`}>
             <View style={[tw`w-3 h-3 rounded-3 mr-1`,
@@ -63,8 +61,8 @@ const JadwalScreen = ({ navigation }) => {
           }}>{item.kategory?item.kategory.nama: 'LIBUR'}</Text>
         </View>
         <View>
-          <Text style={tw`text-primary text-xs`}>🕒 Masuk: {item.masuk}</Text>
-          <Text style={tw`text-negative text-xs`}>🕒 Pulang: {item.pulang}</Text>
+          <Text style={tw`text-xs text-gray`}>🕒 Masuk: {item.masuk}</Text>
+          <Text style={tw`text-xs text-gray`}>🕒 Pulang: {item.pulang}</Text>
         </View>
       </View>
     </TouchableOpacity>
@@ -77,15 +75,23 @@ const JadwalScreen = ({ navigation }) => {
     <View style={[tw`bg-gray-light flex-1`]}>
       <AppLoader visible={loading} />
       <HeaderUser />
-      <View style={tw`bg-white flex-row p-2`}>
-        <View style={tw`bg-primary items-center justify-center rounded-2 w-14 h-14`}>
+      <View style={tw`bg-white flex-row justify-between p-2`}>
+        <View style={tw`flex-row items-center`}>
+          <View style={tw`bg-primary items-center justify-center rounded-2 w-14 h-14`}>
           <Text style={{fontSize:24, color:'white', fontWeight:'bold'}}> {masuk} </Text>
           <Text style={{fontSize:9, color:'white'}}>Masuk</Text>
         </View>
-        <View style={tw`bg-negative items-center justify-center rounded-2 ml-2 w-14 h-14`}>
-          <Text style={{fontSize:24, color:'white', fontWeight:'bold'}}> {libur} </Text>
-          <Text style={{fontSize:9, color:'white'}}>Libur</Text>
+          <View style={tw`bg-negative items-center justify-center rounded-2 ml-2 w-14 h-14`}>
+            <Text style={{fontSize:24, color:'white', fontWeight:'bold'}}> {libur} </Text>
+              <Text style={{fontSize:9, color:'white'}}>Libur</Text>
+          </View>
         </View>
+
+        <View style={tw`bg-dark items-center justify-center rounded-2 ml-2 w-14 h-14`}>
+          <Text style={{ fontSize: 24, color: 'white', fontWeight: 'bold' }}>{totalJam}</Text>
+          <Text style={{fontSize:9, color:'white'}}>Total Jam</Text>
+        </View>
+        
       </View>
       <FlatList
         data={jadwals}

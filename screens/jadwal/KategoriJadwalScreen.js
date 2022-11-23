@@ -32,6 +32,9 @@ const KategoriJadwalScreen = ({ navigation, route }) => {
         setKategoriCut(kategories.slice(2))
     }
   }
+
+  // const callbackLibur = useCallback((sta)=> { setIsLibur(sta)}, [isLibur])
+
   function simpanShift(sta, kat) {
     setIsLibur(sta)
     if (sta === '2' && kat === 0) {
@@ -47,7 +50,13 @@ const KategoriJadwalScreen = ({ navigation, route }) => {
       id: jadwal.id,
       status: isLibur //MASUK 2 LIBUR 1
     }
+    console.log(form)
     setKonf(false)
+    if (jadwal.status === 1  &&  isLibur === '1') {
+      navigation.goBack()
+      return false;
+    }
+
     if (date.format("dddd") === jadwal.hari || date.format("dddd") === jadwal.day) {
       if (jadwal.status === '2' && date.format("HH:mm:ss") < jadwal.pulang) {
         console.log(date.format("HH:mm:ss"))
@@ -63,14 +72,14 @@ const KategoriJadwalScreen = ({ navigation, route }) => {
     }
   }
 
-  const callbackKategori = useCallback((kategory)=> { setKategori(kategory)}, [])
-
+  
   
 
   useEffect(() => {
     cutItems()
     setKategori(0)
-    setIsLibur('1')
+
+
     const interval = setInterval(() => {
       setDate(dayjs())
     }, 1000 * 60)
@@ -89,7 +98,7 @@ const KategoriJadwalScreen = ({ navigation, route }) => {
 
       <AppLoader visible={loading} />
       
-      <AppConfirm visible={konf} status="Success" msg="Konfirmasi penggantian Shift"
+      <AppConfirm visible={konf} status="Success" msg={`${isLibur === '1' ?'Pilih Libur ?': 'Ganti SHIFT ?'} `}
         labelBtnOk='IYA'
         labelBtnBack='BATAL'
         onOk={() => sendUpdateJadwal()}
@@ -101,7 +110,7 @@ const KategoriJadwalScreen = ({ navigation, route }) => {
       />
 
       <View style={tw`px-3 py-4 border-b-2 border-gray bg-white flex-row justify-between`}>
-        <Text style={tw`font-bold`}>Pilih Kategory Shift Hari : { jadwal? jadwal.hari: '' }</Text>
+        <Text style={tw`font-bold`}>Pilih Kategory Shift Hari </Text>
         <TouchableOpacity  onPress={()=> navigation.goBack()}><Icon name="close" size={22} /></TouchableOpacity>
       </View>
       <ScrollView>
@@ -134,14 +143,18 @@ const KategoriJadwalScreen = ({ navigation, route }) => {
         <View style={tw`flex-row justify-between`}>
           <TouchableOpacity style={tw`bg-negative h-full w-1/2 justify-center items-center`}
             onPress={() => {
-              setKategori(0)
-              simpanShift('1', kategori)
+              if (jadwal.status == 2) {
+                setKategori(0)
+                simpanShift('1', kategori)
+              }
             }}
           >
             <Text style={tw`text-white`}>Pilih Libur</Text>
           </TouchableOpacity>
           <TouchableOpacity style={tw`bg-dark h-full w-1/2 justify-center items-center`}
-            onPress={()=> simpanShift('2', kategori)}
+            onPress={() => {
+              simpanShift('2', kategori)
+            }}
           >
             <Text style={tw`text-white`} >Simpan Shift</Text>
           </TouchableOpacity>
