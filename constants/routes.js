@@ -4,6 +4,7 @@ export default {
   REGISTRASIPASSWORD: 'RegistrasiPassword',
   
   LOGOUT: 'Logout',
+  ERROR_TIMEOUT : 'Error Timeout',
 
 
   HOME: 'Home',

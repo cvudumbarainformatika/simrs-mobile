@@ -25,7 +25,10 @@ export const jadwalsReducer = createSlice({
         getError: (state, action) => {
             state.error = action.payload
         },
-        setStatus:(state, action) => {state.status = action.payload}
+        setStatus: (state, action) => { state.status = action.payload },
+        
+        setLibur: (state) =>  { state.libur = state.jadwals.filter(x => x.status === '1').length },
+        setMasuk: (state) =>  { state.masuk = state.jadwals.filter(x => x.status === '2').length }
 
     },
     extraReducers: (builder) => {
@@ -39,15 +42,36 @@ export const jadwalsReducer = createSlice({
             state.jadwals = action.payload;
             state.loading = false;
             state.error = null;
+            state.libur = state.jadwals.filter(x => x.status === '1').length
+            state.masuk = state.jadwals.filter(x => x.status === '2').length
         })
         .addCase(getJadwalsAsync.rejected, (state, action) => {
+            state.error = action.payload
+            state.loading = false;
+        })
+
+
+
+        .addCase(updateJadwalsAsync.pending, (state, action) => {
+            state.loading = true;
+            state.error = null;
+        })
+            .addCase(updateJadwalsAsync.fulfilled, (state, action) => {
+            state.jadwals = [...state.jadwals]
+            state.jadwals = state.jadwals.map(x => x.id === action.payload.id ? x = action.payload : x)
+            state.libur = action.payload.status === '1' || state.libur !== 0 ? state.libur + 1 : state.libur - 1
+            state.masuk = action.payload.status === '2' || state.masuk !== 7 ? state.masuk + 1 : state.masuk - 1
+            state.loading = false;
+        })
+
+        .addCase(updateJadwalsAsync.rejected, (state, action) => {
             state.error = action.payload
             state.loading = false;
         })
   },
 })  
 
-export const { getJadwals, setLoading, getError } = jadwalsReducer.actions;
+export const { getJadwals, setLoading, getError, setLibur, setMasuk } = jadwalsReducer.actions;
 
 // INI DIKIRIM KE SELECTOR
 export const showJadwals = (state) => state.jadwal.jadwals;
@@ -65,11 +89,21 @@ export default jadwalsReducer.reducer;
 
 export const getJadwalsAsync = createAsyncThunk(
     "jadwal/getJadwalsAsync", 
-    // ini nanti kalo dikasih parameter
   async () => {
     try {
       const response = await api.get('/v2/absensi/jadwal/by-user');
       return response.data;
+    } catch (error) {
+        console.error(error);
+        return error.response
+    }
+});
+export const updateJadwalsAsync = createAsyncThunk(
+    "jadwal/updateJadwalsAsync", 
+  async (form) => {
+    try {
+      const response = await api.post('/v2/absensi/jadwal/update', form);
+      return response.data.data;
     } catch (error) {
         console.error(error);
         return error.response

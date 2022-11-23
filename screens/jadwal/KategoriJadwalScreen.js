@@ -5,70 +5,72 @@ import { tw } from '../../constants'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchKategoryJadwals, updateJadwalToDb } from '../../redux/actions/jadwalActions'
-import { AppAlert, AppLoader } from '../../components'
+import { AppAlert, AppConfirm, AppLoader } from '../../components'
 import dayjs from 'dayjs'
 import { ScrollView } from 'react-native-gesture-handler'
+import { updateJadwalsAsync } from '../../redux/features/jadwal/jadwalsReducer'
 require('dayjs/locale/id')
 
 const KategoriJadwalScreen = ({ navigation, route }) => {
   
   const dispatch = useDispatch()
 
-  const {jadwal, kategories} = route.params
+  const {jadwal, kategories, loading} = route.params
 
   const [kategoriCut, setKategoriCut] = useState(kategories)
   const [kategori, setKategori] = useState(0)
 
   const [date, setDate] = useState(dayjs().locale('id'))
 
+  const [konf, setKonf] = useState(false)
+  const [alert, setAlert] = useState(false)
+  const [isLibur, setIsLibur] = useState('1')
+
+
   const cutItems = () => {
     if (kategories.length > 2) {
         setKategoriCut(kategories.slice(2))
     }
   }
-  function selectedKategori(ktgr) {
-    setKategori(ktgr.id)
-    console.log('aaa :',kategori)
-
-    // Alert.alert(
-    //   `Konfirmasi Hari : ${jadwal.hari}`,
-    //   "Apakah benar kamu akan ganti SHIFT ?",
-    //   [
-    //     {
-    //       text: "Cancel",
-    //       onPress: () => console.log("Cancel Pressed"),
-    //       style: "cancel"
-    //     },
-    //     { text: "OK", onPress: () => sendUpdateJadwal(id) }
-    //   ]
-    // );
-
+  function simpanShift(sta, kat) {
+    setIsLibur(sta)
+    if (sta === '2' && kat === 0) {
+      setAlert(true)
+    } else {
+      setKonf(true)
+    }
   }
 
-  function sendUpdateJadwal(kategory_id) {
+  function sendUpdateJadwal() {
     let form = {
-      kategory_id: kategory_id,
+      kategory_id: kategori,
       id: jadwal.id,
-      status:'2' //MASUK
+      status: isLibur //MASUK 2 LIBUR 1
     }
-    // console.log(form)
+    setKonf(false)
     if (date.format("dddd") === jadwal.hari || date.format("dddd") === jadwal.day) {
-      if (jadwal.pulang !== null || jadwal.pulang < date.format("hh:mm:ss")) {
-        Alert.alert("PERINGATAN !", "Maaf, Anda Ada jadwal dihari ini dan Belum Absen Pulang!, Boleh Mengganti jadwal setelah Absen Pulang")
+      if (jadwal.status === '2' && date.format("HH:mm:ss") < jadwal.pulang) {
+        console.log(date.format("HH:mm:ss"))
+        Alert.alert("PERINGATAN !",
+          `Maaf, Anda Ada jadwal dihari ini dan Belum Absen Pulang!, Boleh Mengganti jadwal setelah Absen Pulang `)
         return
       }
+      dispatch(updateJadwalsAsync(form))
+      navigation.goBack()
     } else {
-      dispatch(updateJadwalToDb(form))
+      dispatch(updateJadwalsAsync(form))
       navigation.goBack()
     }
   }
 
-  const callbackKategori = useCallback((kategory_id)=> { selectedKategori(kategory_id)}, [])
+  const callbackKategori = useCallback((kategory)=> { setKategori(kategory)}, [])
 
   
 
   useEffect(() => {
     cutItems()
+    setKategori(0)
+    setIsLibur('1')
     const interval = setInterval(() => {
       setDate(dayjs())
     }, 1000 * 60)
@@ -83,15 +85,30 @@ const KategoriJadwalScreen = ({ navigation, route }) => {
       backgroundColor: tw.color('gray-light'),
       flex: 1,
       overflow: 'hidden'
-    },tw`rounded-t-4`]}>
-      <View style={tw`p-3 py-4 border-b-2 border-gray bg-white flex-row justify-between`}>
-        <Text>Pilih Kategory Shift</Text>
+    }, tw`rounded-t-4`]}>
+
+      <AppLoader visible={loading} />
+      
+      <AppConfirm visible={konf} status="Success" msg="Konfirmasi penggantian Shift"
+        labelBtnOk='IYA'
+        labelBtnBack='BATAL'
+        onOk={() => sendUpdateJadwal()}
+        onDismiss={()=> setKonf(false)}
+      />
+
+      <AppAlert visible={alert} msg="Maaf Pilih Shift Atau Libur terlebih dahulu"
+        onOk={()=> setAlert(false)}
+      />
+
+      <View style={tw`px-3 py-4 border-b-2 border-gray bg-white flex-row justify-between`}>
+        <Text style={tw`font-bold`}>Pilih Kategory Shift Hari : { jadwal? jadwal.hari: '' }</Text>
         <TouchableOpacity  onPress={()=> navigation.goBack()}><Icon name="close" size={22} /></TouchableOpacity>
       </View>
       <ScrollView>
         {kategoriCut.map((kat, i) => {
           return (
-            <TouchableOpacity style={[tw`mt-1`,{backgroundColor: kategori===kat.id? 'rgba(0,0,0,0.5)': 'white'}]} onPress={()=> selectedKategori(kat)} >
+            <TouchableOpacity key={i} style={[tw`mt-1`, { backgroundColor: kategori === kat.id ? 'rgba(0,0,0,0.5)' : 'white' }]}
+              onPress={() => setKategori(kat.id)} >
               <View style={tw`p-3 flex-row justify-between items-center`}>
                 <View style={tw`flex-row items-center`}>
                   <View style={{
@@ -115,10 +132,17 @@ const KategoriJadwalScreen = ({ navigation, route }) => {
       </ScrollView>
       <View style={tw`absolute h-26 w-full bottom-0 bg-white`}>
         <View style={tw`flex-row justify-between`}>
-          <TouchableOpacity style={tw`bg-negative h-full w-1/2 justify-center items-center`}>
+          <TouchableOpacity style={tw`bg-negative h-full w-1/2 justify-center items-center`}
+            onPress={() => {
+              setKategori(0)
+              simpanShift('1', kategori)
+            }}
+          >
             <Text style={tw`text-white`}>Pilih Libur</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={tw`bg-dark h-full w-1/2 justify-center items-center`}>
+          <TouchableOpacity style={tw`bg-dark h-full w-1/2 justify-center items-center`}
+            onPress={()=> simpanShift('2', kategori)}
+          >
             <Text style={tw`text-white`} >Simpan Shift</Text>
           </TouchableOpacity>
         </View>
@@ -129,32 +153,3 @@ const KategoriJadwalScreen = ({ navigation, route }) => {
 }
 
 export default KategoriJadwalScreen
-
-// const KategoriJadwal = ({ item, selectKategori, setKategori }) => {
-  
-//   const {id, nama, warna} = item
-
-//   return (
-//       <>
-//         <TouchableOpacity style={tw`bg-white mt-1`} onPress={()=>setKategori(id) }>
-//           <View style={tw`p-3 flex-row justify-between`}>
-//           <View style={tw`flex-row`}>
-//             <View style={{
-//               height: 16,
-//               width: 16,
-//               borderRadius: 8,
-//               backgroundColor: warna,
-//               marginRight:10
-//             }} />
-//             <Text style={{minWidth:120}}>{nama}</Text>
-//           </View>
-//           {selectKategori === id && (
-//             <Icon name="check" size={22} color={tw.color('primary')} />
-//           )}
-            
-//           </View>
-//         </TouchableOpacity>
-//       </>
-      
-//     )
-//   }

@@ -7,7 +7,7 @@ import { AppLoader, HeaderUser } from '../../components'
 import { useDispatch, useSelector } from 'react-redux';
 
 import dayjs from 'dayjs'
-import { liburJadwalCount} from '../../redux/features/jadwal/jadwalsReducer';
+import { setLibur, setMasuk } from '../../redux/features/jadwal/jadwalsReducer';
 require('dayjs/locale/id')
   
 
@@ -16,26 +16,23 @@ const JadwalScreen = ({ navigation }) => {
 
   const dispatch = useDispatch();
   // const { pegawai } = useSelector(state => state.pegawaiReducer)
-  const { jadwals, loading } = useSelector(state => state.jadwal)
+  const { jadwals, loading, libur, masuk } = useSelector(state => state.jadwal)
   const { kategories } = useSelector(state => state.kategory)
-
-  const [libur, setLibur] = useState(0);
-  const [masuk, setMasuk] = useState(7);
 
   
   const [date, setDate] = useState(dayjs().locale('id'))
 
-
-  const updateLibur = () => {
-    let lib = jadwals.filter(x => x.status === '1').length
-    let mas = masuk - lib
-    setLibur(lib)
-    setMasuk(mas)
-  }
-
   useEffect(() => {
-    updateLibur()
-    // console.log('kategory from jadwal:', kategories)
+    const updateLib = () => {
+      dispatch(setLibur())
+      dispatch(setMasuk())
+    }
+
+    (() => {
+      updateLib()
+    })()
+
+    console.log('masuk from jadwal:', masuk)
   },[])
 
 

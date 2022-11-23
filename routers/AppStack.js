@@ -5,6 +5,7 @@ import { ROUTES } from '../constants'
 import BottomTabNavigator from './BottomTabNavigator'
 import { TRANSITION_HORIZONTAL } from '../constants/transitions'
 import Logout from '../screens/Logout'
+import Timeout from '../screens/Timeout'
 
 const AppStack = () => {
 
@@ -20,6 +21,7 @@ const AppStack = () => {
     >
       <Stack.Screen name={ROUTES.HOME} component={BottomTabNavigator} options={ TRANSITION_HORIZONTAL } />
       <Stack.Screen name={ROUTES.LOGOUT} component={Logout} options={TRANSITION_HORIZONTAL} />
+      <Stack.Screen name={ROUTES.ERROR_TIMEOUT} component={Timeout} options={TRANSITION_HORIZONTAL} />
     </Stack.Navigator>
   )
 }
