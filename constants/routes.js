@@ -5,6 +5,7 @@ export default {
   
   LOGOUT: 'Logout',
   ERROR_TIMEOUT : 'Error Timeout',
+  LOADING_SPECIAL : 'Loading Special',
 
 
   HOME: 'Home',

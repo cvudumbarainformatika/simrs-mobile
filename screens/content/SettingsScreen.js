@@ -20,47 +20,55 @@ const SettingsScreen = ({ navigation }) => {
     <View style={tw`flex-1`}>
       <Image 
           source={ pegawai? {uri:`${PATH_IMG100}/${pegawai.nip}/${pegawai.foto}`} : IMGS.avatarMale}
-          style={[tw`h-120 w-full`, {resizeMode:'cover'}]}
+          style={[tw`h-100 w-full`, {resizeMode:'contain'}]}
       />
 
+      <View style={tw`absolute top-0 p-4 mt-4`}>
+        <AppBtn icon="chevron-left" color="dark" round clicked={ ()=> navigation.goBack() } />
+      </View>
+
       <View style={[tw`absolute bottom-0 left-0 right-0 top-0 bg-gray-light rounded-t-4`, {
-        marginTop:360, overflow:'hidden'
+        marginTop:300, overflow:'hidden'
       }]}>
         <View style={tw`p-4 border-b-2 border-gray-light bg-white`}>
           <Text style={tw`font-bold`}>Profile Details 👋</Text>
         </View>
         <ScrollView>
-          <View style={tw`bg-white p-4 mt-[1]`}>
+          <View style={tw`bg-white p-3 mt-[1]`}>
             <Text style={tw`text-xs text-gray`}>🧑 Nama</Text>
             <Text style={tw``}>{ pegawai.nama }</Text>
           </View>
-          <View style={tw`bg-white p-4 mt-[2]`}>
+          <View style={tw`bg-white p-3 mt-[2]`}>
             <Text style={tw`text-xs text-gray`}>💼 Nip</Text>
             <Text style={tw``}>{pegawai.nip}</Text>
           </View>
-          <View style={tw`bg-white p-4 mt-[2]`}>
+          <View style={tw`bg-white p-3 mt-[2]`}>
             <Text style={tw`text-xs text-gray`}>🏷️ Nik</Text>
             <Text style={tw``}>{ pegawai.nik }</Text>
           </View>
-          <View style={tw`bg-white p-4 mt-[2]`}>
+          <View style={tw`bg-white p-3 mt-[2]`}>
             <Text style={tw`text-xs text-gray`}>🏠 Alamat</Text>
             <Text style={tw``}>{ pegawai.alamat_detil }</Text>
           </View>
-          <View style={tw`bg-white p-4 mt-[1]`}>
+          <View style={tw`bg-white p-3 mt-[1]`}>
             <Text style={tw`text-xs text-gray`}>📞 Telp</Text>
             <Text style={tw``}>{ pegawai.telp }</Text>
           </View>
-          <View style={tw`bg-white p-4 mt-[1]`}>
+          {/* <View style={tw`bg-white p-3 mt-[1]`}>
             <Text style={tw`text-xs text-gray`}>Alamat</Text>
             <Text style={tw``}>{ pegawai.alamat_detil }</Text>
           </View>
-          <View style={tw`bg-white p-4 mt-[1]`}>
+          <View style={tw`bg-white p-3 mt-[1]`}>
             <Text style={tw`text-xs text-gray`}>Alamat</Text>
             <Text style={tw``}>{ pegawai.alamat_detil }</Text>
           </View>
-          <View style={tw`bg-white p-4 mt-[1]`}>
+          <View style={tw`bg-white p-3 mt-[1]`}>
             <Text style={tw`text-xs text-gray`}>Alamat</Text>
             <Text style={tw``}>{ pegawai.alamat_detil }</Text>
+          </View> */}
+
+          <View style={tw`bg-white p-3 mt-8`}>
+            <AppBtn label="Logout" color="negative" clicked={()=>navigation.navigate(ROUTES.LOGOUT) } />
           </View>
           <View style={{paddingBottom:120}} />
         </ScrollView>

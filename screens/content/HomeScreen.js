@@ -47,7 +47,8 @@ const HomeScreen = () => {
       {/* <ModalPengaturanJadwal visible={config} /> */}
       <AppLoader visible={loading} />
       {/* <GradientTop  /> */}
-      <HeaderUser bellClick={() => alert(`ini alert percobaan`)}/>
+      <HeaderUser bellClick={() => alert(`ini alert percobaan`)} />
+      <AppBtn label="MM" clicked={()=> navigation.navigate(ROUTES.LOADING_SPECIAL)} />
       <ScrollView>
         {/* PRESENSI BULAN INI */}
         {/* <AppBtn label="GG" clicked={()=> navigation.navigate(ROUTES.JADWAL_SET_TAB)} /> */}

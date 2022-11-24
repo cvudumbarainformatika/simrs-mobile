@@ -45,33 +45,62 @@ const BottomTabNavigator = () => {
 
   return (
       <Tab.Navigator
-          screenOptions={({ route }) => ({
-              headerShown: false,
-              tabBarActiveTintColor: tw.color('white'),
-              tabBarShowLabel: false,
-              tabBarInactiveTintColor: tw.color('gray'),
-              tabBarStyle: styles.tabBarStyle,
-              tabBarHideOnKeyboard:true,
+        //   screenOptions={({ route }) => (
+        //     {
+        //       headerShown: false,
+        //       tabBarActiveTintColor: tw.color('white'),
+        //       tabBarShowLabel: false,
+        //       tabBarInactiveTintColor: tw.color('gray'),
+        //       tabBarStyle: styles.tabBarStyle,
+        //       tabBarHideOnKeyboard: true,
               
-              tabBarIcon: ({ color, size, focused }) => {
-                  let iconName;
-                  if (route.name === ROUTES.HOME_TAB) {
-                    iconName = focused? "view-dashboard":"view-dashboard-outline"
-                  } else if (route.name === ROUTES.SETTINGS_TAB) {
-                    iconName = focused? "account-cog":"account-cog-outline"
-                  } else if (route.name === ROUTES.HISTORY_TAB) {
-                    iconName = focused? "clipboard-list":"clipboard-list-outline"
-                  } else if (route.name === ROUTES.JADWAL_TAB) {
-                    iconName = focused? "calendar-text":"calendar-clock-outline"
-                  }
+        //       tabBarIcon: ({ color, size, focused }) => {
+        //           let iconName;
+        //           if (route.name === ROUTES.HOME_TAB) {
+        //             iconName = focused? "view-dashboard":"view-dashboard-outline"
+        //           } else if (route.name === ROUTES.SETTINGS_TAB) {
+        //             iconName = focused? "account-cog":"account-cog-outline"
+        //           } else if (route.name === ROUTES.HISTORY_TAB) {
+        //             iconName = focused? "clipboard-list":"clipboard-list-outline"
+        //           } else if (route.name === ROUTES.JADWAL_TAB) {
+        //             iconName = focused? "calendar-text":"calendar-clock-outline"
+        //           }
 
-                  return <Icon name={iconName} size={22} color={color} />
-              }
-         })}
+        //           return <Icon name={iconName} size={22} color={color} />
+        //       }
+        //  })}
+      screenOptions={({ route }) => {
+        return {
+          headerShown: false,
+          tabBarActiveTintColor: tw.color('white'),
+          tabBarShowLabel: false,
+          tabBarInactiveTintColor: tw.color('gray'),
+          tabBarStyle: styles.tabBarStyle,
+          tabBarHideOnKeyboard: true,
+
+          tabBarIcon: ({ color, size, focused }) => {
+            let iconName;
+            if (route.name === ROUTES.HOME_TAB) {
+              iconName = focused ? "view-dashboard" : "view-dashboard-outline"
+            } else if (route.name === ROUTES.SETTINGS_TAB) {
+              iconName = focused ? "account-cog" : "account-cog-outline"
+            } else if (route.name === ROUTES.HISTORY_TAB) {
+              iconName = focused ? "clipboard-list" : "clipboard-list-outline"
+            } else if (route.name === ROUTES.JADWAL_TAB) {
+              iconName = focused ? "calendar-text" : "calendar-clock-outline"
+            }
+
+            return <Icon name={iconName} size={22} color={color} />
+          },
+          tabBarStyle: getFocusedRouteNameFromRoute(route) === ROUTES.LOADING_SPECIAL ?
+            { display: "none" } : styles.tabBarStyle
+          };
+        }
+      }
         initialRouteName={ROUTES.HOME_TAB}
       >
       
-      <Tab.Screen name={ROUTES.HOME_TAB} component={HomeNavigator} />
+      <Tab.Screen name={ROUTES.HOME_TAB} component={HomeNavigator}  />
      
       <Tab.Screen name={ROUTES.JADWAL_TAB} component={JadwalNavigator}/>
       <Tab.Screen name={ROUTES.ABSEN_TAB} component={AbsenScreen}
@@ -101,7 +130,7 @@ export default BottomTabNavigator
 const styles = StyleSheet.create({
   tabBarStyle: {
     position: 'absolute',
-    zIndex:9,
+    zIndex:1,
     backgroundColor: tw.color('primary'),
     elevation: 0,
     borderTopWidth: 1,

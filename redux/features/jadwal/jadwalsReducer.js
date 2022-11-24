@@ -30,8 +30,9 @@ export const jadwalsReducer = createSlice({
         },
         setStatus: (state, action) => { state.status = action.payload },
         
-        setLibur: (state) =>  { state.libur = state.jadwals.filter(x => x.status === '1').length },
-        setMasuk: (state) => { state.masuk = state.jadwals.filter(x => x.status === '2').length },
+        setLibur: (state) =>  { state.libur = state.jadwals.length > 0 ? state.jadwals.filter(x => x.status === '1').length: 0 },
+        setMasuk: (state) => { state.masuk = state.jadwals.length > 0? state.jadwals.filter(x => x.status === '2').length: 0  },
+
         setTotalJam: (state) => state.jadwals.map(x => x.status === '2' || x.status === 2 ? x.jam : 0).reduce((r, x) => r + x),
         setTotalMenit: (state) => state.jadwals.map(x => x.status === '2' || x.status === 2 ? x.menit : 0).reduce((r, x) => r + x)
 

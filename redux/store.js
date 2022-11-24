@@ -18,12 +18,19 @@
 import { configureStore } from '@reduxjs/toolkit'
 import jadwalsReducer from './features/jadwal/jadwalsReducer'
 import kategoryJadwalReducer from './features/jadwal/kategoryJadwalReducer'
+import rekapJadwalReducer from './features/jadwal/rekapJadwalReducer'
 
 const store = configureStore({
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false
+    }),
   reducer: {
-    jadwal: jadwalsReducer,
-    kategory: kategoryJadwalReducer,
+    jadwal    : jadwalsReducer,
+    kategory  : kategoryJadwalReducer,
+    rekap     :rekapJadwalReducer,
   },
+
 })
 
 export default store

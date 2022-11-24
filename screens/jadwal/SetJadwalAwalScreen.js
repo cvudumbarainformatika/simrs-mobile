@@ -7,6 +7,7 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { useDispatch, useSelector } from 'react-redux'
 import { useBackHandler } from '@react-native-community/hooks'
 import { getKategoriesAscync } from '../../redux/features/jadwal/kategoryJadwalReducer'
+import { getJadwalsAsync } from '../../redux/features/jadwal/jadwalsReducer'
 
 const SetJadwalAwalScreen = ({ navigation }) => {
   
@@ -19,6 +20,7 @@ const SetJadwalAwalScreen = ({ navigation }) => {
   }
 
   useEffect(() => {
+    dispatch(getJadwalsAsync())
     navigateToHome()
     console.log('from set jadwal awal :', jadwals.length)
   }, [jadwals.length])

@@ -5,9 +5,9 @@ import { View, Text, StatusBar, SafeAreaView, StyleSheet, FlatList, TouchableOpa
 import { ROUTES, tw } from '../../constants'
 import { AppLoader, HeaderUser } from '../../components'
 import { useDispatch, useSelector } from 'react-redux';
+import { getJadwalsAsync, setLibur, setMasuk } from '../../redux/features/jadwal/jadwalsReducer';
 
 import dayjs from 'dayjs'
-import { getJadwalsAsync, setLibur, setMasuk } from '../../redux/features/jadwal/jadwalsReducer';
 require('dayjs/locale/id')
   
 

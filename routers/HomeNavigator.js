@@ -8,32 +8,25 @@ import { CardStyleInterpolators, createStackNavigator, TransitionPresets } from 
 import { HomeScreen, JadwalScreen } from '../screens';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import SetJadwalAwalScreen from '../screens/jadwal/SetJadwalAwalScreen';
+import LoadingSpecial from '../screens/home/LoadingSpecial';
 
 
 const Stack = createStackNavigator();
-
+const RootStack = createStackNavigator();
 const HomeNavigator = () => {
   // console.log(Stack)
   return (
-      <Stack.Navigator 
-          screenOptions={{
-            headerShown: false,
-            gestureDirection: 'horizontal',
-            
-      }}
-      initialRouteName={ROUTES.HOME}
-    >
-      <Stack.Screen name={ROUTES.HOME} component={HomeScreen} />
-      {/* <Stack.Screen name={ROUTES.KATEGORY_JADWAL} component={KategoriJadwalScreen} options={{
-        headerMode:'screen',
+      <RootStack.Navigator>
+        <RootStack.Group>
+          <RootStack.Screen name="Home" component={HomeScreen} options={{headerShown:false}}/>
+        </RootStack.Group>
+      <RootStack.Group screenOptions={{
+        presentation: 'modal',
         headerShown:false,
-        presentation: 'transparentModal',
-        cardStyle: {
-          backgroundColor: 'transparent',
-        },
-        ...TransitionPresets.ModalSlideFromBottomIOS,
-      }} /> */}
-    </Stack.Navigator>
+      }} >
+          <RootStack.Screen name={ROUTES.LOADING_SPECIAL} component={LoadingSpecial} />
+        </RootStack.Group>
+    </RootStack.Navigator>
   )
 }
 export default HomeNavigator

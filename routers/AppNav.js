@@ -22,9 +22,9 @@ const AppNav = () => {
 
   if (alerts) {
     if (msgOk !== null) {
-      return (<AppAlert visible={alerts} status="Success" msg={msgOk} onOk={resetDevice}  />)
+      return (<AppAlert visible={alerts} status="Success" msg={msgOk} onOk={resetDevice}  /> )
     }
-    return (<AppAlert visible={alerts} status="Error" msg={msgError} onOk={closeAlerts}  />)
+    return (<AppAlert visible={alerts} status="Error" msg={msgError} onOk={closeAlerts}  /> )
   }
 
   return (

@@ -22,10 +22,13 @@ export const AuthProvider = ({ children }) => {
     const login = async (username, password) => {
         let device = Device.osInternalBuildId
         let email = username + '@app.com'
+        let form = {
+            email: email,
+            password: password,
+            device:device
+        }
         setIsLoading(true);
-        await api.post(`/v2/login`, {
-            email,password,device
-        }).then(resp => {
+        await api.post(`/v2/login`, form).then(resp => {
             let token = resp.data.token
             let userInfo = resp.data.user
             AsyncStorage.setItem('userToken', token)
@@ -42,13 +45,20 @@ export const AuthProvider = ({ children }) => {
             //     console.log(e.response.status);
             //     console.log(e.response.headers);
             // }
+            const err = e
+            console.log('auth context : ', err);
             setIsLoading(false)
             setAlerts(true)
-            if (e.response.status === 406) {
+            
+            if (err.response.status === 406) {
                 setMsgError('Maaf, Kamu sudah terdaftar pada device lain ... Harap menghubungi admin untuk mengganti device')
                 return
             }
-            if (e.response.status === 410) {
+            if (err.response.status === 409) {
+                setMsgError('Username dan Password Tidak Valid !')
+                return
+            }
+            if (err.response.status === 410) {
                 // console.log(e.response)
                 setMsgOk('Klik OK untuk ganti device')
                 setUserId(e.response.data.id)
@@ -77,9 +87,10 @@ export const AuthProvider = ({ children }) => {
 
     const getMe = async () => {
         await api.get(`/v2/user/me`).then(resp => {
-         resp? setPegawai(resp.data.result): setPegawai(null)
+         resp?setPegawai(resp.data.result):setPegawai(null)
         }).catch(err => {
-            console.log('me :',err)
+            console.log('me :', err)
+            setIsLoading(false)
         })
     }
 
@@ -115,9 +126,9 @@ export const AuthProvider = ({ children }) => {
             userInfo = JSON.parse(userInfo)
             setUser(userInfo)
             setUserToken(token)
+            setIsLoading(false)
 
             getMe()
-            setIsLoading(false)
             console.log('setUser:', userInfo)
         } catch (e) {
             console.log(`isLoggedIn Error : ${e}`)
@@ -129,6 +140,7 @@ export const AuthProvider = ({ children }) => {
     const closeAlerts = () => {
         setMsgOk(null)
         setAlerts(false)
+        console.log('token', userToken)
     }
 
     useEffect(() => {
