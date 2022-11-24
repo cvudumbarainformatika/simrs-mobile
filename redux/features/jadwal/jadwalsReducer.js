@@ -33,8 +33,8 @@ export const jadwalsReducer = createSlice({
         setLibur: (state) =>  { state.libur = state.jadwals.length > 0 ? state.jadwals.filter(x => x.status === '1').length: 0 },
         setMasuk: (state) => { state.masuk = state.jadwals.length > 0? state.jadwals.filter(x => x.status === '2').length: 0  },
 
-        setTotalJam: (state) => state.jadwals.map(x => x.status === '2' || x.status === 2 ? x.jam : 0).reduce((r, x) => r + x),
-        setTotalMenit: (state) => state.jadwals.map(x => x.status === '2' || x.status === 2 ? x.menit : 0).reduce((r, x) => r + x)
+        setTotalJam: (state) => state.jadwals.map(x => x.status === '2' || x.status === 2 ? x.jam : 0).reduce((r, x) => r + x, 0),
+        setTotalMenit: (state) => state.jadwals.map(x => x.status === '2' || x.status === 2 ? x.menit : 0).reduce((r, x) => r + x, 0)
 
     },
     extraReducers: (builder) => {
@@ -48,10 +48,10 @@ export const jadwalsReducer = createSlice({
             state.jadwals = action.payload;
             state.loading = false;
             state.error = null;
-            state.libur = state.jadwals.filter(x => x.status === '1').length
-            state.masuk = state.jadwals.filter(x => x.status === '2').length
-            state.totalJam = state.jadwals.map(x => x.status === '2' || x.status === 2 ? x.jam : 0).reduce((r, x) => r + x),
-            state.totalMenit =  state.jadwals.map(x => x.status === '2' || x.status === 2 ? x.menit : 0).reduce((r, x) => r + x)
+            state.libur = state.jadwals.length > 0? state.jadwals.filter(x => x.status === '1').length:0
+            state.masuk = state.jadwals.length > 0? state.jadwals.filter(x => x.status === '2').length:0
+            state.totalJam =  state.jadwals.length > 0 ? state.jadwals.map(x => x.status === '2' || x.status === 2 ? x.jam : 0).reduce((r, x) => r + x, 0):0,
+            state.totalMenit =   state.jadwals.length > 0? state.jadwals.map(x => x.status === '2' || x.status === 2 ? x.menit : 0).reduce((r, x) => r + x, 0):0
 
         })
         .addCase(getJadwalsAsync.rejected, (state, action) => {
@@ -71,7 +71,7 @@ export const jadwalsReducer = createSlice({
             
             state.libur = action.payload.status === '1' || action.payload.status === 1 ? state.libur + 1 : state.libur - 1
                 state.masuk = action.payload.status === '1' || action.payload.status === 1 ? state.masuk - 1 : state.masuk + 1
-                state.totalJam = state.jadwals.map(x => x.status === '2' || x.status === 2 ? x.jam : 0).reduce((r, x) => r + x)
+                state.totalJam = state.jadwals.map(x => x.status === '2' || x.status === 2 ? x.jam : 0).reduce((r, x) => r + x, 0)
             state.loading = false;
         })
 

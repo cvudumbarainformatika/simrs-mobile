@@ -3,5 +3,6 @@ export default {
   avatarMale: require('../assets/static/avatar-male.png'),
   avatarFemale: require('../assets/static/avatar-female.png'),
   madSalehMenunjuk: require('../assets/static/mad_saleh_menunjuk.png'),
-  madSalehMinum: require('../assets/static/mad_saleh_minum.png')
+  madSalehMinum: require('../assets/static/mad_saleh_minum.png'),
+  loadingAnim: require('../assets/static/mad_saleh_jalan.gif')
 };

@@ -14,6 +14,7 @@ export default {
 
   ABSEN: 'Absen Tab',
   ABSEN_TAB: 'Absen',
+  ABSEN_LOADING: 'Absen Loading',
   ABSEN_DRAWER: 'Absen Drawer',
 
   JADWAL: 'Jadwal',

@@ -26,7 +26,6 @@ const HomeScreen = () => {
     dispatch(getJadwalsAsync());
     dispatch(getKategoriesAscync());
     jadwals.length > 0? false : navigation.navigate(ROUTES.JADWAL_SET_TAB)
-
   }
 
   // const memJadwals = useMemo(() => {
@@ -48,7 +47,7 @@ const HomeScreen = () => {
       <AppLoader visible={loading} />
       {/* <GradientTop  /> */}
       <HeaderUser bellClick={() => alert(`ini alert percobaan`)} />
-      <AppBtn label="MM" clicked={()=> navigation.navigate(ROUTES.LOADING_SPECIAL)} />
+      {/* <AppBtn label="MM" clicked={()=> navigation.navigate(ROUTES.LOADING_SPECIAL)} /> */}
       <ScrollView>
         {/* PRESENSI BULAN INI */}
         {/* <AppBtn label="GG" clicked={()=> navigation.navigate(ROUTES.JADWAL_SET_TAB)} /> */}

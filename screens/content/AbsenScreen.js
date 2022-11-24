@@ -6,14 +6,23 @@ import { useNavigation } from '@react-navigation/native'
 
 import { tw, ROUTES } from '../../constants';
 import { AppConfirm, AppLoader } from '../../components';
+import { api } from '../../helpers/axiosInterceptor';
+import { useDispatch, useSelector } from 'react-redux';
+import {  setId, setWaiting } from '../../redux/features/jadwal/absenReducer';
 
 const AbsenScreen = () => {
+
+  const dispatch = useDispatch()
 
   const navigation = useNavigation()
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
+  const [animLoad, setAnimLoad] = useState(false)
   const [msg, setMsg] = useState('');
+
+  const { id, interv, waiting, isDone } = useSelector(state => state.absen)
+  
 
   // METHOD
   useEffect(() => {
@@ -21,15 +30,35 @@ const AbsenScreen = () => {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
       setHasPermission(status === 'granted');
     })();
-  }, []);
+  }, [waiting, isDone, id]);
 
-  const handleBarCodeScanned = ({ type, data }) => {
-    setLoading(true)
-    setTimeout(() => {
-      setScanned(true);
-      setLoading(false)
-      setMsg(`Bar code type ${type} and data ${data} has been scanned!`)
-    }, 500);
+
+
+
+  const handleBarCodeScanned = async ({ type, data }) => {
+    // setScanned(true);
+    // alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+    setScanned(true)
+    dispatch(setWaiting(true))
+    let form = {
+      id: id,
+      qr: data
+    }
+    console.log('absen form : ', form)
+    
+        
+    await api.post('/v2/absensi/qr/scan', form).then((response) => {
+      console.log('response absen',response.data);
+      let trans_id = response.data.jadwal.data.id;
+      dispatch(setId(trans_id))
+      navigation.navigate(ROUTES.HOME_TAB)
+      dispatch(setWaiting(false))
+    }).catch(error => {
+      console.log('absen :', error.response);
+      dispatch(setWaiting(false))
+      setScanned(true)
+    })
+       
   };
 
   if (hasPermission === null) {
@@ -56,7 +85,7 @@ const AbsenScreen = () => {
         </BarCodeScanner>
       
       {/* setelah scann */}
-      <AppLoader visible={loading} />
+      <AppLoader visible={waiting} />
       <AppConfirm visible={scanned} status="Success" msg={msg} labelBtnBack="Scan Lagi!" labelBtnOk="OK"
         onDismiss={() => {
           setScanned(false)

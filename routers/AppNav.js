@@ -9,6 +9,7 @@ import AuthStack from './AuthStack'
 import { Provider } from 'react-redux'
 import { navigationRef } from './RootNavigation'
 import store  from '../redux/store'
+import AppLoaderAnim from '../components/~global/AppLoaderAnim'
 
 const AppNav = () => {
 
@@ -17,6 +18,9 @@ const AppNav = () => {
   if (isLoading) {
       return (<AppLoader visible={isLoading} />)
   }
+  // if (isLoading) {
+  //     return (<AppLoaderAnim visible={isLoading} />)
+  // }
 
   
 

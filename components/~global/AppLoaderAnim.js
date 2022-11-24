@@ -1,17 +1,14 @@
-import { View, Text } from 'react-native'
-import React, { useEffect } from 'react'
+import { View, Text, StyleSheet } from 'react-native'
+import React from 'react'
 import * as Animatable from 'react-native-animatable'
 import * as Progress from 'react-native-progress'
-import { useNavigation } from '@react-navigation/native'
-import { IMGS, tw } from '../../constants'
 import { LinearGradient } from 'expo-linear-gradient'
+import { IMGS, tw } from '../../constants'
 
-const LoadingSpecial = () => {
-    const navigation = useNavigation()
-
-    useEffect(()=> {})
-  return (
-    <View className="flex-1">
+const AppLoaderAnim = ({ visible = false }) => {
+    return (
+      visible && (
+    <View style={[styles.container]}>
       <LinearGradient 
           className="flex-1 justify-center items-center"
           colors={[tw.color('secondary'), tw.color('primary')]}
@@ -34,7 +31,20 @@ const LoadingSpecial = () => {
         <Progress.Circle size={60} indeterminate={true} color={'white'} />
       </LinearGradient>
     </View>
-  )
+  ))
 }
 
-export default LoadingSpecial
+export default AppLoaderAnim
+
+const styles = StyleSheet.create({
+  container: {
+        flex: 1,
+        position: "absolute",
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right:0,
+        zIndex: 10,
+        justifyContent:'center'
+    },
+  });

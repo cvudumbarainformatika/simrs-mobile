@@ -126,9 +126,9 @@ export const AuthProvider = ({ children }) => {
             userInfo = JSON.parse(userInfo)
             setUser(userInfo)
             setUserToken(token)
-            setIsLoading(false)
 
             getMe()
+            setIsLoading(false)
             console.log('setUser:', userInfo)
         } catch (e) {
             console.log(`isLoggedIn Error : ${e}`)

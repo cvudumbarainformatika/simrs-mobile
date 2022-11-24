@@ -12,6 +12,7 @@ import JadwalNavigator from './JadwalNavigator';
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import HomeNavigator from './HomeNavigator';
 import SetJadwalNavigator from './SetJadwalNavigator';
+import AbsenNavigator from './AbsenNavigator';
 // import CustomBottomTabBar from '../components/CustomBottomTabBar';
 
 // CUSTOM TAB BAR =======================
@@ -45,30 +46,6 @@ const BottomTabNavigator = () => {
 
   return (
       <Tab.Navigator
-        //   screenOptions={({ route }) => (
-        //     {
-        //       headerShown: false,
-        //       tabBarActiveTintColor: tw.color('white'),
-        //       tabBarShowLabel: false,
-        //       tabBarInactiveTintColor: tw.color('gray'),
-        //       tabBarStyle: styles.tabBarStyle,
-        //       tabBarHideOnKeyboard: true,
-              
-        //       tabBarIcon: ({ color, size, focused }) => {
-        //           let iconName;
-        //           if (route.name === ROUTES.HOME_TAB) {
-        //             iconName = focused? "view-dashboard":"view-dashboard-outline"
-        //           } else if (route.name === ROUTES.SETTINGS_TAB) {
-        //             iconName = focused? "account-cog":"account-cog-outline"
-        //           } else if (route.name === ROUTES.HISTORY_TAB) {
-        //             iconName = focused? "clipboard-list":"clipboard-list-outline"
-        //           } else if (route.name === ROUTES.JADWAL_TAB) {
-        //             iconName = focused? "calendar-text":"calendar-clock-outline"
-        //           }
-
-        //           return <Icon name={iconName} size={22} color={color} />
-        //       }
-        //  })}
       screenOptions={({ route }) => {
         return {
           headerShown: false,
@@ -103,7 +80,7 @@ const BottomTabNavigator = () => {
       <Tab.Screen name={ROUTES.HOME_TAB} component={HomeNavigator}  />
      
       <Tab.Screen name={ROUTES.JADWAL_TAB} component={JadwalNavigator}/>
-      <Tab.Screen name={ROUTES.ABSEN_TAB} component={AbsenScreen}
+      <Tab.Screen name={ROUTES.ABSEN_TAB} component={AbsenNavigator}
         options={{
           unmountOnBlur:true,
           tabBarIcon: ({ focused }) => (

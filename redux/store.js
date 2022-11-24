@@ -16,6 +16,7 @@
 
 // ==========================================================================================INI STORE BARU
 import { configureStore } from '@reduxjs/toolkit'
+import absenReducer from './features/jadwal/absenReducer'
 import jadwalsReducer from './features/jadwal/jadwalsReducer'
 import kategoryJadwalReducer from './features/jadwal/kategoryJadwalReducer'
 import rekapJadwalReducer from './features/jadwal/rekapJadwalReducer'
@@ -28,7 +29,8 @@ const store = configureStore({
   reducer: {
     jadwal    : jadwalsReducer,
     kategory  : kategoryJadwalReducer,
-    rekap     :rekapJadwalReducer,
+    rekap     : rekapJadwalReducer,
+    absen     : absenReducer
   },
 
 })

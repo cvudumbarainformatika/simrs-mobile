@@ -25,19 +25,27 @@ const JadwalScreen = ({ navigation }) => {
   useEffect(() => {
     const updateLib = () => {
       dispatch(getJadwalsAsync())
+      dispatch(setLibur())
+      dispatch(setMasuk())
     }
 
     
     updateLib()
 
     console.log('total Jam:', totalJam)
-  },[])
+    console.log('total libur:', libur)
+    console.log('total masuk:', masuk)
+    // console.log('jadwal Screen:', jadwals)
+  },[libur, masuk])
 
 
   const renderItem = ({ item }) => (
     <TouchableOpacity style={tw`mt-1 bg-white`}
       onPress={() => {
-        navigation.navigate(ROUTES.KATEGORY_JADWAL_SCREEN, { jadwal: item, kategories })
+        if (item.kategory_id > 2) {
+          navigation.navigate(ROUTES.KATEGORY_JADWAL_SCREEN, { jadwal: item, kategories })
+        }
+        
       }}
     >
       <View style={tw`flex-row items-center justify-between p-3`}>

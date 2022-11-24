@@ -25,7 +25,7 @@ const HeaderUser = (props) => {
                 <View style={tw`flex-1`}>
                     <Text className="font-bold text-gray text-xs ">Selamat Datang, 👋</Text>
                     <View className="flex-row items-center"> 
-                    <Text className=" text-white mr-1">{ pegawai? pegawai.nama:'tunggu ...' }</Text>
+                    <Text className=" text-white mr-1 text-xs">{ pegawai? pegawai.nama:'tunggu ...' }</Text>
                     </View>
               </View>
               <TouchableOpacity

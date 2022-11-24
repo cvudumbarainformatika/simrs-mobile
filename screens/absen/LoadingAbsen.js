@@ -6,8 +6,7 @@ import { useNavigation } from '@react-navigation/native'
 import { IMGS, tw } from '../../constants'
 import { LinearGradient } from 'expo-linear-gradient'
 
-const LoadingSpecial = () => {
-    const navigation = useNavigation()
+const LoadingAbsen = ({navigation, route}) => {
 
     useEffect(()=> {})
   return (
@@ -37,4 +36,4 @@ const LoadingSpecial = () => {
   )
 }
 
-export default LoadingSpecial
+export default LoadingAbsen

@@ -47,6 +47,7 @@ const PilihJadwalScreen = ({ navigation }) => {
         let form = {
             kategory_id:kategori
         }
+        console.log(form)
         setProgress(true)
         await api.post('/v2/absensi/jadwal/simpan', form).then(() => {
             setStatus('Success')

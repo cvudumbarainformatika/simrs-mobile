@@ -20,10 +20,10 @@ const SettingsScreen = ({ navigation }) => {
     <View style={tw`flex-1`}>
       <Image 
           source={ pegawai? {uri:`${PATH_IMG100}/${pegawai.nip}/${pegawai.foto}`} : IMGS.avatarMale}
-          style={[tw`h-100 w-full`, {resizeMode:'contain'}]}
+          style={[tw`h-100 w-full bg-gray`, {resizeMode:'contain'}]}
       />
 
-      <View style={tw`absolute top-0 p-4 mt-4`}>
+      <View style={tw`absolute top-0 p-4 mt-10`}>
         <AppBtn icon="chevron-left" color="dark" round clicked={ ()=> navigation.goBack() } />
       </View>
 
