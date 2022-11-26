@@ -8,17 +8,19 @@ export default {
   LOADING_SPECIAL : 'Loading Special',
 
 
-  HOME: 'Home',
-  HOME_TAB: 'Home Tab',
+  HOME: 'screens/content/HomeScreen',
+  HOME_TAB: 'routes/HomeNavigator',
   HOME_DRAWER: 'Home Drawer',
+  SET_JADWAL_AWAL: 'screens/home/SetJadwalAwalScreen',
+  PILIH_KATEGORI_JADWAL_AWAL: 'screens/home/PilihKategoriJadwal',
 
   ABSEN: 'Absen Tab',
-  ABSEN_TAB: 'Absen',
+  ABSEN_TAB: 'routes/AbsenNavigator',
   ABSEN_LOADING: 'Absen Loading',
   ABSEN_DRAWER: 'Absen Drawer',
 
   JADWAL: 'Jadwal',
-  JADWAL_TAB: 'Jadwal Tab',
+  JADWAL_TAB: 'routes/JadwalNavigator',
   JADWAL_DRAWER: 'Jadwal Drawer',
   JADWAL_SET: 'Jadwal Set',
   

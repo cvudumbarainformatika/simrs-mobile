@@ -50,21 +50,29 @@ export const { getKategories, setLoading, getError } = kategoryJadwalsReducer.ac
 
 // INI DIKIRIM KE SELECTOR
 
-// export const showLoading = (state) => state.jadwal.loading;
+export const showKategories = (state) => state.kategory.kategories;
+export const sliceKategoriesAwal = (state) => {
+    let newKategories = [...state.kategory.kategories]
+    if (newKategories.length > 0) {
+        return newKategories.slice(2)
+    }
+    return newKategories
+}
 // export const showError = (state) => state.jadwal.error;
 
 export default kategoryJadwalsReducer.reducer;
 
 export const getKategoriesAscync = createAsyncThunk(
     "kategory/getKategoriesAscync", 
-  async () => {
-    try {
-      const response = await api.get('/v2/absensi/jadwal/kategori');
-      return response.data;
-    } catch (error) {
-        console.error(error);
-        return error.response
-    }
+    async () => {
+      
+        try {
+            const resp = await api.get('/v2/absensi/jadwal/kategori')
+            return resp.data
+        } catch (error) {
+            return error.response
+        }
+     
 });
 
 

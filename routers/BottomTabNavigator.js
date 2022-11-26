@@ -42,38 +42,52 @@ const HiddenTab = ({ children }) => (
 
 const BottomTabNavigator = () => {
     
-    const Tab = createBottomTabNavigator();
+  const Tab = createBottomTabNavigator();
+  
+  const routes = (val) => {
+    console.log('bottom tab :', getFocusedRouteNameFromRoute(val))
+    const focusedRoute = getFocusedRouteNameFromRoute(val)
+
+    const arr = [
+      ROUTES.SET_JADWAL_AWAL,
+      ROUTES.PILIH_KATEGORI_JADWAL_AWAL
+    ]
+
+    let hideBottomTab = arr.some(obj => obj === focusedRoute)
+    return hideBottomTab
+  }  
 
   return (
       <Tab.Navigator
-      screenOptions={({ route }) => {
-        return {
-          headerShown: false,
-          tabBarActiveTintColor: tw.color('white'),
-          tabBarShowLabel: false,
-          tabBarInactiveTintColor: tw.color('gray'),
-          tabBarStyle: styles.tabBarStyle,
-          tabBarHideOnKeyboard: true,
+        screenOptions={({ route }) => {
+          // console.log('bot navigation :', routes(route))
+          return {
+            headerShown: false,
+            tabBarActiveTintColor: tw.color('white'),
+            tabBarShowLabel: false,
+            tabBarInactiveTintColor: tw.color('gray'),
+            tabBarStyle: styles.tabBarStyle,
+            tabBarHideOnKeyboard: true,
 
-          tabBarIcon: ({ color, size, focused }) => {
-            let iconName;
-            if (route.name === ROUTES.HOME_TAB) {
-              iconName = focused ? "view-dashboard" : "view-dashboard-outline"
-            } else if (route.name === ROUTES.SETTINGS_TAB) {
-              iconName = focused ? "account-cog" : "account-cog-outline"
-            } else if (route.name === ROUTES.HISTORY_TAB) {
-              iconName = focused ? "clipboard-list" : "clipboard-list-outline"
-            } else if (route.name === ROUTES.JADWAL_TAB) {
-              iconName = focused ? "calendar-text" : "calendar-clock-outline"
-            }
+            tabBarIcon: ({ color, size, focused }) => {
+              let iconName;
+              if (route.name === ROUTES.HOME_TAB) {
+                iconName = focused ? "view-dashboard" : "view-dashboard-outline"
+              } else if (route.name === ROUTES.SETTINGS_TAB) {
+                iconName = focused ? "account-cog" : "account-cog-outline"
+              } else if (route.name === ROUTES.HISTORY_TAB) {
+                iconName = focused ? "clipboard-list" : "clipboard-list-outline"
+              } else if (route.name === ROUTES.JADWAL_TAB) {
+                iconName = focused ? "calendar-text" : "calendar-clock-outline"
+              }
 
-            return <Icon name={iconName} size={22} color={color} />
-          },
-          tabBarStyle: getFocusedRouteNameFromRoute(route) === ROUTES.LOADING_SPECIAL ?
-            { display: "none" } : styles.tabBarStyle
-          };
+              return <Icon name={iconName} size={22} color={color} />
+            },
+            tabBarStyle: routes(route) ?
+              { display: "none" } : styles.tabBarStyle
+            };
+          }
         }
-      }
         initialRouteName={ROUTES.HOME_TAB}
       >
       
@@ -90,13 +104,13 @@ const BottomTabNavigator = () => {
             }}
         />
         <Tab.Screen name={ ROUTES.HISTORY_TAB } component={HistoryScreen} />
-      <Tab.Screen name={ROUTES.SETTINGS_TAB} component={SettingsNavigator} />
-       <Tab.Screen name={ROUTES.JADWAL_SET_TAB} component={SetJadwalNavigator}
-        options={{
-          tabBarStyle: { display: 'none' },
-          tabBarButton: (props) => (<HiddenTab {...props} />)
-        }}
-      />
+        <Tab.Screen name={ROUTES.SETTINGS_TAB} component={SettingsNavigator} />
+        {/* <Tab.Screen name={ROUTES.JADWAL_SET_TAB} component={SetJadwalNavigator}
+          options={{
+            tabBarStyle: { display: 'none' },
+            tabBarButton: (props) => (<HiddenTab {...props} />)
+          }}
+        /> */}
     </Tab.Navigator>
   )
 }

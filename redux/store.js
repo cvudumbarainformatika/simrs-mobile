@@ -15,23 +15,26 @@
 
 
 // ==========================================================================================INI STORE BARU
-import { configureStore } from '@reduxjs/toolkit'
+import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import absenReducer from './features/jadwal/absenReducer'
 import jadwalsReducer from './features/jadwal/jadwalsReducer'
 import kategoryJadwalReducer from './features/jadwal/kategoryJadwalReducer'
 import rekapJadwalReducer from './features/jadwal/rekapJadwalReducer'
+
+const rootReducer = combineReducers({
+    jadwal    : jadwalsReducer,
+    kategory  : kategoryJadwalReducer,
+    rekap     : rekapJadwalReducer,
+    absen     : absenReducer
+})
+
 
 const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false
     }),
-  reducer: {
-    jadwal    : jadwalsReducer,
-    kategory  : kategoryJadwalReducer,
-    rekap     : rekapJadwalReducer,
-    absen     : absenReducer
-  },
+  reducer: rootReducer
 
 })
 

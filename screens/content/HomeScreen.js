@@ -4,7 +4,7 @@ import { useEffect } from 'react'
 import { useState } from 'react'
 import { IMGS, ROUTES, tw } from '../../constants'
 import { AppBtn, AppLoader, GradientTop, HeaderUser } from '../../components'
-import { useNavigation } from '@react-navigation/native'
+import { StackActions, useNavigation } from '@react-navigation/native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
 import { useDispatch, useSelector } from 'react-redux'
@@ -32,7 +32,7 @@ const HomeScreen = () => {
   const callFirst = () => {
     dispatch(getJadwalsAsync());
     dispatch(getKategoriesAscync());
-    jadwals.length > 0? false : navigation.navigate(ROUTES.JADWAL_SET_TAB)
+    // jadwals.length > 0? false : navigation.navigate(ROUTES.JADWAL_SET_TAB)
   }
 
   // const currentJadwal = useSelector((state) => getCurrentJadwal(state, date.format("dddd")))
@@ -41,7 +41,7 @@ const HomeScreen = () => {
 
     callFirst()
 
-    // console.log('jadwal dari home effect :', jadwals.length)
+    console.log('jadwal dari home effect :', jadwals.length)
     // console.log('kategori dari home effect :', kategories.length)
     // console.log('jadwal use selector :', currentJadwal)
 
@@ -61,7 +61,7 @@ const HomeScreen = () => {
       <AppLoader visible={loading} />
       {/* <GradientTop  /> */}
       <HeaderUser bellClick={() => alert(`ini alert percobaan`)} />
-      {/* <AppBtn label="MM" clicked={()=> navigation.navigate(ROUTES.LOADING_SPECIAL)} /> */}
+      <AppBtn label="MM" clicked={()=> navigation.navigate(ROUTES.SET_JADWAL_AWAL, {jadwals})} />
       <ScrollView>
 
         {/* JAM DIGITAL */}
