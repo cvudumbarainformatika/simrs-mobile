@@ -7,7 +7,7 @@ import { IMGS, tw } from '../../constants'
 
 const AppLoaderAnim = ({ visible = false }) => {
     return (
-      visible && (
+      // visible && (
     <View style={[styles.container]}>
       <LinearGradient 
           className="flex-1 justify-center items-center"
@@ -22,7 +22,7 @@ const AppLoaderAnim = ({ visible = false }) => {
         iterationCount={1}
       />
       <Animatable.Text
-        animation="slideInUp"
+        animation="fadeIn"
         iterateCount={1}
         className="text-lg my-10 text-white font-bold text-center"
       >
@@ -31,7 +31,8 @@ const AppLoaderAnim = ({ visible = false }) => {
         <Progress.Circle size={60} indeterminate={true} color={'white'} />
       </LinearGradient>
     </View>
-  ))
+  )
+  // )
 }
 
 export default AppLoaderAnim

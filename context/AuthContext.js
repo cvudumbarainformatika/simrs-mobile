@@ -17,6 +17,8 @@ export const AuthProvider = ({ children }) => {
     const [msgError, setMsgError] = useState(null)
     const [msgOk, setMsgOk] = useState(null)
     const [userId, setUserId] = useState(null)
+    const [isSignin, setIsSignin] = useState(false)
+    const [isSignout, setIsSignout] = useState(false)
 
 
     const login = async (username, password) => {
@@ -31,11 +33,7 @@ export const AuthProvider = ({ children }) => {
         await api.post(`/v2/login`, form).then(resp => {
             let token = resp.data.token
             let userInfo = resp.data.user
-            AsyncStorage.setItem('userToken', token)
-            AsyncStorage.setItem('user', JSON.stringify(userInfo))
-            setUserToken(token)
-            setUser(userInfo)
-
+            saveToken(token, userInfo)
             getMe()
             setIsLoading(false)
             // console.log(token)
@@ -90,7 +88,8 @@ export const AuthProvider = ({ children }) => {
          resp?setPegawai(resp.data.result):setPegawai(null)
         }).catch(err => {
             console.log('me :', err)
-            setIsLoading(false)
+            removeToken()
+            // setIsLoading(false)
         })
     }
 
@@ -98,6 +97,7 @@ export const AuthProvider = ({ children }) => {
         setIsLoading(true);
         await api.get(`/v2/user/logout`).then(resp => {
             removeToken()
+            
             setIsLoading(false)
         }).catch(err => {
             console.log(err)
@@ -105,19 +105,28 @@ export const AuthProvider = ({ children }) => {
         })
     }
 
+    const saveToken = async (token, userInfo) => {
+        AsyncStorage.setItem('userToken', token)
+        AsyncStorage.setItem('user', JSON.stringify(userInfo))
+        setUserToken(token)
+        setUser(userInfo)
+        setIsSignin(true)
+        setIsSignout(false)
+    }
     const removeToken = async () => {
-        setIsLoading(true);
+        // setIsLoading(true);
         await AsyncStorage.removeItem('userToken');
         await AsyncStorage.removeItem('user');
         setUserToken(null)
         setUser(null)
-        setTimeout(() => {
-            setIsLoading(false)
-        },300)
+        setIsSignout(true)
+        setIsSignin(false)
+        // setTimeout(() => {
+        //     setIsLoading(false)
+        // },300)
     }
 
     const isLoggedIn = async () => {
-        setIsLoading(true)
         setMsgOk(null)
         setUserId(null)
         try {
@@ -126,13 +135,12 @@ export const AuthProvider = ({ children }) => {
             userInfo = JSON.parse(userInfo)
             setUser(userInfo)
             setUserToken(token)
+            // setIsLoading(false)
 
             getMe()
-            setIsLoading(false)
             console.log('setUser:', userInfo)
         } catch (e) {
             console.log(`isLoggedIn Error : ${e}`)
-            setIsLoading(false)
         }
 
     }
@@ -145,12 +153,16 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         isLoggedIn();
+
     },[])
 
 
 
     return (
-        <AuthContext.Provider value={{login, logout, removeToken, closeAlerts,resetDevice, alerts, isLoading, userToken, user, pegawai, msgError, msgOk}}>
+        <AuthContext.Provider value={{
+            login, logout, removeToken, closeAlerts, resetDevice, getMe, 
+            alerts, isLoading, userToken, user, pegawai, msgError, msgOk, isSignin, isSignout, 
+        }}>
             {children}
         </AuthContext.Provider>
     )

@@ -7,6 +7,7 @@ const initialState = {
     jadwals: [],
     error: null,
     loading: false,
+    currentJadwal:null,
 
 
     libur: 0,
@@ -89,6 +90,14 @@ export const showJadwals = (state) => state.jadwal.jadwals;
 export const showLoading = (state) => state.jadwal.loading;
 export const showError = (state) => state.jadwal.error;
 
+// export const getCurrentJadwal = (state, hari) => {
+//     const index = state.jadwal.jadwals.findIndex((item) => item.hari === hari || item.day === hari)
+//     state.jadwal.jadwals[index]
+// };
+// export const getCurrentJadwal = (state, hari) =>
+//     state.jadwal.jadwals.filter((item) => item.hari === hari || item.day === hari).reduce((curr, item) => curr = item, {});
+
+
 
 export default jadwalsReducer.reducer;
 
@@ -114,7 +123,9 @@ export const updateJadwalsAsync = createAsyncThunk(
         console.error(error);
         return error.response
     }
-});
+    });
+
+  
 
 
 

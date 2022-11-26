@@ -8,7 +8,11 @@ import { tw, ROUTES } from '../../constants';
 import { AppConfirm, AppLoader } from '../../components';
 import { api } from '../../helpers/axiosInterceptor';
 import { useDispatch, useSelector } from 'react-redux';
-import {  setId, setWaiting } from '../../redux/features/jadwal/absenReducer';
+import { setId, setWaiting } from '../../redux/features/jadwal/absenReducer';
+
+import dayjs from 'dayjs'
+import { getCurrentJadwal } from '../../redux/features/jadwal/jadwalsReducer';
+require('dayjs/locale/id')
 
 const AbsenScreen = () => {
 
@@ -23,6 +27,22 @@ const AbsenScreen = () => {
 
   const { id, interv, waiting, isDone } = useSelector(state => state.absen)
   
+  const { jadwals } = useSelector(state => state.jadwal)
+  const [date, setDate] = useState(dayjs().locale("id"))
+  const [cam, setCam] = useState('_qmasuk')   // _qmasuk || _qpending  || _qpulang
+
+  const currentJadwal = useSelector((state) => getCurrentJadwal(state, date.format("dddd")))
+  // const jamMasuk = currentJadwal[0].masuk
+  // const jamPulang = currentJadwal[0].pulang
+  // const status = currentJadwal[0].status
+  // const hari = currentJadwal[0].hari
+  // const day = currentJadwal[0].day
+
+  // const prioritas = () => {
+  //   if (hari === date.format("dddd") || day === date.format("dddd") || id === 0) {
+  //     setCam('_qmasuk')
+  //   } 
+  // }
 
   // METHOD
   useEffect(() => {
@@ -30,7 +50,17 @@ const AbsenScreen = () => {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
       setHasPermission(status === 'granted');
     })();
-  }, [waiting, isDone, id]);
+
+    const interval = setInterval(() => {
+      setDate(dayjs())
+    }, 1000 * 60)
+
+    // prioritas()
+
+    return () => clearInterval(interval)
+    console.log('absens jadwal :', jadwals.length)
+    console.log('absen date :', date.format("dddd"))
+  }, [waiting, isDone, id, jadwals.length, date]);
 
 
 

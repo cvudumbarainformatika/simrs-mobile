@@ -16,14 +16,14 @@ const SetJadwalAwalScreen = ({ navigation }) => {
   // const { loading, status } = useSelector( state => state.kategory)   // panggil stte kategori juga
   
   const navigateToHome = () => {
+    dispatch(getJadwalsAsync())
     jadwals.length > 0 ? navigation.navigate(ROUTES.HOME_TAB) : null
   }
 
   useEffect(() => {
-    dispatch(getJadwalsAsync())
     navigateToHome()
     console.log('from set jadwal awal :', jadwals.length)
-  }, [jadwals.length])
+  }, [jadwals.length, dispatch])
   
     const backAction = () => {
         Alert.alert("Tunggu!", "Apakah Kamu ingin membatalkan dan keluar dari aplikasi?", [

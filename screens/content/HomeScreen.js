@@ -1,26 +1,33 @@
-import { View, Text, Image, ScrollView, BackHandler } from 'react-native'
+import { View, Text, Image, ScrollView, BackHandler, ImageBackground } from 'react-native'
 import React, { useContext } from 'react'
 import { useEffect } from 'react'
 import { useState } from 'react'
-import { ROUTES, tw } from '../../constants'
+import { IMGS, ROUTES, tw } from '../../constants'
 import { AppBtn, AppLoader, GradientTop, HeaderUser } from '../../components'
 import { useNavigation } from '@react-navigation/native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
 import { useDispatch, useSelector } from 'react-redux'
-import { getJadwalsAsync, showError, showJadwals, showLoading } from '../../redux/features/jadwal/jadwalsReducer'
+import { getCurrentJadwal, getJadwalsAsync, showError, showJadwals, showLoading } from '../../redux/features/jadwal/jadwalsReducer'
 import { getKategoriesAscync } from '../../redux/features/jadwal/kategoryJadwalReducer'
-import { useCallback } from 'react'
-import { useMemo } from 'react'
+import { LinearGradient } from 'expo-linear-gradient'
+import { AuthContext } from '../../context/AuthContext'
+
+
+import dayjs from 'dayjs'
+require('dayjs/locale/id')
 
 const HomeScreen = () => {
 
   const navigation = useNavigation();
 
   const dispatch = useDispatch()
+  const { pegawai, getMe } = useContext(AuthContext);
 
   const {jadwals, loading, error} = useSelector(state => state.jadwal)
-  const {kategories} = useSelector(state => state.kategory)
+  const { kategories } = useSelector(state => state.kategory)
+  
+  const [date, setDate] = useState(dayjs().locale("id"))
 
   const callFirst = () => {
     dispatch(getJadwalsAsync());
@@ -28,15 +35,22 @@ const HomeScreen = () => {
     jadwals.length > 0? false : navigation.navigate(ROUTES.JADWAL_SET_TAB)
   }
 
-  // const memJadwals = useMemo(() => {
-  //   callFirst()
-  // },[jadwals.length])
+  // const currentJadwal = useSelector((state) => getCurrentJadwal(state, date.format("dddd")))
 
   useEffect(() => {
+
     callFirst()
-    console.log('jadwal dari home effect :', jadwals.length)
-    console.log('kategori dari home effect :', kategories.length)
-  }, [jadwals.length])
+
+    // console.log('jadwal dari home effect :', jadwals.length)
+    // console.log('kategori dari home effect :', kategories.length)
+    // console.log('jadwal use selector :', currentJadwal)
+
+    const interval = setInterval(() => {
+      setDate(dayjs())
+    }, 1000 * 60)
+    return () => clearInterval(interval)
+    
+  }, [ ])
   
 
   
@@ -49,38 +63,55 @@ const HomeScreen = () => {
       <HeaderUser bellClick={() => alert(`ini alert percobaan`)} />
       {/* <AppBtn label="MM" clicked={()=> navigation.navigate(ROUTES.LOADING_SPECIAL)} /> */}
       <ScrollView>
-        {/* PRESENSI BULAN INI */}
-        {/* <AppBtn label="GG" clicked={()=> navigation.navigate(ROUTES.JADWAL_SET_TAB)} /> */}
-        <View style={tw`px-3 pt-2`}>
-          <Text style={tw`font-bold pb-1 text-gray-dark`}>Presensi Hari Ini 📅</Text>
-          <View style={tw`bg-white p-3 pb-5 rounded`}>
+
+        {/* JAM DIGITAL */}
+
+        <View className="h-32 w-full overflow-hidden">
+          <LinearGradient 
+              className="flex-1 justify-center items-center"
+              colors={[tw.color('secondary'), tw.color('primary')]}
+              start={{ x: 1, y: 0.5 }}
+              end={{x:1,y:0.09}}
+          >
+            <Text className="text-white text-6xl font-bold">{date.format("HH:mm")}</Text>
+          </LinearGradient>
+        </View>
+
+        <View style={tw`pt-2`}>
+          <Text style={tw`font-bold px-4 py-2 text-gray-dark`}>Presensi Hari Ini 📅</Text>
+          <View style={tw`bg-white p-4 pb-5 rounded`}>
             {/* JIKA BUKAN LIBUR */}
-            <View style={tw`flex-row justify-between`}>
-              <View style={tw`flex-1 items-center`}>
-                <Text style={tw`text-primary`}>Waktu Masuk</Text>
-                <View style={tw`rounded-l-lg p-3 w-full items-center bg-primary`}>
-                  <Text style={tw`text-white text-[14px] `}>🕒  07:30</Text>
+            {/* {status === '2' && (
+              <View style={tw`flex-row justify-between `}>
+                <View style={tw`flex-1 items-center`}>
+                  <Text style={tw`text-primary`}>Waktu Masuk</Text>
+                  <View style={tw`rounded-l-lg p-3 w-full items-center bg-primary`}>
+                    <Text style={tw`text-white text-[14px] `}>🕒  {masuk.slice(0, -3)}</Text>
+                  </View>
+                </View>
+                <View style={tw`flex-1 items-center`}>
+                  <Text style={tw`text-dark`}>Waktu Pulang</Text>
+                  <View style={tw`rounded-r-lg p-3 w-full items-center bg-dark`}>
+                    <Text style={tw`text-white text-[14px] `}>🕒  {pulang.slice(0, -3)}</Text>
+                  </View>
                 </View>
               </View>
-              <View style={tw`flex-1 items-center`}>
-                <Text style={tw`text-dark`}>Waktu Pulang</Text>
-                <View style={tw`rounded-r-lg p-3 w-full items-center bg-dark`}>
-                  <Text style={tw`text-white text-[14px] `}>🕒  16:00</Text>
-                </View>
-              </View>
-            </View>
+            )} */}
+            
             {/* JIKA LIBUR */}
-            <View style={tw`flex-1 items-center`}>
-              <Text style={tw`text-negative`}>Tidak Ada Jadwal</Text>
-              <View style={tw`rounded-lg p-3 w-full items-center bg-negative`}>
-                <Text style={tw`text-white text-[14px] `}>🕒  Libur</Text>
-              </View>
-            </View>
+            {/* {status === '1' && (
+              <View style={tw`flex-1 items-center`}>
+                <Text style={tw`text-negative`}>Tidak Ada Jadwal</Text>
+                <View style={tw`rounded-lg p-3 w-full items-center bg-negative`}>
+                  <Text style={tw`text-white text-[14px] `}> Libur </Text>
+                </View>
+              </View>)} */}
+
           </View>
         </View>
         {/* PRESENSI HARI INI */}
-        <View style={tw`px-3 pt-2`}>
-            <Text style={tw`font-bold pb-1 text-gray-dark`}>Statistik Presensi Bulan ini 📈</Text>
+        <View style={tw`pt-2`}>
+            <Text style={tw`font-bold px-4 py-2 text-gray-dark`}>Statistik Presensi Bulan ini 📈</Text>
           <View style={tw`bg-white p-3 pb-5 rounded`}>
             <View style={tw`flex-row justify-between`}>
               <View style={tw`flex-1 h-24 w-full bg-primary rounded justify-center items-center m-1`}>
@@ -99,8 +130,8 @@ const HomeScreen = () => {
           </View>
         </View>
         {/* Calendar */}
-        <View style={tw`px-3 pt-3 pb-40`}>
-          <Text style={tw`font-bold pb-1 text-gray-dark`}>Absensi Bulan Ini  🗓️</Text>
+        <View style={tw`py-2 pb-40`}>
+          <Text style={tw`font-bold px-4 py-2 text-gray-dark`}> Bulan Ini  🗓️</Text>
           <View style={tw`bg-white p-2 pb-5 rounded`}>
               <Calendar
                 monthFormat={'MMMM yyyy'}

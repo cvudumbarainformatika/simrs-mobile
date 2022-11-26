@@ -1,5 +1,5 @@
 
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { AuthContext } from '../context/AuthContext'
 import { AppAlert, AppLoader } from '../components'
@@ -10,17 +10,31 @@ import { Provider } from 'react-redux'
 import { navigationRef } from './RootNavigation'
 import store  from '../redux/store'
 import AppLoaderAnim from '../components/~global/AppLoaderAnim'
+import { createStackNavigator } from '@react-navigation/stack'
+import SplashScreen_ from './SplashScreen_'
 
 const AppNav = () => {
 
   const { isLoading, userToken, alerts, msgError, msgOk, closeAlerts, resetDevice } = useContext(AuthContext);
 
+  const [isSplash, setIsSplash] = useState(true)
+
+  function SplashScreen() {
+    return (<AppLoaderAnim />);
+  }
+
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsSplash(false)
+    },3000)
+  }, [])
+
+
+
   if (isLoading) {
       return (<AppLoader visible={isLoading} />)
   }
-  // if (isLoading) {
-  //     return (<AppLoaderAnim visible={isLoading} />)
-  // }
 
   
 
@@ -31,12 +45,17 @@ const AppNav = () => {
     return (<AppAlert visible={alerts} status="Error" msg={msgError} onOk={closeAlerts}  /> )
   }
 
+  // const Stack = createStackNavigator();
   return (
     <Provider store={store}>
       <NavigationContainer ref={navigationRef}>
-        {
-          userToken !== null ? <AppStack /> : <AuthStack />
-        }
+        {/* <Stack.Navigator> */}
+          {isSplash ? (
+            SplashScreen()
+          ) :
+           userToken !== null ? (<AppStack />) : (<AuthStack />) 
+          }
+        {/* </Stack.Navigator> */}
       </NavigationContainer>
     </Provider>
   )
