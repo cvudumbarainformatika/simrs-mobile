@@ -32,18 +32,19 @@ const HomeScreen = () => {
   const callFirst = () => {
     dispatch(getJadwalsAsync());
     dispatch(getKategoriesAscync());
-    // jadwals.length > 0? false : navigation.navigate(ROUTES.JADWAL_SET_TAB)
   }
 
-  // const currentJadwal = useSelector((state) => getCurrentJadwal(state, date.format("dddd")))
+  const currentJadwal = useSelector((state) => getCurrentJadwal(state, date.format("dddd")))
+
+  const {hari, masuk, pulang, status} = currentJadwal
 
   useEffect(() => {
 
     callFirst()
 
-    console.log('jadwal dari home effect :', jadwals.length)
+    // console.log('jadwal dari home effect :', jadwals.length)
     // console.log('kategori dari home effect :', kategories.length)
-    // console.log('jadwal use selector :', currentJadwal)
+    console.log('jadwal use selector :', hari)
 
     const interval = setInterval(() => {
       setDate(dayjs())
@@ -51,9 +52,6 @@ const HomeScreen = () => {
     return () => clearInterval(interval)
     
   }, [ ])
-  
-
-  
 
   return (
     <View style={tw`flex-1 bg-gray-light`}>
@@ -61,7 +59,7 @@ const HomeScreen = () => {
       <AppLoader visible={loading} />
       {/* <GradientTop  /> */}
       <HeaderUser bellClick={() => alert(`ini alert percobaan`)} />
-      <AppBtn label="MM" clicked={()=> navigation.navigate(ROUTES.SET_JADWAL_AWAL, {jadwals})} />
+      {/* <AppBtn label="MM" clicked={()=> navigation.navigate(ROUTES.SET_JADWAL_AWAL, {jadwals})} /> */}
       <ScrollView>
 
         {/* JAM DIGITAL */}
@@ -71,7 +69,7 @@ const HomeScreen = () => {
               className="flex-1 justify-center items-center"
               colors={[tw.color('secondary'), tw.color('primary')]}
               start={{ x: 1, y: 0.5 }}
-              end={{x:1,y:0.09}}
+              end={{x:1,y:0.08}}
           >
             <Text className="text-white text-6xl font-bold">{date.format("HH:mm")}</Text>
           </LinearGradient>
@@ -81,7 +79,7 @@ const HomeScreen = () => {
           <Text style={tw`font-bold px-4 py-2 text-gray-dark`}>Presensi Hari Ini 📅</Text>
           <View style={tw`bg-white p-4 pb-5 rounded`}>
             {/* JIKA BUKAN LIBUR */}
-            {/* {status === '2' && (
+            {status === '2' && (
               <View style={tw`flex-row justify-between `}>
                 <View style={tw`flex-1 items-center`}>
                   <Text style={tw`text-primary`}>Waktu Masuk</Text>
@@ -96,16 +94,16 @@ const HomeScreen = () => {
                   </View>
                 </View>
               </View>
-            )} */}
+            )}
             
             {/* JIKA LIBUR */}
-            {/* {status === '1' && (
+            {status === '1' && (
               <View style={tw`flex-1 items-center`}>
                 <Text style={tw`text-negative`}>Tidak Ada Jadwal</Text>
                 <View style={tw`rounded-lg p-3 w-full items-center bg-negative`}>
                   <Text style={tw`text-white text-[14px] `}> Libur </Text>
                 </View>
-              </View>)} */}
+              </View>)}
 
           </View>
         </View>

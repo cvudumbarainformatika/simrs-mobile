@@ -7,7 +7,8 @@ const initialState = {
     interv: 0,
     waiting: false,
     isDone:false,
-    error:null
+    error: null,
+    absenToday:null,
 }
 
 export const absenReducer = createSlice({
@@ -21,26 +22,30 @@ export const absenReducer = createSlice({
     },
 
 
-    // extraReducers: (builder) => {
-    //     builder.addCase(postAbsenAsync.pending , (state, action) => {
-    //         state.waiting = true,
-    //             state.error = null
-    //         state.isDone = false
-    //     })
+    extraReducers: (builder) => {
+        builder.addCase(getAbsenTodayAsync.pending , (state, action) => {
+            state.waiting = true;
+            state.error = null;
+            state.isDone = false;
+            state.absenToday = null;
+        })
 
-    //     builder.addCase(postAbsenAsync.fulfilled, (state, action) => {
-    //         state.id = action.payload.jadwal? action.payload.jadwal.data.id : 0,
-    //         // state.interv = action.payload.jadwal? action.payload.jadwal.data.kategori.jam: 0,
-    //         state.error = null
-    //         state.isDone = true
-    //     })
+        builder.addCase(getAbsenTodayAsync.fulfilled, (state, action) => {
+            state.id = action.payload? action.payload.id:0;
+            state.absenToday = action.payload? action.payload:null;
+            state.error = null;
+            state.isDone = true;
+            state.waiting = false;
+        })
 
-    //     .addCase(postAbsenAsync.rejected, (state, action) => {
-    //         state.error = action.payload
-    //         state.waiting = false;
-    //         state.isDone = true
-    //     })
-    // }
+        builder.addCase(getAbsenTodayAsync.rejected, (state, action) => {
+            state.id = 0;
+            state.error = 'belum ada absen hari ini';
+            state.waiting = false;
+            state.isDone = true;
+            state.absenToday = null
+        })
+    }
 }) 
 
 
@@ -48,6 +53,19 @@ export const { setId, setIntrv, setWaiting, setIsDone } = absenReducer.actions;
 
 export default absenReducer.reducer;
 
+
+export const getAbsenTodayAsync = createAsyncThunk(
+    "absen/getAbsenTodayAsync", 
+  async () => {
+    try {
+        const response = await api.get('/v2/absensi/jadwal/absen-today');
+        console.log('response absen today : ',response.data);
+        return response.data;
+    } catch (error) {
+        console.log('reducer tangkap :',error);
+        // return error.response.status
+    }
+});
 
 // export const postAbsenAsync = createAsyncThunk(
 //     "absen/postAbsenAsync", 

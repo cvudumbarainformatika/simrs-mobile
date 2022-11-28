@@ -19,20 +19,21 @@ const AppStack = () => {
 
   // React.useMemo(() => dispatch(getKategoriesAscync()), [])
   useEffect(() => {
-    const bootStrapAsynch = async () => {
-        await dispatch(getJadwalsAsync())
+    const bootStrapAsynch = () => {
+        dispatch(getJadwalsAsync())
     }
   
     bootStrapAsynch()
 
     console.log('JADWALS :', jadwals.length)
     // console.log('KATEGORIES :', kategories)
-  }, [])
+  }, [jadwals.length])
 
   const Stack = createStackNavigator()
   return (
     <>
       {loading && (<AppLoader visible={loading} />)}
+      
     <Stack.Navigator
       screenOptions={{
         gestureEnabled: true,
@@ -41,14 +42,21 @@ const AppStack = () => {
       }}
       initialRouteName={ROUTES.HOME}
     >
-      {jadwals.length > 0 ? (<Stack.Screen name={ROUTES.HOME} component={BottomTabNavigator} options={TRANSITION_HORIZONTAL} initialParams={{jadwals}} />) :
+        {jadwals.length > 0 ? (
+          <>
+          <Stack.Screen name={ROUTES.HOME} component={BottomTabNavigator} options={TRANSITION_HORIZONTAL} initialParams={{ jadwals }} />
+          {/* <Stack.Screen name={ROUTES.LOGOUT} component={Logout} options={TRANSITION_HORIZONTAL} /> */}
+          </>
+        ) :
         (
           <>
           <Stack.Screen name={ROUTES.SET_JADWAL_AWAL} component={SetJadwalAwalScreen} options={TRANSITION_HORIZONTAL} initialParams={{ jadwals }} />
-          <Stack.Screen name={ROUTES.PILIH_KATEGORI_JADWAL_AWAL} component={PilihKategoriJadwal} options={TRANSITION_HORIZONTAL} />
+              <Stack.Screen name={ROUTES.PILIH_KATEGORI_JADWAL_AWAL} component={PilihKategoriJadwal} options={TRANSITION_HORIZONTAL} />
+              <Stack.Screen name={'BottomNavigator'} component={BottomTabNavigator} options={TRANSITION_HORIZONTAL} />
+              <Stack.Screen name={ROUTES.LOGOUT} component={Logout} options={TRANSITION_HORIZONTAL} />
           </>
         )}
-      <Stack.Screen name={ROUTES.LOGOUT} component={Logout} options={TRANSITION_HORIZONTAL} />
+      
       <Stack.Screen name={ROUTES.ERROR_TIMEOUT} component={Timeout} options={TRANSITION_HORIZONTAL} />
       </Stack.Navigator>
     </>

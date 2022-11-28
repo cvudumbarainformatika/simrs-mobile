@@ -27,7 +27,7 @@ const AppNav = () => {
   useEffect(() => {
     setTimeout(() => {
       setIsSplash(false)
-    },1000)
+    },3000)
   }, [])
 
 

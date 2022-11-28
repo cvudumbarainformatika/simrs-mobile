@@ -1,9 +1,10 @@
 import { View, Text, FlatList, TouchableOpacity } from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
-import { AppBtn, AppLoader, BottomTwoBtn } from '../../components'
+import { AppAlert, AppBtn, AppLoader, BottomTwoBtn } from '../../components'
 import { ROUTES, tw } from '../../constants'
 import KategoriJadwal from '../../components/jadwal/KategoriJadwal'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { api } from '../../helpers/axiosInterceptor'
 
 const PilihKategoriJadwal = ({ navigation, route }) => {
     
@@ -38,17 +39,24 @@ const PilihKategoriJadwal = ({ navigation, route }) => {
 
     function konfirmasi() {
         setStatus('Idle')
-        navigation.navigate(ROUTES.HOME_TAB)
+        navigation.navigate('BottomNavigator', {newKategories})
     }
     
     useEffect(() => {
-      console.log(newKategories)
+      // console.log(newKategories)
     }, [])
     
 
   return (
     <SafeAreaView className="flex-1">
-      <View className="p-4 flex-row justify-between bg-white">
+      <AppLoader visible={progress} />
+      {status === 'Success' && (<AppAlert visible={status === 'Success'} status={status} msg={'data tersimpan'}
+        onOk={()=> konfirmasi()}
+      />)}
+      {status === 'Error' && (<AppAlert visible={status === 'Error'} status={status} msg={'Ada Kesalahan silahkan diulangi'}
+        onOk={()=> setStatus('Idle')}
+      />)}
+      <View className="p-4 mb-5 flex-row justify-between bg-white">
           <Text style={tw`font-bold`}>Pilih Kategori Jadwal</Text>
         <Text style={tw`font-bold`}>{ kategori}</Text>
       </View>

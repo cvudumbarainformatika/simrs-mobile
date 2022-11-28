@@ -8,7 +8,15 @@ const Logout = ({navigation}) => {
     useEffect(() => {
         removeToken();
     },[])
-    return <ActivityIndicator />;
+    return (
+        <>
+            <View className="flex-1 justify-center items-center">
+                <ActivityIndicator />
+            </View>
+            
+        </>
+        
+    );
 }
 
 export default Logout

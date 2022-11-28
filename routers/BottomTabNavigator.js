@@ -45,12 +45,16 @@ const BottomTabNavigator = () => {
   const Tab = createBottomTabNavigator();
   
   const routes = (val) => {
-    console.log('bottom tab :', getFocusedRouteNameFromRoute(val))
     const focusedRoute = getFocusedRouteNameFromRoute(val)
+    console.log('bottom tab :', focusedRoute)
 
     const arr = [
       ROUTES.SET_JADWAL_AWAL,
-      ROUTES.PILIH_KATEGORI_JADWAL_AWAL
+      ROUTES.PILIH_KATEGORI_JADWAL_AWAL,
+      ROUTES.LOGOUT,
+      ROUTES.SCREEN_ABSEN_AWAL,
+      ROUTES.ABSEN,
+      ROUTES.ABSEN_TAB
     ]
 
     let hideBottomTab = arr.some(obj => obj === focusedRoute)
@@ -96,21 +100,16 @@ const BottomTabNavigator = () => {
       <Tab.Screen name={ROUTES.JADWAL_TAB} component={JadwalNavigator}/>
       <Tab.Screen name={ROUTES.ABSEN_TAB} component={AbsenNavigator}
         options={{
-          unmountOnBlur:true,
+          // unmountOnBlur:true,
           tabBarIcon: ({ focused }) => (
             <Icon name={'qrcode-scan'} size={28} color={`${ focused? tw.color('gray-light') : tw.color('gray') }`} />
           ),
-          tabBarButton: (props) => (<CustomTab {...props} />) 
-            }}
+          tabBarButton: (props) => <CustomTab {...props} />,
+          tabBarStyle: {display:"none"}
+          }}
         />
         <Tab.Screen name={ ROUTES.HISTORY_TAB } component={HistoryScreen} />
         <Tab.Screen name={ROUTES.SETTINGS_TAB} component={SettingsNavigator} />
-        {/* <Tab.Screen name={ROUTES.JADWAL_SET_TAB} component={SetJadwalNavigator}
-          options={{
-            tabBarStyle: { display: 'none' },
-            tabBarButton: (props) => (<HiddenTab {...props} />)
-          }}
-        /> */}
     </Tab.Navigator>
   )
 }
@@ -120,13 +119,10 @@ export default BottomTabNavigator
 
 const styles = StyleSheet.create({
   tabBarStyle: {
+    // display:"none",
     position: 'absolute',
-    zIndex:1,
     backgroundColor: tw.color('primary'),
     elevation: 0,
-    borderTopWidth: 1,
-    borderTopColor: tw.color('gray-light'),
-    bottom:0,
     
   }
 })

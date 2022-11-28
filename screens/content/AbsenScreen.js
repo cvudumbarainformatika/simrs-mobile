@@ -50,17 +50,7 @@ const AbsenScreen = () => {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
       setHasPermission(status === 'granted');
     })();
-
-    const interval = setInterval(() => {
-      setDate(dayjs())
-    }, 1000 * 60)
-
-    // prioritas()
-
-    return () => clearInterval(interval)
-    console.log('absens jadwal :', jadwals.length)
-    console.log('absen date :', date.format("dddd"))
-  }, [waiting, isDone, id, jadwals.length, date]);
+  }, []);
 
 
 

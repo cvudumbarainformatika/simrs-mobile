@@ -17,7 +17,7 @@ const SetJadwalAwalScreen = ({ navigation }) => {
     } } = useRoute()
     
     const { kategories, loading } = useSelector(state => state.kategory)
-    const newKategories = useSelector(state =>sliceKategoriesAwal(state))
+    const newKategories = useSelector(state =>sliceKategoriesAwal(state, 2))
 
     const backAction = () => {
         Alert.alert("Tunggu!", "Apakah Kamu ingin membatalkan dan keluar dari aplikasi?", [
@@ -36,7 +36,7 @@ const SetJadwalAwalScreen = ({ navigation }) => {
           "hardwareBackPress",
           backAction
         );
-        console.log('backHandler')
+        // console.log('backHandler')
         return true
       }
       BackHandler.removeEventListener("hardwareBackPress", backAction);
@@ -50,8 +50,8 @@ const SetJadwalAwalScreen = ({ navigation }) => {
         }
 
         kat()
-        console.log('KATEGORIES from set jadwal awal:', kategories.length)
-        console.log('JADWALS from set jadwal awal:', jadwals.length)
+        // console.log('KATEGORIES from set jadwal awal:', kategories.length)
+        // console.log('JADWALS from set jadwal awal:', jadwals.length)
     },[kategories.length])
 
     

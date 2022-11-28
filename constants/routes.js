@@ -16,6 +16,8 @@ export default {
 
   ABSEN: 'Absen Tab',
   ABSEN_TAB: 'routes/AbsenNavigator',
+  SCREEN_ABSEN_AWAL: 'screens/absen/ScreenAbsenAwal',
+  QR_SCAN: 'screens/absen/QrScan',
   ABSEN_LOADING: 'Absen Loading',
   ABSEN_DRAWER: 'Absen Drawer',
 

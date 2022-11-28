@@ -85,6 +85,8 @@ export const jadwalsReducer = createSlice({
 
 export const { getJadwals, setLoading, getError, setLibur, setMasuk, setTotalJam } = jadwalsReducer.actions;
 
+export default jadwalsReducer.reducer;
+
 // INI DIKIRIM KE SELECTOR
 export const showJadwals = (state) => state.jadwal.jadwals;
 export const showLoading = (state) => state.jadwal.loading;
@@ -94,12 +96,15 @@ export const showError = (state) => state.jadwal.error;
 //     const index = state.jadwal.jadwals.findIndex((item) => item.hari === hari || item.day === hari)
 //     state.jadwal.jadwals[index]
 // };
-// export const getCurrentJadwal = (state, hari) =>
-//     state.jadwal.jadwals.filter((item) => item.hari === hari || item.day === hari).reduce((curr, item) => curr = item, {});
-
-
-
-export default jadwalsReducer.reducer;
+export const getCurrentJadwal = (state, hari) => {
+    let newJadwals = [...state.jadwal.jadwals]
+    if (newJadwals.length > 0) {
+        newJadwals = newJadwals.filter((item) => item.hari === hari || item.day === hari).reduce((curr, item) => curr = item, {})
+        return newJadwals
+    } 
+    
+    return newJadwals
+}
 
 export const getJadwalsAsync = createAsyncThunk(
     "jadwal/getJadwalsAsync", 
