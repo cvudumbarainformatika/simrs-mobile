@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity} from 'react-native'
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
@@ -11,10 +11,11 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useState } from 'react'
 import { getCurrentJadwal, getJadwalsAsync } from '../../redux/features/jadwal/jadwalsReducer'
 import { getKategoriesAscync } from '../../redux/features/jadwal/kategoryJadwalReducer'
-import { getAbsenTodayAsync } from '../../redux/features/jadwal/absenReducer'
+import { getAbsenTodayAsync, setIsAbsen } from '../../redux/features/jadwal/absenReducer'
 
 import * as Location from 'expo-location';
 import dayjs from 'dayjs'
+import { SafeAreaView } from 'react-native-safe-area-context'
 require('dayjs/locale/id')
 
 const ScreenAbsenAwal = ({ navigation, route }) => {
@@ -27,7 +28,7 @@ const ScreenAbsenAwal = ({ navigation, route }) => {
 
     const currentJadwal = useSelector((state) => getCurrentJadwal(state, date.format("dddd")))
     const { hari, masuk, pulang, status, kategory_id } = currentJadwal
-    const { id, absenToday, interv, waiting, isDone } = useSelector(state => state.absen)
+    const { id, absenToday, interv, waiting, isDone, isAbsen } = useSelector(state => state.absen)
 
 
     const [absenMasuk, setAbsenMasuk] = useState(false)
@@ -39,94 +40,112 @@ const ScreenAbsenAwal = ({ navigation, route }) => {
     const [vColor, setVColor] = useState('negative')
     
     
-
-
-
     const configAbsen = () => {
+        let bukaAbsenMasuk = date.format("HH:mm") >= kurangiJam(masuk, 1) && date.format("HH:mm") <= kurangiMenit(pulang, 30)
+        let bukaAbsenPulang = date.format("HH:mm") >= kurangiMenit(pulang, 30) && date.format("HH:mm") <= tambahiJam(pulang, 5)
 
-       
-
-        if (status === '1' || status === 1) { // jika libur atau yg lainnya
+        if (bukaAbsenMasuk) {
+            dispatch(setIsAbsen(false))
+            absenToday === null? setAbsenMasuk(true): setAbsenMasuk(false)
+            setAbsenPulang(false)
+        } else if(bukaAbsenPulang) {
+            setAbsenMasuk(false)
+            setAbsenPulang(true)
+            absenToday === null? dispatch(setIsAbsen(false)): absenToday.pulang === null?dispatch(setIsAbsen(false)):dispatch(setIsAbsen(true))
+        } else if (!bukaAbsenMasuk && !bukaAbsenPulang) {
+            dispatch(setIsAbsen(false))
             setAbsenMasuk(false)
             setAbsenPulang(false)
-            setSudahAbsenMasuk(false)
-            setSudahAbsenPulang(false)
-            setVMsg('Belum Ada Jadwal Hari ini')
-            setVIcon('calendar-blank')
-            setVColor('gray')
-            console.log('coba status 1')
-
-        }else if (status === '2' || status === 2 && masuk <= "18:00:00") {
-            let bukaAbsenMasuk = date.format("HH:mm") >= kurangiJam(masuk, 1) && date.format("HH:mm") <= kurangiMenit(pulang,30)
-            let bukaAbsenPulang = date.format("HH:mm") >= kurangiMenit(pulang, 30) && date.format("HH:mm") <= tambahiJam(pulang, 5)
-
-            if (bukaAbsenMasuk) {
-                if (absenToday === null || absenToday === 410) { // belum absen masuk
-                    setAbsenMasuk(true)
-                    setSudahAbsenMasuk(false)
-                    setAbsenPulang(false)
-                    setSudahAbsenPulang(false)
-                    setVMsg('Waktu Absen Masuk')
-                    setVIcon('bell-ring')
-                    setVColor('primary')
-                    console.log('belum absen masuk')
-                } else { // sudah absen masuk
-                    setAbsenMasuk(false)
-                    setSudahAbsenMasuk(true)
-                    setAbsenPulang(false)
-                    setSudahAbsenPulang(false)
-                    setVMsg('Menunggu Absen Masuk')
-                    setVIcon('calendar-clock')
-                    setVColor('secondary')
-                    console.log('sudah absen masuk')
-                }
-            } else {
-                if (bukaAbsenPulang && absenToday !== null) {
-                    console.log('coba buka absen pulang && absen today !== null')
-                    if (absenToday.pulang === null) {
-                        setAbsenMasuk(false)
-                        setSudahAbsenMasuk(true)
-                        setAbsenPulang(true)
-                        setSudahAbsenPulang(false)
-                        setVMsg('Waktu Absen Pulang !')
-                        setVIcon('bell-ring')
-                        setVColor('negative')
-                        console.log('coba buka absen pulang && absen today.pulang === null')
-                    } else {
-                        setAbsenMasuk(false)
-                        setSudahAbsenMasuk(true)
-                        setAbsenPulang(false)
-                        setSudahAbsenPulang(true)
-                        setVMsg('Absen Complete')
-                        setVIcon('check-decagram')
-                        setVColor('primary')
-                        console.log('coba buka absen pulang && absen today.pulang !== null')
-                    }
-                }  
-            }
-
-
-            if (!bukaAbsenMasuk && !bukaAbsenPulang) {
-                console.log('tidak ada absen masuk dan pulang')
-                setAbsenMasuk(false)
-                setAbsenPulang(false)
-                setSudahAbsenMasuk(false)
-                setSudahAbsenPulang(false)
-                setVMsg('Belum Ada Jadwal')
-                setVIcon('calendar-blank')
-                setVColor('gray')
-            }
-        } else {
-            setAbsenMasuk(false)
-            setAbsenPulang(false)
-            setSudahAbsenMasuk(false)
-            setSudahAbsenPulang(false)
-            setVMsg('Belum Ada Jadwal')
-            setVIcon('calendar-blank')
-            setVColor('gray')
-            console.log('status sleain 1 dan 2')
         }
+        
     }
+
+
+
+    // const configAbsen = (status) => {
+    
+    
+    //     if (status === '1' || status === 1) { // jika libur atau yg lainnya
+    //         setAbsenMasuk(false)
+    //         setAbsenPulang(false)
+    //         setSudahAbsenMasuk(false)
+    //         setSudahAbsenPulang(false)
+    //         setVMsg('Belum Ada Jadwal Hari ini')
+    //         setVIcon('calendar-blank')
+    //         setVColor('gray')
+    //         console.log('coba status 1')
+
+    //     }else if (status === '2' || status === 2 && masuk <= "18:00:00") {
+    //         let bukaAbsenMasuk = date.format("HH:mm") >= kurangiJam(masuk, 1) && date.format("HH:mm") <= kurangiMenit(pulang,30)
+    //         let bukaAbsenPulang = date.format("HH:mm") >= kurangiMenit(pulang, 30) && date.format("HH:mm") <= tambahiJam(pulang, 5)
+
+    //         if (bukaAbsenMasuk) {
+    //             if (absenToday === null) { // belum absen masuk
+    //                 setAbsenMasuk(true)
+    //                 setSudahAbsenMasuk(false)
+    //                 setAbsenPulang(false)
+    //                 setSudahAbsenPulang(false)
+    //                 setVMsg('Waktu Absen Masuk')
+    //                 setVIcon('bell-ring')
+    //                 setVColor('primary')
+    //                 console.log('belum absen masuk')
+    //             } else { // sudah absen masuk
+    //                 setAbsenMasuk(false)
+    //                 setSudahAbsenMasuk(true)
+    //                 setAbsenPulang(false)
+    //                 setSudahAbsenPulang(false)
+    //                 setVMsg('Menunggu Absen Pulang')
+    //                 setVIcon('calendar-clock')
+    //                 setVColor('secondary')
+    //                 console.log('sudah absen masuk')
+    //             }
+    //         } else {
+    //             if (bukaAbsenPulang && absenToday !== null) {
+    //                 console.log('coba buka absen pulang && absen today !== null')
+    //                 if (absenToday.pulang === null) {
+    //                     setAbsenMasuk(false)
+    //                     setSudahAbsenMasuk(true)
+    //                     setAbsenPulang(true)
+    //                     setSudahAbsenPulang(false)
+    //                     setVMsg('Waktu Absen Pulang !')
+    //                     setVIcon('bell-ring')
+    //                     setVColor('negative')
+    //                     console.log('coba buka absen pulang && absen today.pulang === null')
+    //                 } else {
+    //                     setAbsenMasuk(false)
+    //                     setSudahAbsenMasuk(true)
+    //                     setAbsenPulang(false)
+    //                     setSudahAbsenPulang(true)
+    //                     setVMsg('Absen Complete')
+    //                     setVIcon('check-decagram')
+    //                     setVColor('primary')
+    //                     console.log('coba buka absen pulang && absen today.pulang !== null')
+    //                 }
+    //             }  
+    //         }
+
+
+    //         if (!bukaAbsenMasuk && !bukaAbsenPulang) {
+    //             console.log('tidak ada absen masuk dan pulang')
+    //             setAbsenMasuk(false)
+    //             setAbsenPulang(false)
+    //             setSudahAbsenMasuk(false)
+    //             setSudahAbsenPulang(false)
+    //             setVMsg('Belum Ada Jadwal')
+    //             setVIcon('calendar-blank')
+    //             setVColor('gray')
+    //         }
+    //     } else {
+    //         setAbsenMasuk(false)
+    //         setAbsenPulang(false)
+    //         setSudahAbsenMasuk(false)
+    //         setSudahAbsenPulang(false)
+    //         setVMsg('Belum Ada Jadwal')
+    //         setVIcon('calendar-blank')
+    //         setVColor('gray')
+    //         console.log('status sleain 1 dan 2')
+    //     }
+    // }
 
      // locaion -7.745561337439556, 113.2106703321762
     const [location, setLocation] = useState(null);
@@ -152,7 +171,7 @@ const ScreenAbsenAwal = ({ navigation, route }) => {
         // text = errorMsg;
         text = 'KAMU MEMATIKAN LOKASI';
     } else if (location) {
-        // text = JSON.stringify(location);
+        // text = JSON.stringify(location);   
         // console.log(location)
         let jarakKamuDariKantor = hitungJarak(location.coords, lokasiKantor)
         // console.log(jarak)
@@ -170,16 +189,18 @@ const ScreenAbsenAwal = ({ navigation, route }) => {
         // dispatch(getJadwalsAsync());
         dispatch(getAbsenTodayAsync());
         // dispatch(getKategoriesAscync());
-        const interval = setInterval(()=> setDate(dayjs().locale("id")) ,1000)
-        configAbsen()
-        getLocation()
+        const interval = setInterval(() => {
+            setDate(dayjs().locale("id"))
+            configAbsen()
+        }, 1000)
+        // getLocation()
         console.log('absens Today :', absenToday)
         return () => clearInterval(interval)
-    },[status])
+    },[])
   return (
-      <View className="flex-1 justify-center items-center">
+      <SafeAreaView className="flex-1 justify-center items-center">
           <AppLoader visible={waiting} />
-         <TouchableOpacity className="absolute top-6 right-4" onPress={()=> navigation.navigate(ROUTES.HOME_TAB)}>
+         <TouchableOpacity className="absolute top-8 right-4" onPress={()=> navigation.navigate(ROUTES.HOME_TAB)}>
             <Icon name="close" color="black" size={32} />
           </TouchableOpacity> 
 
@@ -189,13 +210,34 @@ const ScreenAbsenAwal = ({ navigation, route }) => {
         </View>
 
           {/* CONTENT */}
-          <View className="self-center justify-center items-center">
-              <Icon name={vIcon} color={tw.color(vColor)} size={80} />
-              <Text className={`pt-1 text-${vColor}`}>{vMsg}</Text>
-                <Text>{text}</Text>
-          </View>
+          {isAbsen ? (
+             <View className="self-center justify-center items-center">
+                  <Icon name="check-decagram" color={tw.color("primary")} size={80} />
+              <Text className={`pt-1 text-primary`}>Absen Success</Text>
+            </View> 
+          ): (
+           status === '2' && (<>
+              {absenMasuk &&(<View className="self-center justify-center items-center">
+                  <Icon name="bell-ring" color={tw.color("primary")} size={80} />
+                  <Text className={`pt-1 text-primary`}>Absen Masuk</Text>
+                  {/* <Text>{text}</Text> */}
+              </View>)}
+              {absenPulang &&(<View className="self-center justify-center items-center">
+                  <Icon name="bell-ring" color={tw.color("negative")} size={80} />
+                  <Text className={`pt-1 text-negative`}>Absen Pulang</Text>
+                  {/* <Text>{text}</Text> */}
+              </View>)}
+          </>)       
+          )}
+            
           
-          {(absenMasuk || absenPulang) &&(<TouchableOpacity
+          {status === '1' &&(<View className="self-center justify-center items-center">
+              <Icon name="calendar" color={tw.color("negative")} size={80} />
+              <Text className={`pt-1 text-negative`}>Tidak Ada Jadwal</Text>
+              {/* <Text>{text}</Text> */}
+          </View>)}
+          
+          {(absenMasuk || absenPulang && !isAbsen) &&(<TouchableOpacity
               className="w-18 h-18 bg-dark overflow-hidden absolute bottom-8 rounded-full"
               onPress={() => navigation.navigate(ROUTES.QR_SCAN, { kategory_id })}
           >
@@ -203,7 +245,7 @@ const ScreenAbsenAwal = ({ navigation, route }) => {
                   <Icon name="qrcode-scan" color={'white'} size={32} />
               </View>
           </TouchableOpacity>)}
-    </View>
+    </SafeAreaView>
   )
 }
 

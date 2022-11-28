@@ -8,7 +8,7 @@ import { tw, ROUTES } from '../../constants';
 import { AppConfirm, AppLoader } from '../../components';
 import { api } from '../../helpers/axiosInterceptor';
 import { useDispatch, useSelector } from 'react-redux';
-import { setId, setWaiting } from '../../redux/features/jadwal/absenReducer';
+import { getAbsenTodayAsync, setId, setWaiting } from '../../redux/features/jadwal/absenReducer';
 
 import dayjs from 'dayjs'
 import { getCurrentJadwal } from '../../redux/features/jadwal/jadwalsReducer';
@@ -59,7 +59,6 @@ const AbsenScreen = () => {
     // setScanned(true);
     // alert(`Bar code with type ${type} and data ${data} has been scanned!`);
     setScanned(true)
-    dispatch(setWaiting(true))
     let form = {
       id: id,
       qr: data
@@ -67,12 +66,14 @@ const AbsenScreen = () => {
     console.log('absen form : ', form)
     
         
+    dispatch(setWaiting(true))
     await api.post('/v2/absensi/qr/scan', form).then((response) => {
-      console.log('response absen',response.data);
+      navigation.navigate(ROUTES.HOME_TAB)
+      // console.log('response absen',response.data);
       let trans_id = response.data.jadwal.data.id;
       dispatch(setId(trans_id))
-      navigation.navigate(ROUTES.HOME_TAB)
-      dispatch(setWaiting(false))
+      dispatch(getAbsenTodayAsync())
+      // dispatch(setWaiting(false))
     }).catch(error => {
       console.log('absen :', error.response);
       dispatch(setWaiting(false))

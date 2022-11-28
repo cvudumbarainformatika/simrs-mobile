@@ -8,7 +8,11 @@ const initialState = {
     waiting: false,
     isDone:false,
     error: null,
-    absenToday:null,
+
+
+    absenToday: null,
+    isAbsen:false
+    
 }
 
 export const absenReducer = createSlice({
@@ -17,7 +21,8 @@ export const absenReducer = createSlice({
     reducers: {
         setWaiting: (state, action) => {state.waiting = action.payload},
         setId: (state, action) => { state.id = action.payload },
-        setIsDone: (state, action) => { state.id = action.payload },
+        setIsDone: (state, action) => { state.isDone = action.payload },
+        setIsAbsen: (state, action) => { state.isAbsen = action.payload },
         setInterv: (state, action) => {state.interv = action.payload}
     },
 
@@ -28,6 +33,7 @@ export const absenReducer = createSlice({
             state.error = null;
             state.isDone = false;
             state.absenToday = null;
+            state.isAbsen = false
         })
 
         builder.addCase(getAbsenTodayAsync.fulfilled, (state, action) => {
@@ -36,6 +42,7 @@ export const absenReducer = createSlice({
             state.error = null;
             state.isDone = true;
             state.waiting = false;
+            state.isAbsen = true
         })
 
         builder.addCase(getAbsenTodayAsync.rejected, (state, action) => {
@@ -44,12 +51,13 @@ export const absenReducer = createSlice({
             state.waiting = false;
             state.isDone = true;
             state.absenToday = null
+            state.isAbsen = false
         })
     }
 }) 
 
 
-export const { setId, setIntrv, setWaiting, setIsDone } = absenReducer.actions;
+export const { setId, setIntrv, setWaiting, setIsDone, setIsAbsen } = absenReducer.actions;
 
 export default absenReducer.reducer;
 
