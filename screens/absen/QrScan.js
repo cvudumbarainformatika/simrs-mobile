@@ -5,9 +5,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getAbsenTodayAsync } from '../../redux/features/jadwal/absenReducer'
 import { api } from '../../helpers/axiosInterceptor'
 import { BarCodeScanner } from 'expo-barcode-scanner'
-import { AppConfirm, AppLoader } from '../../components'
+import { AppAlert, AppConfirm, AppLoader } from '../../components'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { ROUTES } from '../../constants'
+import { ROUTES, tw } from '../../constants'
 
 const QrScan = ({navigation}) => {
 
@@ -28,7 +28,7 @@ const dispatch = useDispatch()
             dispatch(getAbsenTodayAsync())
             const { status } = await BarCodeScanner.requestPermissionsAsync();
             setHasPermission(status === 'granted');
-            console.log('today qrcode:', id)
+            // console.log('today qrcode:', id)
         })();
   }, []);
 
@@ -38,38 +38,47 @@ const dispatch = useDispatch()
   const handleBarCodeScanned = async ({ type, data }) => {
     // setScanned(true);
     // alert(`Bar code with type ${type} and data ${data} has been scanned!`);
-      setMsg(null)
+    setMsg(null)
     setScanned(true)
-    setWaiting(true)
     let form = {
       id: id,
       qr: data
     }
-    console.log('absen form : ', form)
+    // console.log('absen form : ', form)
     
+    //   setWaiting(true)
+      navigation.navigate(ROUTES.ABSEN_LOADING, {data, id})
         
-    await api.post('/v2/absensi/qr/scan', form).then((response) => {
-    //   console.log('response absen',response.data);
-    //   let trans_id = response.data.jadwal.data.id;
-      dispatch(getAbsenTodayAsync())
-      navigation.goBack()
-        setWaiting(false)
-    //   dispatch(setWaiting(false))
-    }).catch(error => {
-      setScanned(true)
-      console.log('absen :', error.response);
-        setWaiting(false)
-        setMsg('Maaf Ada Kesalahan Ulangi Lagi')
-    })
+    // await api.post('/v2/absensi/qr/scan', form).then((response) => {
+    // //   console.log('response absen',response.data);
+    // //   let trans_id = response.data.jadwal.data.id;
+        
+    //     dispatch(getAbsenTodayAsync())
+    //     setWaiting(false)
+    // //   dispatch(setWaiting(false))
+    // }).catch(error => {
+    //   setScanned(true)
+    //   console.log('absen :', error.response);
+    //     setWaiting(false)
+    //     setMsg('Maaf Ada Kesalahan Ulangi Lagi')
+    // })
        
   };
 
   if (hasPermission === null) {
-    return <Text className="self-center text-center">Requesting for camera permission</Text>;
+      return <AppAlert visible={hasPermission === null} msg="Camera tidak diijinkan" onOk={()=>navigation.goBack()} />
+    //   (<View className="bg-dark flex-1">
+    //       <Text className="self-center text-center">Requesting for camera permission</Text>
+    //   </View>
+    //   )
   }
 
   if (hasPermission === false) {
-    return <Text className="self-center text-center">No access to camera</Text>;
+      return <AppAlert visible={hasPermission === false} msg="Camera tidak diijinkan" onOk={()=>navigation.goBack()}/>
+    //   (<View className="bg-dark flex-1">
+    //       <Text className="self-center text-center">Requesting for camera permission</Text>
+    //   </View>
+    //   )
   }
 
   return (
@@ -112,7 +121,8 @@ const dispatch = useDispatch()
 
 export default QrScan
 
-const opacity = 'rgba(0, 0, 0, .6)';
+// const opacity = 'rgba(0, 0, 0, .6)';
+const opacity = tw.color('dark');
 const styles = StyleSheet.create({
   container: {
     flex: 1,

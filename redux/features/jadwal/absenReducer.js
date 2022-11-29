@@ -10,8 +10,16 @@ const initialState = {
     error: null,
 
 
-    absenToday: null,
-    isAbsen:false
+    absenToday: {
+        masuk: null,
+        pulang:null
+    },
+
+    absenTodayMasuk:null,
+    absenTodayPulang:null,
+    
+    isAbsen: false,
+    qrCode:null
     
 }
 
@@ -33,12 +41,19 @@ export const absenReducer = createSlice({
             state.error = null;
             state.isDone = false;
             state.absenToday = null;
+            state.absenTodayMasuk = null;
+            state.absenTodayPulang = null;
             state.isAbsen = false
         })
 
         builder.addCase(getAbsenTodayAsync.fulfilled, (state, action) => {
             state.id = action.payload? action.payload.id:0;
-            state.absenToday = action.payload? action.payload:null;
+            state.absenToday = {
+                masuk: action.payload ? action.payload.masuk : null,
+                pulang: action.payload ? action.payload.pulang : null
+            };
+            state.absenTodayMasuk = action.payload ? action.payload.masuk : null;
+            state.absenTodayPulang = action.payload ? action.payload.pulang : null;
             state.error = null;
             state.isDone = true;
             state.waiting = false;
@@ -51,6 +66,8 @@ export const absenReducer = createSlice({
             state.waiting = false;
             state.isDone = true;
             state.absenToday = null
+            state.absenTodayMasuk = null;
+            state.absenTodayPulang = null;
             state.isAbsen = false
         })
     }
@@ -60,6 +77,8 @@ export const absenReducer = createSlice({
 export const { setId, setIntrv, setWaiting, setIsDone, setIsAbsen } = absenReducer.actions;
 
 export default absenReducer.reducer;
+
+export const stateAbsenTodayMasuk = (state) => state.absenToday.masuk;
 
 
 export const getAbsenTodayAsync = createAsyncThunk(

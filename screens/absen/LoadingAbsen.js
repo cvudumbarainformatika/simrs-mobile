@@ -1,37 +1,51 @@
 import { View, Text } from 'react-native'
-import React, { useEffect } from 'react'
-import * as Animatable from 'react-native-animatable'
-import * as Progress from 'react-native-progress'
-import { useNavigation } from '@react-navigation/native'
-import { IMGS, tw } from '../../constants'
-import { LinearGradient } from 'expo-linear-gradient'
+import React, { useEffect, useState } from 'react'
+import { AppBtn, AppConfirm, AppLoader } from '../../components'
+import { ROUTES } from '../../constants'
+import { useDispatch } from 'react-redux'
+import { getAbsenTodayAsync } from '../../redux/features/jadwal/absenReducer'
+import { api } from '../../helpers/axiosInterceptor'
 
-const LoadingAbsen = ({navigation, route}) => {
+const LoadingAbsen = ({ navigation, route }) => {
+  
+  const { id, data } = route.params
+  const dispatch = useDispatch()
+  const [waiting, setWaiting] = useState(false)
+  const [msg, setMsg] = useState(null)
 
-    useEffect(()=> {})
+  const sendQrCode = async () => {
+    setWaiting(true)
+    let form = {
+      id: id,
+      qr: data
+    }
+    await api.post('/v2/absensi/qr/scan', form).then((response) => {
+      // dispatch(getAbsenTodayAsync())
+      setWaiting(false)
+    }).catch(error => {
+      // console.log('absen :', error.response);
+        setWaiting(false)
+        setMsg('Maaf Ada Kesalahan, Ulangi Lagi?')
+    })
+  }
+
+  const scanAgain = () => {
+    setMsg(null)
+    navigation.navigate(ROUTES.QR_SCAN)
+  }
+
+  useEffect(() => {
+    (() => {
+        sendQrCode()
+      })()
+    },[])
   return (
-    <View className="flex-1">
-      <LinearGradient 
-          className="flex-1 justify-center items-center"
-          colors={[tw.color('secondary'), tw.color('primary')]}
-          start={{ x: 1, y: 0 }}
-          end={{x:1,y:0.9}}
-      >
-      <Animatable.Image
-        source={IMGS.loadingAnim}
-        animation="fadeIn"
-        className="h-40 w-20"
-        iterationCount={1}
+    <View className="flex-1 justify-center items-center">
+      <AppLoader visible={waiting} />
+      <AppConfirm visible={msg !== null} msg={msg} status="Error" onOk={() => scanAgain()} onDismiss={() => navigation.navigate(ROUTES.SCREEN_ABSEN_AWAL)}
+        labelBtnBack="Kembali" labelBtnOk='Ok'
       />
-      <Animatable.Text
-        animation="slideInUp"
-        iterateCount={1}
-        className="text-lg my-10 text-white font-bold text-center"
-      >
-        UOBK RSUD MOH SALEH
-      </Animatable.Text>
-        <Progress.Circle size={60} indeterminate={true} color={'white'} />
-      </LinearGradient>
+      <AppBtn label="Kembali" clicked={()=>navigation.navigate(ROUTES.SCREEN_ABSEN_AWAL)} />
     </View>
   )
 }
