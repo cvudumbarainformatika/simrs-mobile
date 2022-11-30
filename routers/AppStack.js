@@ -11,6 +11,7 @@ import SetJadwalAwalScreen from '../screens/home/SetJadwalAwalScreen'
 import PilihKategoriJadwal from '../screens/home/PilihKategoriJadwal'
 import { AppLoader } from '../components'
 import { getJadwalsAsync } from '../redux/features/jadwal/jadwalsReducer'
+import AppLoaderAnim from '../components/~global/AppLoaderAnim'
 
 const AppStack = () => {
 
@@ -32,7 +33,7 @@ const AppStack = () => {
   const Stack = createStackNavigator()
   return (
     <>
-      {loading && (<AppLoader visible={loading} />)}
+      {loading && (<AppLoaderAnim />)}
       
     <Stack.Navigator
       screenOptions={{
@@ -44,7 +45,7 @@ const AppStack = () => {
     >
         {jadwals.length > 0 ? (
           <>
-          <Stack.Screen name={ROUTES.HOME} component={BottomTabNavigator} options={TRANSITION_HORIZONTAL} initialParams={{ jadwals }} />
+          <Stack.Screen name={ROUTES.HOME} component={BottomTabNavigator} initialParams={{ jadwals }} />
           {/* <Stack.Screen name={ROUTES.LOGOUT} component={Logout} options={TRANSITION_HORIZONTAL} /> */}
           </>
         ) :
