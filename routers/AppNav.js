@@ -48,7 +48,7 @@ const AppNav = () => {
   // const Stack = createStackNavigator();
   return (
     <Provider store={store}>
-      <NavigationContainer ref={navigationRef}>
+      <NavigationContainer ref={navigationRef} >
         {/* <Stack.Navigator> */}
           {isSplash ? (
             SplashScreen()
