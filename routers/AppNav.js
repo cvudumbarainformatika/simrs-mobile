@@ -33,7 +33,7 @@ const AppNav = () => {
 
 
   if (isLoading) {
-      return (<AppLoader visible={isLoading} />)
+      return (<AppLoaderAnim />)
   }
 
   
