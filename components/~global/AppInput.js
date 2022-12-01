@@ -16,12 +16,12 @@ const AppInput = ({
   const [hidePassword, setHidePassword] = React.useState(password)
   return (
     <View className="my-1">
-      <View className="flex flex-row items-center space-x-1 bg-gray-light px-2 py-1 rounded-md border"
+      <View className="flex flex-row items-center space-x-2 bg-gray-light p-2 rounded-md border"
         style={tw`${error ? `border-negative` : isFocused ? `border-secondary` : `border-gray`}`}
       >
         <Icon
           name={icon}
-          size={20}
+          size={21}
           color={tw.color('gray')}
         />
         <TextInput
@@ -36,7 +36,9 @@ const AppInput = ({
             setIsFocused(false)
           }}
           onChangeText ={props.changed}
-          className="flex-1" {...props}
+          className="flex-1"
+          style={{fontFamily:"Poppins-Regular"}}
+          {...props}
         />
         {password && (
           <Icon

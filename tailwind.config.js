@@ -12,6 +12,23 @@ module.exports = {
     minWidth: {
       '6rem': '24',
     },
+    fontFamily: {
+      poppins: [
+        'Poppins-Regular'
+      ],
+      poppinsBold: [
+        'Poppins-Bold'
+      ],
+      poppinsThin: [
+        'Poppins-Thin'
+      ],
+      poppinsItalic: [
+        'Calibre-Italic'
+      ],
+      rubikMaze: [
+        'RubikMaze-Regular'
+      ],
+    },
     extend: {
       backgroundImage: theme => ({
         grd: 'linear-gradient(45deg, #50abdf, #1f78aa)'

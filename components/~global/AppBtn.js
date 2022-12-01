@@ -17,11 +17,12 @@ const AppBtn = (props) => {
     <TouchableOpacity
         onPress={props.clicked}
         style={tw`bg-${props.color ? props.color : 'primary'} 
-        ${props.round ? 'px-1 py-1 min-h-8 min-w-8' : 'px-4 py-3'} flex self-center justify-center ${props.round ? 'rounded-full' : 'rounded'}
+        ${props.round ? 'p-2 h-9 w-9' : 'px-4 py-4'} flex self-center justify-center ${props.round ? 'rounded-full' : 'rounded'}
+        ${props.rounded? 'rounded-full': 'rounded'}
         ${props.fullwidth? 'w-full':''}
         `}
     >
-      <View style={tw.style('flex-row items-center justify-center')}>
+      <View style={tw.style('flex-row self-center')}>
         {props.icon && (
           <Icon
             name={props.icon}
@@ -29,7 +30,7 @@ const AppBtn = (props) => {
             color={tw.color(`${textColorChanged(props.color)}`)}
           />
         )}
-        <Text style={tw.style(`text-${textColorChanged(props.color)}`)} > {props.label}</Text>
+        <Text style={tw.style(`text-${textColorChanged(props.color)}`)} className="font-poppins " > {props.label}</Text>
       </View>
     </TouchableOpacity>
   )
