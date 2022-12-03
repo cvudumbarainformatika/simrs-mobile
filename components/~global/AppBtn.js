@@ -30,7 +30,7 @@ const AppBtn = (props) => {
             color={tw.color(`${textColorChanged(props.color)}`)}
           />
         )}
-        <Text style={tw.style(`text-${textColorChanged(props.color)}`)} className="font-poppins " > {props.label}</Text>
+        <Text style={tw.style(`text-${textColorChanged(props.color)}`)} className="font-poppins" > {props.label}</Text>
       </View>
     </TouchableOpacity>
   )

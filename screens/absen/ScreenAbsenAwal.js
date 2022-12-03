@@ -112,7 +112,7 @@ const ScreenAbsenAwal = ({ navigation }) => {
         
         
         const subscribe = navigation.addListener("focus", () => {
-        dispatch(getAbsenTodayAsync());
+            dispatch(getAbsenTodayAsync());
             configAbsen()
         })
 

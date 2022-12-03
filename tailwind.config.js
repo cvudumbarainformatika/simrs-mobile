@@ -23,7 +23,7 @@ module.exports = {
         'Poppins-Thin'
       ],
       poppinsItalic: [
-        'Calibre-Italic'
+        'Poppins-Italic'
       ],
       rubikMaze: [
         'RubikMaze-Regular'

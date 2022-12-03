@@ -31,8 +31,8 @@ const AppLoaderAnim = ({ visible = false }) => {
         <Progress.Circle size={60} indeterminate={true} color={'white'} />
       </LinearGradient>
     </View>
-  )
   // )
+  )
 }
 
 export default AppLoaderAnim

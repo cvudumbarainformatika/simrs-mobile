@@ -8,8 +8,6 @@ import { tw,IMGS,ROUTES } from '../../constants'
 import { AppInput, AppLoader, AppAlert, BottomTwoBtn } from '../../components'
 import ModalConfirmKaryawan from '../../components/authentifikasi/ModalConfirmKaryawan'
 import { api } from '../../helpers/axiosInterceptor'
-import { BASE } from '../../config'
-// import { useSelector } from 'react-redux'
 
 const RegisterScreen = () => {
     // STATE
@@ -111,7 +109,7 @@ const RegisterScreen = () => {
         setErrors(states => ({ ...states, [input]: msg }))
     }
 
-    function toConfirmPassword() {
+    function toConfirmPassword(nip) {
         if (details.user !== null) {
             setModal(false)
             return
@@ -119,7 +117,7 @@ const RegisterScreen = () => {
         setModal(false)
         navigation.navigate(ROUTES.REGISTRASIPASSWORD, {
             pegawai_id: details.id,
-            nip: details.nip,
+            nip: nip,
             nama:details.nama
         });
     }
@@ -131,14 +129,14 @@ const RegisterScreen = () => {
             {/* CONFIRMASI USER ============================================================================ */}
 
             {modal && (<ModalConfirmKaryawan visible={modal}
-                nip={details.nip}
+                nip={inputs.nip}
                 nama={details.nama}
                 id={details.id}
                 foto={details.foto}
                 user={details.user}
                 onDismiss={() => setModal(false)}
                 onOk={() => {
-                    toConfirmPassword()
+                    toConfirmPassword(details.nip)
                 }}
             />)}
 
@@ -147,20 +145,22 @@ const RegisterScreen = () => {
             
             <ScrollView >
                 <View style={tw.style('flex-row p-4')}>
-                    <Text style={tw`font-bold text-lg`}>Cari Data Kepegawaian </Text>
+                    <Text className="font-poppinsBold">Cari Data Kepegawaian </Text>
                 </View>
                 <View style={tw.style('flex-row items-center py-2 px-8')}>
                     <View style={tw.style('flex-1')}>
                         <View  style={tw.style('border-2 p-4 rounded-4 ')}>
-                            <Text style={tw.style('font-bold')}>
-                                Masukkan Nip dan tanggal Lahir Anda, lalu Klik Cari data dan ikuti
-                                langkah selanjutnya
+                            <Text className="font-poppinsBold text-xs">
+                                Masukkan Nip dan tanggal Lahir Anda, 
                             </Text>
-                            <Text style={tw.style('italic pt-2 text-gray-dark')}>
+                            <Text className="font-poppins text-xs">lalu Klik Cari data dan ikuti
+                                langkah selanjutnya</Text>
+                            <Text className="font-poppinsItalic text-xs pt-2">
+                                
                                 Data anda tidak ditemukan? Harap lapor kepada 
                                 petugas yang berwenang...
                             </Text>
-                            <Text style={tw.style('font-bold pt-2')}>
+                            <Text className="font-poppinsBold pt-2">
                                 Terimakasih
                             </Text>
                         </View>

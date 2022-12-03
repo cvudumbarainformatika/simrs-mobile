@@ -49,13 +49,11 @@ const AppNav = () => {
   return (
     <Provider store={store}>
       <NavigationContainer ref={navigationRef} >
-        {/* <Stack.Navigator> */}
           {isSplash ? (
             SplashScreen()
           ) :
-           userToken !== null ? (<AppStack />) : (<AuthStack />) 
+           userToken !== null ? <AppStack />: <AuthStack />
           }
-        {/* </Stack.Navigator> */}
       </NavigationContainer>
     </Provider>
   )

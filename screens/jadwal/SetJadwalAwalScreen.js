@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useBackHandler } from '@react-native-community/hooks'
 import { getKategoriesAscync } from '../../redux/features/jadwal/kategoryJadwalReducer'
 import { getJadwalsAsync } from '../../redux/features/jadwal/jadwalsReducer'
+import AppLoaderAnim from '../../components/~global/AppLoaderAnim'
 
 const SetJadwalAwalScreen = ({ navigation }) => {
   
@@ -55,7 +56,7 @@ const SetJadwalAwalScreen = ({ navigation }) => {
   
   return (
     <ScrollView contentContainerStyle={tw`flex-1 items-center justify-center`}>
-        <AppLoader visible={loading} />
+        <AppLoaderAnim visible={loading} />
           <View style={tw`h-38 w-48 rounded-full border-gray border-2 p-8`}>
               <Text>Tinggal Selangkah lagi... Klik Lanjutkan untuk memilih Kategori jadwal Anda</Text>
           </View>

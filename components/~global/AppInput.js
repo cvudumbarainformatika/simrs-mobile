@@ -16,6 +16,8 @@ const AppInput = ({
   const [hidePassword, setHidePassword] = React.useState(password)
   return (
     <View className="my-1">
+      
+      {label && (<Text>{label}</Text>)}
       <View className="flex flex-row items-center space-x-2 bg-gray-light p-2 rounded-md border"
         style={tw`${error ? `border-negative` : isFocused ? `border-secondary` : `border-gray`}`}
       >

@@ -17,15 +17,18 @@ const HeaderUser = (props) => {
               <View style={tw`mr-2`}>
                   <View style={tw`h-10 w-10 bg-gray-light border-2 border-gray-light rounded-full overflow-hidden items-center justify-center`}>
                       <Image 
-                            source={ pegawai? {uri:`${PATH_IMG100}/${pegawai.nip}/${pegawai.foto}`} : IMGS.avatarMale}
-                            style={[tw`h-10 w-10`, {resizeMode:'contain'}]}
+                        source={pegawai
+                          ? pegawai.foto === '' || pegawai.foto === null
+                            ? IMGS.avatarMale :{uri:`${PATH_IMG100}/${pegawai.nip}/${pegawai.foto}`}
+                          : IMGS.avatarMale}
+                        style={[tw`h-10 w-10`, {resizeMode:'contain'}]}
                         />
                   </View>
               </View>
                 <View style={tw`flex-1`}>
-                    <Text className="font-bold text-gray text-xs ">Selamat Datang, 👋</Text>
+                    <Text className="font-poppinsBold text-gray text-xs ">Selamat Datang, 👋</Text>
                     <View className="flex-row items-center"> 
-                    <Text className=" text-white mr-1 text-xs">{ pegawai? pegawai.nama:'tunggu ...' }</Text>
+                    <Text className="font-poppins text-white mr-1 text-xs">{ pegawai? pegawai.nama:'tunggu ...' }</Text>
                     </View>
               </View>
               <TouchableOpacity

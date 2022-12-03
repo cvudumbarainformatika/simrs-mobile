@@ -114,16 +114,16 @@ export const AuthProvider = ({ children }) => {
         setIsSignout(false)
     }
     const removeToken = async () => {
-        // setIsLoading(true);
+        setIsLoading(true);
         await AsyncStorage.removeItem('userToken');
         await AsyncStorage.removeItem('user');
         setUserToken(null)
         setUser(null)
         setIsSignout(true)
         setIsSignin(false)
-        // setTimeout(() => {
-        //     setIsLoading(false)
-        // },300)
+        setTimeout(() => {
+            setIsLoading(false)
+        },300)
     }
 
     const isLoggedIn = async () => {
@@ -153,7 +153,6 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         isLoggedIn();
-
     },[])
 
 

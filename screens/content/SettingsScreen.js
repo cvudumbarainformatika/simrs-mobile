@@ -1,7 +1,7 @@
-import { View, Text, Image } from 'react-native'
+import { View, Text, Image, TouchableOpacity } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import { IMGS, ROUTES, tw } from '../../constants'
-import { AppBtn } from '../../components'
+import { AppBtn, BottomTwoBtn } from '../../components'
 import { AuthContext } from '../../context/AuthContext'
 import { PATH_IMG100 } from '../../config'
 import { ScrollView } from 'react-native-gesture-handler'
@@ -19,7 +19,10 @@ const SettingsScreen = ({ navigation }) => {
   return (
     <View style={tw`flex-1`}>
       <Image 
-          source={ pegawai? {uri:`${PATH_IMG100}/${pegawai.nip}/${pegawai.foto}`} : IMGS.avatarMale}
+          source={pegawai
+                          ? pegawai.foto === '' || pegawai.foto === null
+                            ? IMGS.avatarMale :{uri:`${PATH_IMG100}/${pegawai.nip}/${pegawai.foto}`}
+                          : IMGS.avatarMale}
           style={[tw`h-100 w-full bg-gray`, {resizeMode:'contain'}]}
       />
 
@@ -67,11 +70,25 @@ const SettingsScreen = ({ navigation }) => {
             <Text style={tw``}>{ pegawai.alamat_detil }</Text>
           </View> */}
 
-          <View style={tw`bg-white p-3 mt-8`}>
+          {/* <View style={tw`bg-white p-3 mt-8`}>
             <AppBtn label="Logout" color="negative" clicked={()=>navigation.navigate(ROUTES.LOGOUT) } />
-          </View>
+          </View> */}
           <View style={{paddingBottom:120}} />
         </ScrollView>
+        <View className="absolute bottom-0 w-full">
+          <View className="flex-row items-center justify-between">
+            <TouchableOpacity style={tw`h-14 w-1/2 bg-dark justify-center items-center`}
+            onPress={()=> navigation.goBack()}
+          >
+              <Text className="font-poppins text-white">Kembali</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={tw`h-14 w-1/2 bg-negative justify-center items-center`}
+            onPress={()=> navigation.navigate(ROUTES.LOGOUT, {expired:true})}
+          >
+              <Text className="font-poppins text-white">Logout</Text>
+          </TouchableOpacity>
+          </View>
+        </View>
       </View>
     </View>
   )

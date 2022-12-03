@@ -11,7 +11,7 @@ const AppLoader = ({ visible = false }) => {
           <View style={[styles.container]}>
               
               <View style={tw`bg-white flex flex-row items-center justify-center mx-16 p-4 rounded`}>
-                    <Text style={tw`ml-4 pt-4`}>Harap tunggu ...</Text>
+                    <Text className="font-poppins" style={tw`ml-4 pt-4`}>Harap tunggu ...</Text>
                     <Animatable.Image
                       source={IMGS.loadingAnim}
                       animation="fadeIn"

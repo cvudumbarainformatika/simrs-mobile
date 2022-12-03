@@ -16,7 +16,7 @@ const JadwalScreen = ({ navigation }) => {
 
   const dispatch = useDispatch();
   // const { pegawai } = useSelector(state => state.pegawaiReducer)
-  const { jadwals, loading, libur, masuk, totalJam} = useSelector(state => state.jadwal)
+  const { jadwals, waiting, libur, masuk, totalJam} = useSelector(state => state.jadwal)
   const { kategories } = useSelector(state => state.kategory)
 
   
@@ -24,7 +24,7 @@ const JadwalScreen = ({ navigation }) => {
 
   useEffect(() => {
     const updateLib = () => {
-      dispatch(getJadwalsAsync())
+      // dispatch(getJadwalsAsync())
       dispatch(setLibur())
       dispatch(setMasuk())
     }
@@ -82,7 +82,7 @@ const JadwalScreen = ({ navigation }) => {
 
   return (
     <View style={[tw`bg-gray-light flex-1`]}>
-      <AppLoader visible={loading} />
+      <AppLoader visible={waiting} />
       <HeaderUser />
       <View style={tw`bg-white flex-row justify-between p-2`}>
         <View style={tw`flex-row items-center`}>

@@ -18,11 +18,11 @@ const AppAlert = ({
                     <View style={tw`bg-${status === 'Error'? 'negative':'primary'} w-14 h-14 rounded-full items-center justify-center absolute -top-8 border-4 border-white`}>
                         <Icon name={`${status === 'Error'? 'close':'thumb-up'}`} size={32} color={tw.color('white')} />
                     </View>
-                    <View style={tw`p-4 pt-8`}><Text>{msg}</Text></View>
+                    <View  style={tw`p-4 pt-8`}><Text className="font-poppins">{msg}</Text></View>
                     <TouchableOpacity style={tw.style('p-3 w-full bg-gray-light border-primary border-t items-center')}
                         onPress={props.onOk}
                     >
-                        <Text style={tw`text-primary`}>OK</Text>
+                        <Text className="font-poppins" style={tw`text-primary`}>OK</Text>
                     </TouchableOpacity>
                     
             </View>

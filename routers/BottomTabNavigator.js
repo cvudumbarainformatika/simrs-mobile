@@ -109,7 +109,9 @@ const BottomTabNavigator = () => {
           }}
         />
         <Tab.Screen name={ ROUTES.HISTORY_TAB } component={HistoryScreen} />
-        <Tab.Screen name={ROUTES.SETTINGS_TAB} component={SettingsNavigator} />
+      <Tab.Screen name={ROUTES.SETTINGS_TAB} component={SettingsNavigator} options={{
+        tabBarStyle: {display:"none"}
+      }} />
     </Tab.Navigator>
   )
 }
@@ -123,6 +125,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     backgroundColor: tw.color('primary'),
     elevation: 0,
-    
+    zIndex:0
   }
 })

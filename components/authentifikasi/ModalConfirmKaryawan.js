@@ -22,7 +22,7 @@ const ModalConfirmKaryawan = ({
     visible && (
         <View style={[styles.container, {height, width}]}>
               
-            <View style={tw`bg-white flex items-center justify-center mx-10 rounded`}>
+            <View style={tw`bg-white flex items-center justify-center mx-8 rounded`}>
                 <View style={tw`w-32 h-32 bg-gray rounded-full items-center justify-center absolute -top-18 border-4 border-white overflow-hidden`}>
                     <Image
                         source={ foto? {uri:`${PATH_IMG100}/${nip}/${foto}`} : IMGS.avatarMale}
@@ -31,16 +31,16 @@ const ModalConfirmKaryawan = ({
                     />
                 </View>
                 <View style={tw`p-4 pt-16 items-center`}>
-                      <Text style={tw`font-bold text-center`}>{ nama }</Text>
+                      <Text className="font-poppinsBold" style={tw`text-center`}>{ nama }</Text>
                     <View style={tw`items-center`}>
-                        <Text style={tw`text-gray-dark`}>Nip : { nip }</Text>
+                        <Text className="font-poppins" style={tw`text-gray-dark`}>Nip : { nip }</Text>
                     </View>
                 </View>
 
-                <View style={tw`pb-14 items-center`}>
+                <View style={tw`pb-18 items-center`}>
                       {
-                          user === null ? <Text style={tw`italic text-negative`}>Apakah Benar ini Anda?</Text> :
-                              <Text style={tw`text-negative`}>KAMU SUDAH TEREGISTRASI</Text>
+                          user === null ? <Text className="font-poppinsItalic" style={tw`text-negative`}>Apakah Benar ini Anda?</Text> :
+                              <Text className="font-poppins" style={tw`text-negative`}>KAMU SUDAH TEREGISTRASI</Text>
                       }
                   </View>
 

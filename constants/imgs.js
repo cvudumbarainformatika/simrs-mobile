@@ -6,4 +6,5 @@ export default {
   madSalehMinum: require('../assets/static/mad_saleh_minum.png'),
   loadingAnim: require('../assets/static/mad_saleh_jalan.gif'),
   wallpaper: require('../assets/static/wallpaper.jpg'),
+  bg: require('../assets/static/bg-gradient.png'),
 };

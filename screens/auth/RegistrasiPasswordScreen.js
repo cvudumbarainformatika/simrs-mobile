@@ -20,7 +20,7 @@ const RegistrasiPasswordScreen = () => {
     const [errors, setErrors] = useState({});
     const [inputs, setInputs] = useState({
         username: route.params.nip,
-        password: '',
+        password: route.params.nip,
         pegawai_id: route.params.pegawai_id,
         device: Device.osInternalBuildId,
         nama:route.params.nama
@@ -108,28 +108,28 @@ const RegistrasiPasswordScreen = () => {
                   />
                   <View style={tw.style('flex-1')}>
                         <View style={tw.style('border-2 p-4 rounded-4 bg-secondary')}>
-                            <Text style={tw.style('font-bold')}>
+                            <Text className="font-poppinsBold">
                                 INFORMASI PENTING !!!
                             </Text>
-                            <Text style={tw.style('pt-2')}>
-                                Data dibawah ini Adalah informasi tentang <Text style={tw`font-bold`}>Username </Text> 
-                                dan <Text style={tw`font-bold`}>Password</Text> Anda...
+                            <Text className="font-poppins pt-2">
+                                Data dibawah ini Adalah informasi tentang <Text className="font-poppinsBold">Username </Text> 
+                                dan <Text className="font-poppinsBold">Password</Text> Anda...
                             </Text>
                             <Text style={tw.style('pt-2')}>
-                                Anda boleh mengganti Username dan Password yang telah diberikan..
+                                Anda boleh mengganti <Text className="font-poppinsBold"> Password </Text> yang telah diberikan..
                             </Text>
-                            <Text style={tw.style('italic pt-2')}>
-                                Klik <Text style={tw`font-bold`}>OK. </Text> jika setuju.
+                            <Text className="font-poppinsItalic">
+                                Klik <Text className="font-poppinsBold">OK. </Text> jika setuju.
                             </Text>
-                            <Text style={tw.style('italic pt-2')}>
-                                Klik <Text style={tw`font-bold`}>Kembali </Text> untuk Batal.
+                            <Text className="font-poppinsItalic pt-2">
+                                Klik <Text className="font-poppinsBold">Kembali </Text> untuk Batal.
                             </Text>
                         </View>
                     </View>
               </View>
               
               <ScrollView style={tw`px-4 mt-8`}>
-                  <Text style={tw`font-bold text-lg mb-4`}>Username dan Password 🤐</Text>
+                  <Text className="font-poppinsBold mb-4">Username dan Password 🤐</Text>
                   {/* <AppInput placeholder="Masukkan Username Anda"
                         editable={inputs.username.length === 0}
                         value={inputs.username}
@@ -141,12 +141,12 @@ const RegistrasiPasswordScreen = () => {
 
                     /> */}
                   <View style={tw`mb-2`}>
-                        <Text style={tw`font-bold`}>Username Anda:</Text>
+                        <Text className="font-poppins">Username :</Text>
                         <TouchableOpacity onPress={() => copyToClipboard}>
                             <Text>  📋  {inputs.username}</Text>
                         </TouchableOpacity>
                   </View>
-                    <AppInput placeholder="Masukkan Password Anda"
+                    <AppInput label="Password :" placeholder="Masukkan Password Anda"
                         value={inputs.password}
                         changed={(val) => handleOnChanged(val, 'password')}
                         error={errors.password}

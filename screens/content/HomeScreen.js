@@ -4,7 +4,7 @@ import { useEffect } from 'react'
 import { useState } from 'react'
 import { IMGS, ROUTES, tw } from '../../constants'
 import { AppBtn, AppLoader, GradientTop, HeaderUser } from '../../components'
-import { StackActions, useNavigation } from '@react-navigation/native'
+import { StackActions, useNavigation, useRoute } from '@react-navigation/native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
 import { useDispatch, useSelector } from 'react-redux'
@@ -15,6 +15,7 @@ import { AuthContext } from '../../context/AuthContext'
 
 
 import dayjs from 'dayjs'
+import AppLoaderAnim from '../../components/~global/AppLoaderAnim'
 require('dayjs/locale/id')
 
 const HomeScreen = () => {
@@ -36,22 +37,30 @@ const HomeScreen = () => {
 
   const currentJadwal = useSelector((state) => getCurrentJadwal(state, date.format("dddd")))
 
-  const {hari, masuk, pulang, status} = currentJadwal
+  const { hari, masuk, pulang, status } = currentJadwal
+  
+  
 
   useEffect(() => {
+    const subscribe = navigation.addListener("focus", (e) => { 
+      console.log('subscribe:', e)
+    })
 
     callFirst()
 
     // console.log('jadwal dari home effect :', jadwals.length)
     // console.log('kategori dari home effect :', kategories.length)
-    console.log('jadwal use selector :', hari)
+    console.log('jadwal use selector :', jadwals.length)
 
     const interval = setInterval(() => {
-      setDate(dayjs())
+      setDate(dayjs().locale("id"))
     }, 1000 * 60)
-    return () => clearInterval(interval)
+    return () => {
+      subscribe
+      clearInterval(interval)
+    }
     
-  }, [ ])
+  }, [navigation])
 
   return (
     <View style={tw`flex-1 bg-gray-light`}>
@@ -71,15 +80,16 @@ const HomeScreen = () => {
               start={{ x: 1, y: 0.5 }}
               end={{x:1,y:0.08}}
           >
-            <Text className="text-white text-6xl font-bold">{date.format("HH:mm")}</Text>
+            <Text className="text-white text-4xl font-poppinsBold">{date.format("HH:mm")}</Text>
+            <Text className="text-white font-poppins">{date.format("dddd MMMM YYYY")}</Text>
           </LinearGradient>
         </View>
 
         <View style={tw`pt-2`}>
-          <Text style={tw`font-bold px-4 py-2 text-gray-dark`}>Presensi Hari Ini 📅</Text>
+          <Text className="font-poppinsBold" style={tw`px-4 py-2 text-gray-dark`}>Presensi Hari Ini 📅</Text>
           <View style={tw`bg-white p-4 pb-5 rounded`}>
             {/* JIKA BUKAN LIBUR */}
-            {status === '2' && (
+            {status === '2' ? (
               <View style={tw`flex-row justify-between `}>
                 <View style={tw`flex-1 items-center`}>
                   <Text style={tw`text-primary`}>Waktu Masuk</Text>
@@ -94,42 +104,41 @@ const HomeScreen = () => {
                   </View>
                 </View>
               </View>
-            )}
-            
-            {/* JIKA LIBUR */}
-            {status === '1' && (
+            ): (
               <View style={tw`flex-1 items-center`}>
-                <Text style={tw`text-negative`}>Tidak Ada Jadwal</Text>
+                <Text className="font-poppins" style={tw`text-negative`}>Tidak Ada Jadwal</Text>
                 <View style={tw`rounded-lg p-3 w-full items-center bg-negative`}>
-                  <Text style={tw`text-white text-[14px] `}> Libur </Text>
+                  <Text className="font-poppins" style={tw`text-white text-[14px] `}> Libur </Text>
                 </View>
-              </View>)}
+                </View>
+              )
+            }
 
           </View>
         </View>
         {/* PRESENSI HARI INI */}
         <View style={tw`pt-2`}>
-            <Text style={tw`font-bold px-4 py-2 text-gray-dark`}>Statistik Presensi Bulan ini 📈</Text>
+            <Text className="font-poppinsBold" style={tw`px-4 py-2 text-gray-dark`}>Statistik Presensi Bulan ini 📈</Text>
           <View style={tw`bg-white p-3 pb-5 rounded`}>
             <View style={tw`flex-row justify-between`}>
               <View style={tw`flex-1 h-24 w-full bg-primary rounded justify-center items-center m-1`}>
-                <Text style={tw`text-xs text-gray-light`}>Hadir</Text>
-                <Text style={tw`text-[40px] text-white font-bold`}>20</Text>
+                <Text className="font-poppins" style={tw`text-xs text-gray-light`}>Hadir</Text>
+                <Text className="font-poppinsBold" style={tw`text-[40px] text-white`}>20</Text>
               </View>
               <View style={tw`flex-1 h-24 w-full bg-negative rounded justify-center items-center m-1`}>
-                <Text style={tw`text-xs text-gray-light`}>Tidak Hadir</Text>
-                <Text style={tw`text-[40px] text-white font-bold`}>2</Text>
+                <Text className="font-poppins" style={tw`text-xs text-gray-light`}>Tidak Hadir</Text>
+                <Text className="font-poppinsBold" style={tw`text-[40px] text-white`}>2</Text>
               </View>
              <View style={tw`flex-1 h-24 w-full border-primary border rounded justify-center items-center m-1 p-2`}>
-                <Text style={tw`text-xs text-gray text-center`}>Jumlah Hari Masuk seharusnya</Text>
-                <Text style={tw`text-[40px] font-bold`}>20</Text>
+                <Text className="font-poppins" style={tw`text-xs text-gray text-center`}>Seharusnya</Text>
+                <Text className="font-poppinsBold" style={tw`text-[40px]`}>20</Text>
               </View>
             </View>
           </View>
         </View>
         {/* Calendar */}
         <View style={tw`py-2 pb-40`}>
-          <Text style={tw`font-bold px-4 py-2 text-gray-dark`}> Bulan Ini  🗓️</Text>
+          <Text className="font-poppinsBold" style={tw`px-4 py-2 text-gray-dark`}> Bulan Ini  🗓️</Text>
           <View style={tw`bg-white p-2 pb-5 rounded`}>
               <Calendar
                 monthFormat={'MMMM yyyy'}
@@ -138,7 +147,7 @@ const HomeScreen = () => {
                 hideDayNames={false}
                 disableArrowLeft={true}
                 disableArrowRight={true}
-                disableAllTouchEventsForDisabledDays={true}
+              disableAllTouchEventsForDisabledDays={true}
               style={[tw`w-full`]}
               theme={{
                 textSectionTitleDisabledColor: tw.color('gray'),

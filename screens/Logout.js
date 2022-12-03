@@ -3,20 +3,19 @@ import React, { useContext, useEffect } from 'react'
 import { AuthContext } from '../context/AuthContext'
 
 const Logout = ({navigation}) => {
-    const { removeToken } = useContext(AuthContext)
+    const { removeToken, loading } = useContext(AuthContext)
     
     useEffect(() => {
-        removeToken();
+        (async () => {
+            await removeToken();
+        })()
     },[])
     return (
-        <>
             <View className="flex-1 justify-center items-center">
-                <ActivityIndicator />
+            {loading && (<ActivityIndicator />)}
             </View>
-            
-        </>
         
-    );
+    )
 }
 
 export default Logout
