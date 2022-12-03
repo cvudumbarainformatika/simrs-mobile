@@ -121,7 +121,7 @@ const ScreenAbsenAwal = ({ navigation }) => {
             setDate(dayjs().locale("id"))
         }, 1000)
         // getLocation()
-        console.log('absens Today :', subscribe)
+        console.log('absens Today :', absenMasuk)
         return () => {
             subscribe
             clearInterval(interval)
