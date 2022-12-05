@@ -1,34 +1,66 @@
-import { View, Text } from 'react-native'
+import { View, Text, ScrollView } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { HeaderUser } from '../../components'
 import { useDispatch, useSelector } from 'react-redux'
 import { getRekapAsync } from '../../redux/features/jadwal/rekapJadwalReducer'
-import {getMonth} from '../history/utils'
-import CalendarHeader from '../history/components/CalendarHeader'
-import Month from '../history/components/Month'
-import { GlobalContext } from '../../context/GlobalContext'
+
+import dayjs from 'dayjs'
+import { tw } from '../../constants'
+require('dayjs/locale/id')
 
 
-
-
-const HistoryScreen = () => {
+const HistoryScreen = ({navigation}) => {
 
   const dispatch = useDispatch()
   const { rekaps } = useSelector(state => state.rekap)
-  
-  const [currenMonth, setCurrentMonth] = useState(getMonth());
-  const { monthIndex, showEventModal } = useContext(GlobalContext);
 
-  // const [date, setDate] = useState(dayjs().locale('id'))
+  const [date, setDate] = useState(dayjs().locale('id'))
 
   useEffect(() => {
-    setCurrentMonth(getMonth(monthIndex));
+
+    const subscribe = navigation.addListener("focus", () => {
+        dispatch(getRekapAsync(date.format("MM")));
+    })
+
+     return () => {
+        subscribe
+      }
     
-  },[monthIndex])
+  },[navigation, date])
 
   return (
-    <View>
+    <View className="flex-1 bg-gray-light">
       <HeaderUser />
+      <View className="p-5 bg-white mb-2">
+        <Text className="font-poppinsBold">History Absensi Bulan { date.format("MMMM") }</Text>
+      </View>
+      {rekaps.length === 0 && (
+        <View className="flex-1 justify-center items-center">
+          <Icon name="book" color={tw.color('gray')} size={40} />
+          <Text className="font-poppins text-gray">History Absensi Belum Ada</Text>
+        </View>
+      )}
+      {rekaps.length > 0 && (
+        <ScrollView className="">
+          {rekaps.map((item, i) => {
+            return (
+              <View key={i} className="bg-white px-5 py-2 mb-1">
+                <View className="flex-row items-center">
+                  <View className="flex-1">
+                    <Text className="font-poppinsThin text-primary text-[30px]">{item.tanggal.slice(-2)}</Text>
+                  </View>
+                  <View className="">
+                    <Text className="font-poppins">Absen Masuk : { item.masuk }</Text>
+                    <Text className="font-poppins">Absen Pulang: { item.pulang === null? '-': item.pulang }</Text>
+                  </View>
+                </View>
+              </View>
+            )
+          })}
+          <View style={{ paddingBottom: 100 }} />
+        </ScrollView>
+      )}
     </View>
   )
 }

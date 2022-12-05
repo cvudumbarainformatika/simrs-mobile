@@ -34,45 +34,34 @@ const SettingsScreen = ({ navigation }) => {
         marginTop:300, overflow:'hidden'
       }]}>
         <View style={tw`p-4 border-b-2 border-gray-light bg-white`}>
-          <Text style={tw`font-bold`}>Profile Details 👋</Text>
+          <Text className="font-poppinsBold">Profile Details 👋</Text>
         </View>
         <ScrollView>
-          <View style={tw`bg-white p-3 mt-[1]`}>
-            <Text style={tw`text-xs text-gray`}>🧑 Nama</Text>
-            <Text style={tw``}>{ pegawai.nama }</Text>
-          </View>
-          <View style={tw`bg-white p-3 mt-[2]`}>
-            <Text style={tw`text-xs text-gray`}>💼 Nip</Text>
-            <Text style={tw``}>{pegawai.nip}</Text>
-          </View>
-          <View style={tw`bg-white p-3 mt-[2]`}>
-            <Text style={tw`text-xs text-gray`}>🏷️ Nik</Text>
-            <Text style={tw``}>{ pegawai.nik }</Text>
-          </View>
-          <View style={tw`bg-white p-3 mt-[2]`}>
-            <Text style={tw`text-xs text-gray`}>🏠 Alamat</Text>
-            <Text style={tw``}>{ pegawai.alamat_detil }</Text>
-          </View>
-          <View style={tw`bg-white p-3 mt-[1]`}>
-            <Text style={tw`text-xs text-gray`}>📞 Telp</Text>
-            <Text style={tw``}>{ pegawai.telp }</Text>
-          </View>
-          {/* <View style={tw`bg-white p-3 mt-[1]`}>
-            <Text style={tw`text-xs text-gray`}>Alamat</Text>
-            <Text style={tw``}>{ pegawai.alamat_detil }</Text>
-          </View>
-          <View style={tw`bg-white p-3 mt-[1]`}>
-            <Text style={tw`text-xs text-gray`}>Alamat</Text>
-            <Text style={tw``}>{ pegawai.alamat_detil }</Text>
-          </View>
-          <View style={tw`bg-white p-3 mt-[1]`}>
-            <Text style={tw`text-xs text-gray`}>Alamat</Text>
-            <Text style={tw``}>{ pegawai.alamat_detil }</Text>
-          </View> */}
 
-          {/* <View style={tw`bg-white p-3 mt-8`}>
-            <AppBtn label="Logout" color="negative" clicked={()=>navigation.navigate(ROUTES.LOGOUT) } />
-          </View> */}
+          <View style={tw`bg-white p-3 mt-[1]`}>
+            <Text className="font-poppins text-gray text-xs">🧑 Nama</Text>
+            <Text className="font-poppins ">{ pegawai.nama }</Text>
+          </View>
+          <View style={tw`bg-white p-3 mt-[2]`}>
+            <Text className="font-poppins text-gray text-xs">💼 Nip</Text>
+            <Text className="font-poppins ">{pegawai.nip}</Text>
+          </View>
+          <View style={tw`bg-white p-3 mt-[2]`}>
+            <Text className="font-poppins text-gray text-xs">🏷️ Nik</Text>
+            <Text className="font-poppins">{ pegawai.nik }</Text>
+          </View>
+          <View style={tw`bg-white p-3 mt-[2]`}>
+            <Text className="font-poppins text-gray text-xs">🏠 Alamat</Text>
+            <Text className="font-poppins">{ pegawai.alamat_detil }</Text>
+          </View>
+          <View style={tw`bg-white p-3 mt-[1]`}>
+            <Text className="font-poppins text-gray text-xs">📞 Telp</Text>
+            <Text className="font-poppins">{ pegawai.telp }</Text>
+          </View>
+
+
+
+
           <View style={{paddingBottom:120}} />
         </ScrollView>
         <View className="absolute bottom-0 w-full">

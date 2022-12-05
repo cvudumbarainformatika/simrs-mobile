@@ -14,8 +14,10 @@ import { getKategoriesAscync } from '../../redux/features/jadwal/kategoryJadwalR
 import { getAbsenTodayAsync, setIsAbsen, stateAbsenToday, stateAbsenTodayMasuk } from '../../redux/features/jadwal/absenReducer'
 
 import * as Location from 'expo-location';
-import dayjs from 'dayjs'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import * as Notifications from 'expo-notifications';
+
+import dayjs from 'dayjs'
 require('dayjs/locale/id')
 
 const ScreenAbsenAwal = ({ navigation }) => {
@@ -33,41 +35,53 @@ const ScreenAbsenAwal = ({ navigation }) => {
 
     const [absenMasuk, setAbsenMasuk] = useState(false)
     const [absenPulang, setAbsenPulang] = useState(false)
-    const [sudahAbsenMasuk, setSudahAbsenMasuk] = useState(false)
-    const [sudahAbsenPulang, setSudahAbsenPulang] = useState(false)
-    const [vMsg, setVMsg] = useState('Belum Ada Jadwal Hari ini')
-    const [vIcon, setVIcon] = useState('calendar-blank')
-    const [vColor, setVColor] = useState('negative')
+    const [statusAbsen, setStatusAbsen] = useState("WAM")
     
     // console.log(absenTodayPulang)
 
     let bukaAbsenMasuk = date.format("HH:mm") >= kurangiJam(masuk, 1) && date.format("HH:mm") <= kurangiMenit(pulang, 30)
     let bukaAbsenPulang = date.format("HH:mm") >= kurangiMenit(pulang, 30) && date.format("HH:mm") <= tambahiJam(pulang, 5)
+
+    if (pulang >= "21:00:00") {
+        bukaAbsenPulang = date.format("HH:mm") >= "23:55"
+    }
     
     const configAbsen = () => {
-        
+        let sta = "WAM"
 
         if (bukaAbsenMasuk && absenTodayMasuk === null) {
             // dispatch(setIsAbsen(false))
             setAbsenMasuk(true)
             setAbsenPulang(false)
+            sta = "WAM" // waktu absen masuk
+            setStatusAbsen("WAM")
+            handleNotification()
         } else if (bukaAbsenMasuk && absenTodayMasuk !== null) {
             // dispatch(setIsAbsen(true))
             setAbsenMasuk(false)
             setAbsenPulang(false)
+            sta = "SAM" // sudah absen masuk
+            setStatusAbsen("SAM")
         } else if (bukaAbsenPulang && absenTodayPulang === null) {
             // dispatch(setIsAbsen(false))
             setAbsenMasuk(false)
             setAbsenPulang(true)
+            sta = "WAP" // waktu absen pulang
+            setStatusAbsen("WAP")
         } else if (bukaAbsenPulang && absenTodayPulang !== null) {
             // dispatch(setIsAbsen(true))
             setAbsenMasuk(false)
             setAbsenPulang(false)
+            sta = "SAP" // sudah absen pulang
+            setStatusAbsen("SAP")
         } else if (!bukaAbsenMasuk && !bukaAbsenPulang) {
             // dispatch(setIsAbsen(false))
             setAbsenMasuk(false)
             setAbsenPulang(false)
+            sta = "DA" // done all
+            setStatusAbsen("DA")
         }
+
     }
 
      // locaion -7.745561337439556, 113.2106703321762
@@ -106,7 +120,7 @@ const ScreenAbsenAwal = ({ navigation }) => {
     }
 
     
-
+    
 
     useEffect(() => {
         
@@ -114,19 +128,21 @@ const ScreenAbsenAwal = ({ navigation }) => {
         const subscribe = navigation.addListener("focus", () => {
             dispatch(getAbsenTodayAsync());
             configAbsen()
+            console.log('absens Today :', statusAbsen)
         })
 
+        
 
         const interval = setInterval(() => {
             setDate(dayjs().locale("id"))
         }, 1000)
         // getLocation()
-        console.log('absens Today :', absenMasuk)
         return () => {
             subscribe
             clearInterval(interval)
         }
-    },[navigation])
+    }, [navigation, statusAbsen ])
+
   return (
       <SafeAreaView className="flex-1 justify-center items-center">
           <AppLoader visible={waiting} />
@@ -136,7 +152,7 @@ const ScreenAbsenAwal = ({ navigation }) => {
 
           <View className="absolute top-20 items-center">
               <Icon name="lock" color={tw.color('gray')} size={24} />
-            <Text className="text-gray text-3xl font-bold pt-2">{date.format("HH:mm:ss")}</Text>
+            <Text className="text-gray text-3xl pt-2 font-poppins">{date.format("HH:mm:ss")}</Text>
         </View>
 
           {/* CONTENT */}
@@ -147,28 +163,68 @@ const ScreenAbsenAwal = ({ navigation }) => {
             </View> 
           ): ( */}
           {status === '2' && (<>
-              {(absenMasuk && absenTodayMasuk === null) && (<View className="self-center justify-center items-center">
-                  <Icon name="bell-ring" color={tw.color("primary")} size={80} />
-                  <Text className={`pt-1 text-primary`}>Absen Masuk</Text>
-              </View>)}
-              {(absenMasuk && absenTodayMasuk !== null) && (<View className="self-center justify-center items-center">
-                  <Icon name="check-decagram" color={tw.color("primary")} size={80} />
-                  <Text className={`pt-1 text-primary`}>Sudah Absen Masuk</Text>
-              </View>)}
-              {(absenPulang && absenTodayPulang === null) && (<View className="self-center justify-center items-center">
-                  <Icon name="bell-ring" color={tw.color("negative")} size={80} />
-                  <Text className={`pt-1 text-negative`}>Absen Pulang</Text>
-              </View>)}
-              {(absenPulang && absenTodayPulang !== null) && (<View className="self-center justify-center items-center">
-                  <Icon name="check-decagram" color={tw.color("primary")} size={80} />
-                  <Text className={`pt-1 text-primary`}>Telah Absen Pulang</Text>
-              </View>)}
-              {(!absenMasuk && !absenPulang) && (
+              {
+                //   (absenMasuk && absenTodayMasuk === null) && (
+                  (statusAbsen === "WAM") && (
+                      <>
+                        <View className="self-center justify-center items-center">
+                            <Icon name="bell-ring" color={tw.color("primary")} size={80} />
+                            <Text className={`pt-1 text-primary font-poppins`}>Absen Masuk</Text>
+                        </View>
+                          <TouchableOpacity
+                            className="w-18 h-18 bg-dark overflow-hidden absolute bottom-8 rounded-full"
+                            onPress={() => navigation.navigate(ROUTES.QR_SCAN, { kategory_id })}
+                            >
+                        <View className="justify-center items-center self-center h-18 p-4">
+                            <Icon name="qrcode-scan" color={'white'} size={32} />
+                        </View>
+                        </TouchableOpacity>
+                    </>
+                  )
+              }
+              {
+                //   (absenMasuk && absenTodayMasuk !== null) && (
+                  (statusAbsen === "SAM") && (
+                      <View className="self-center justify-center items-center">
+                        <Icon name="check-decagram" color={tw.color("primary")} size={80} />
+                        <Text className={`pt-1 text-primary font-poppins`}>Sudah Absen Masuk</Text>
+                      </View>)
+              }
+              {
+                //   (absenPulang && absenTodayPulang === null) && (
+                  (statusAbsen === "WAP") && (
+                    <>
+                        <View className="self-center justify-center items-center">
+                            <Icon name="bell-ring" color={tw.color("negative")} size={80} />
+                            <Text className={`pt-1 text-negative font-poppins`}>Absen Pulang</Text>
+                      </View>
+                      <TouchableOpacity
+                                className="w-18 h-18 bg-dark overflow-hidden absolute bottom-8 rounded-full"
+                                onPress={() => navigation.navigate(ROUTES.QR_SCAN, { kategory_id })}
+                            >
+                        <View className="justify-center items-center self-center h-18 p-4">
+                            <Icon name="qrcode-scan" color={'white'} size={32} />
+                        </View>
+                        </TouchableOpacity>
+                    </>
+              )}
+              {
+                //   (absenPulang && absenTodayPulang !== null) && (
+                  (statusAbsen === "SAP") && (
+                      <View className="self-center justify-center items-center">
+                        <Icon name="check-decagram" color={tw.color("primary")} size={80} />
+                        <Text className={`pt-1 text-primary font-poppins`}>Telah Absen Pulang</Text>
+                      </View>)
+              }
+              {
+                //   (!absenMasuk && !absenPulang) && (
+                  (statusAbsen === "DA") && (
                   <View className="self-center justify-center items-center">
                       <Icon name="calendar-clock" color={tw.color("gray")} size={80} />
-                      <Text className={`pt-1 text-gray`}>Selamat beristirahat</Text>
+                      <Text className={`pt-1 text-gray font-poppins`}>Selamat beristirahat</Text>
                   </View>
-              )}
+                  )
+              }
           </>)}   
             
           {/* <View className="self-center justify-center items-center">
@@ -176,23 +232,25 @@ const ScreenAbsenAwal = ({ navigation }) => {
         </View>    */}
           {status === '1' &&(<View className="self-center justify-center items-center">
               <Icon name="calendar" color={tw.color("negative")} size={80} />
-              <Text className={`pt-1 text-negative`}>Tidak Ada Jadwal</Text>
+              <Text className={`pt-1 text-negative font-poppins`}>Tidak Ada Jadwal</Text>
               {/* <Text>{text}</Text> */}
           </View>)}
-          
-          {(absenMasuk || absenPulang) &&(<TouchableOpacity
-              className="w-18 h-18 bg-dark overflow-hidden absolute bottom-8 rounded-full"
-              onPress={() => navigation.navigate(ROUTES.QR_SCAN, { kategory_id })}
-          >
-              <View className="justify-center items-center self-center h-18 p-4">
-                  <Icon name="qrcode-scan" color={'white'} size={32} />
-              </View>
-          </TouchableOpacity>)}
     </SafeAreaView>
   )
 }
 
 export default ScreenAbsenAwal
+
+const handleNotification = async () => {
+    await Notifications.scheduleNotificationAsync({
+    content: {
+      title: "Absen Masuk! 🔔",
+      body: 'Anda Sudah Bisa Absen Masuk',
+      data: { data: 'Absensi Masuk' },
+    },
+    trigger: { seconds: 1 },
+  });
+}
 
 
 const kurangiJam = (

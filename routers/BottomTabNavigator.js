@@ -85,7 +85,7 @@ const BottomTabNavigator = () => {
                 iconName = focused ? "calendar-text" : "calendar-clock-outline"
               }
 
-              return <Icon name={iconName} size={22} color={color} />
+              return <Icon name={iconName} size={24} color={color} />
             },
             tabBarStyle: routes(route) ?
               { display: "none" } : styles.tabBarStyle
@@ -102,7 +102,7 @@ const BottomTabNavigator = () => {
         options={{
           // unmountOnBlur:true,
           tabBarIcon: ({ focused }) => (
-            <Icon name={'qrcode-scan'} size={28} color={`${ focused? tw.color('gray-light') : tw.color('gray') }`} />
+            <Icon name={'qrcode-scan'} size={32} color={`${ focused? tw.color('gray-light') : tw.color('gray') }`} />
           ),
           tabBarButton: (props) => <CustomTab {...props} />,
           tabBarStyle: {display:"none"}
@@ -121,8 +121,8 @@ export default BottomTabNavigator
 
 const styles = StyleSheet.create({
   tabBarStyle: {
-    // display:"none",
     position: 'absolute',
+    height:60,
     backgroundColor: tw.color('primary'),
     elevation: 0,
     zIndex:0

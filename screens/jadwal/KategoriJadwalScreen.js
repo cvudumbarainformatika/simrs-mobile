@@ -139,7 +139,7 @@ const KategoriJadwalScreen = ({ navigation, route }) => {
         })}
         <View style={{ paddingBottom: 100 }} />
       </ScrollView>
-      <View style={tw`absolute h-26 w-full bottom-0 bg-white`}>
+      <View style={tw`absolute h-30 w-full bottom-0 bg-white`}>
         <View style={tw`flex-row justify-between`}>
           <TouchableOpacity style={tw`bg-negative h-full w-1/2 justify-center items-center`}
             onPress={() => {

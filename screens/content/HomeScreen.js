@@ -12,10 +12,10 @@ import { getCurrentJadwal, getJadwalsAsync, showError, showJadwals, showLoading 
 import { getKategoriesAscync } from '../../redux/features/jadwal/kategoryJadwalReducer'
 import { LinearGradient } from 'expo-linear-gradient'
 import { AuthContext } from '../../context/AuthContext'
+import AppLoaderAnim from '../../components/~global/AppLoaderAnim'
 
 
 import dayjs from 'dayjs'
-import AppLoaderAnim from '../../components/~global/AppLoaderAnim'
 require('dayjs/locale/id')
 
 const HomeScreen = () => {
@@ -43,10 +43,12 @@ const HomeScreen = () => {
 
   useEffect(() => {
     const subscribe = navigation.addListener("focus", (e) => { 
-      console.log('subscribe:', e)
+      // console.log('subscribe:', e)
+      callFirst()
+      currentJadwal
     })
 
-    callFirst()
+    
 
     // console.log('jadwal dari home effect :', jadwals.length)
     // console.log('kategori dari home effect :', kategories.length)
@@ -86,7 +88,7 @@ const HomeScreen = () => {
         </View>
 
         <View style={tw`pt-2`}>
-          <Text className="font-poppinsBold" style={tw`px-4 py-2 text-gray-dark`}>Presensi Hari Ini 📅</Text>
+          <Text className="font-poppinsBold" style={tw`px-4 py-2 text-gray-dark`}>Jadwal Hari Ini 📅</Text>
           <View style={tw`bg-white p-4 pb-5 rounded`}>
             {/* JIKA BUKAN LIBUR */}
             {status === '2' ? (
@@ -117,7 +119,7 @@ const HomeScreen = () => {
           </View>
         </View>
         {/* PRESENSI HARI INI */}
-        <View style={tw`pt-2`}>
+        {/* <View style={tw`pt-2`}>
             <Text className="font-poppinsBold" style={tw`px-4 py-2 text-gray-dark`}>Statistik Presensi Bulan ini 📈</Text>
           <View style={tw`bg-white p-3 pb-5 rounded`}>
             <View style={tw`flex-row justify-between`}>
@@ -135,10 +137,10 @@ const HomeScreen = () => {
               </View>
             </View>
           </View>
-        </View>
+        </View> */}
         {/* Calendar */}
         <View style={tw`py-2 pb-40`}>
-          <Text className="font-poppinsBold" style={tw`px-4 py-2 text-gray-dark`}> Bulan Ini  🗓️</Text>
+          <Text className="font-poppinsBold" style={tw`px-4 py-2 text-gray-dark`}> Kalender Bulan Ini  🗓️</Text>
           <View style={tw`bg-white p-2 pb-5 rounded`}>
               <Calendar
                 monthFormat={'MMMM yyyy'}

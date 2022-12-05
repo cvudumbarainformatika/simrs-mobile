@@ -86,7 +86,7 @@ export const getAbsenTodayAsync = createAsyncThunk(
   async () => {
     try {
         const response = await api.get('/v2/absensi/jadwal/absen-today');
-        console.log('response absen today : ',response.data);
+        // console.log('response absen today : ',response.data);
         return response.data;
     } catch (error) {
         console.log('reducer tangkap :',error);

@@ -3,7 +3,7 @@ import { api } from "../../../helpers/axiosInterceptor"
 
 const initialState = {
     rekaps: [],
-    loading: false,
+    waiting: false,
     isError: false,
     error:null
 }
@@ -13,14 +13,34 @@ export const rekapJadwalReducer = createSlice({
     initialState,
 
     reducers: {
-        setLoading: (state, action) => { state.loading = action.payload },
+        setWaiting: (state, action) => { state.waiting = action.payload },
         getRekap: (state, action) => { state.rekaps = action.payload },
         setIsError: (state, action) => { state.isError = action.payload },
         setError: (state,action) => {state.error = action.payload}
+    },
+
+    extraReducers: (builder) => {
+        builder
+            .addCase(getRekapAsync.pending, (state, action) => {
+                state.waiting = true
+                state.error = null
+                state.isError = false
+            })
+            .addCase(getRekapAsync.fulfilled, (state, action) => {
+                state.rekaps = action.payload
+                state.waiting = false
+                state.error = null
+                state.isError = false
+            })
+            .addCase(getRekapAsync.rejected, (state, action) => {
+                state.waiting = false
+                state.error = action.payload
+                state.isError = true
+        })
     }
 })
 
-export const { setLoading, getRekap, setIsError, setError } = rekapJadwalReducer.actions;
+export const { setWaiting, getRekap, setIsError, setError } = rekapJadwalReducer.actions;
 
 export default rekapJadwalReducer.reducer;
 
@@ -29,7 +49,7 @@ export const getRekapAsync = createAsyncThunk(
   async (bulan) => {
     try {
         const response = await api.get(`/v2/absensi/jadwal/rekap-by-user?bulan=${bulan}`);
-        console.log('getRekapAsync :', response.data.weeks)
+        console.log('getRekapAsync :', response.data)
       return response.data;
     } catch (error) {
         // console.error(error);

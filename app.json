@@ -32,6 +32,18 @@
     "androidStatusBar":{
       "translucent":true
     },
+
+    "plugins": [
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/icon/icon.png",
+          "color": "#0D5A86",
+          "sounds": []
+        }
+      ]
+    ],
+
     "web": {
       "favicon": "./assets/favicon.png"
     },
