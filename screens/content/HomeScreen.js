@@ -96,13 +96,13 @@ const HomeScreen = () => {
                 <View style={tw`flex-1 items-center`}>
                   <Text style={tw`text-primary`}>Waktu Masuk</Text>
                   <View style={tw`rounded-l-lg p-3 w-full items-center bg-primary`}>
-                    <Text style={tw`text-white text-[14px] `}>🕒  {masuk.slice(0, -3)}</Text>
+                    <Text className="font-poppins" style={tw`text-white text-[14px] `}>🕒  {masuk.slice(0, -3)}</Text>
                   </View>
                 </View>
                 <View style={tw`flex-1 items-center`}>
                   <Text style={tw`text-dark`}>Waktu Pulang</Text>
                   <View style={tw`rounded-r-lg p-3 w-full items-center bg-dark`}>
-                    <Text style={tw`text-white text-[14px] `}>🕒  {pulang.slice(0, -3)}</Text>
+                    <Text className="font-poppins"  style={tw`text-white text-[14px] `}>🕒  {pulang.slice(0, -3)}</Text>
                   </View>
                 </View>
               </View>
