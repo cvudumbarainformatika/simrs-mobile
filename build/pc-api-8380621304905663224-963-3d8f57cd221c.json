@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "pc-api-8380621304905663224-963",
+  "private_key_id": "3d8f57cd221c28b8adb209b68fb3331d712df152",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC0CN/2Pjd8tymb\nrWSkfacFmoKds0iVGK4xWo3Yfp88sxNi7lFz/UoE+qgObFH73Vmk0N1j2+uGu7wC\nIRcOU4lA9gnDHfVASLuurzjqKjmLwYlExMa211frGF2F7EvMA1s1JEv0CMQX3TC0\n/rZw/6E3tDXvLzCH/WJjjDaIqASGBfP4IV8eKzHHa9dg/ah31TwNwWT8zVrPu7fz\nsx4cLFJGFKd9AUS44x7pnvam7UEwlFnsQ3p6p51hRmRxFDXA4gXAFpzdKpQK+sBx\nEuOPwfV8TauKsXk4zsxlr7PhKpW2T/PlPtxruT6R4NYs7IxMFn6f6n9mfhSNkTTY\nKKAltFuxAgMBAAECggEAAdCg1t/60djcHFXZuNOMNXEQweecusWPXH+i5FDG+M7+\nmhnIVA60skMHYpFWnH8XVDM3lyYQfFjMSPp1y7r9fExarfcRadDt5PF+5bPwJXO5\nlzoTXYSjXhMuXq8ylqt+PfV4J003El1ETF/QvagDE19fh5Iyh11vYmzngBZPCN2W\nS1yXKFM1/yjbqoPWBGBCooWp5zmIo1Izbx7COCZNpjyoArQeV2mqOnF5w7wmYini\nDZ1bYJsExrqYZlrTi7RCjialvStPt01xVVfleEafPnHes//7L8s2i/2PBc05EOJd\nqLyzmU9NojCmoF2aLtZf2KYy2Mx6YQEoB7GBFce/AQKBgQDXwmVXswJftP6uAg3Q\n64fi8UgGI6KAKZ1D0W58JUgBy7pjKGphCWqCqbIleObF4P+1Z0Wz1+wN1rNEGRmi\nqlklIRt3QPZSmDFJr0oQgCP2WV75dxVl+5N3o9O8/Yj5YOnMlLA3ShN15Zz0zfkj\nr2OFCF5m6KTXtrBapRTXxyYUsQKBgQDVnMZcvoqz8pB9SMDMvNjVvp0Yd8pODTm+\nkv9DoCMXMEyPmnRWlXvNAWPQAicUoSl4X1gb8XRiO1yQRUrYPZNPtzE+CzI93ljA\nuf6P6aIbGwq68SyOJ+9saUfABMlON0A2b0tcTlFcR4Id9LfdKyu/Y49LOkcdaYYl\nQia71fB3AQKBgQC0e9MWh5IGyXr5yJISH9RuDPP43rpCh40cfAb2JqGTjv59kANc\n5OmKH7X8DqTNBqgg8SCnjonSEbWn029UWTd1DbrSCS+Ea/de8hj8sJRksOH3wJvP\n0aDMRekLgPKh2WX6Uq8NsROSXd7sEZjFNyQC1rtRTm8GW7YuPUWwMtEyIQKBgQCe\nosT1T1P2eycuw37bDUwCwIIuD5ggCtZdXxFPCXfF2sqgwtWvD2hXQLb9XPvk6CLC\nEByA8/m4kdkWEz+YA3KI+sUJDIuNQriqt/YCrkEC3DxFxKGQGLxHyI/OXD+bZJC9\nXD2dGVR2sWxCDuEU0OC2S5u5BFiX0SwcM1pMmH7yAQKBgBh29W7zMYdt6pRrpCHu\n1piz6q9tYYO3zyehvW5PtJeUn837eE+mD03R/nCLiVYUtDW7EjlpZ3Cp5v+Uat6o\naFKDemVIxZ8h5Eq87xynqQ/ws0Zu9Wt1LBjxeD0h1cEwQs++r129zpUTbStsjKY2\nzpDLPRlN98YIdTPtx6MDL48l\n-----END PRIVATE KEY-----\n",
+  "client_email": "rsud-msaleh-xenter@pc-api-8380621304905663224-963.iam.gserviceaccount.com",
+  "client_id": "115115706315584956991",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/rsud-msaleh-xenter%40pc-api-8380621304905663224-963.iam.gserviceaccount.com"
+}
