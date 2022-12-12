@@ -21,21 +21,17 @@ import dayjs from 'dayjs'
 require('dayjs/locale/id')
 
 const ScreenAbsenAwal = ({ navigation }) => {
-    
-
-//    console.log(route.params)
-
     // jadwal harii ini
     const dispatch = useDispatch()
     const [date, setDate] = useState(dayjs().locale("id"))
 
     const currentJadwal = useSelector((state) => getCurrentJadwal(state, date.format("dddd")))
     const { hari, masuk, pulang, status, kategory_id } = currentJadwal
-    const { id, interv, absenToday, waiting, isDone, isAbsen, absenTodayMasuk, absenTodayPulang } = useSelector(state => state.absen)
+    const { id, interv, absenToday, waiting, isDone, isAbsen, absenTodayMasuk, absenTodayPulang, jam } = useSelector(state => state.absen)
 
     const [absenMasuk, setAbsenMasuk] = useState(false)
     const [absenPulang, setAbsenPulang] = useState(false)
-    const [statusAbsen, setStatusAbsen] = useState("WAM")
+    const [statusAbsen, setStatusAbsen] = useState("")
     
     // console.log(absenTodayPulang)
 
@@ -46,43 +42,48 @@ const ScreenAbsenAwal = ({ navigation }) => {
         bukaAbsenPulang = date.format("HH:mm") >= "23:55"
     }
     
-    const configAbsen = () => {
-        let sta = "WAM"
+    const configAbsen = ((msk, plg) => {
+        let sta = ""
 
-        if (bukaAbsenMasuk && absenTodayMasuk === null) {
+        if (msk && absenTodayMasuk === null) {
             // dispatch(setIsAbsen(false))
             setAbsenMasuk(true)
             setAbsenPulang(false)
             sta = "WAM" // waktu absen masuk
-            setStatusAbsen("WAM")
+            // setStatusAbsen("WAM")
             handleNotification()
-        } else if (bukaAbsenMasuk && absenTodayMasuk !== null) {
+        } else if (msk && absenTodayMasuk !== null) {
             // dispatch(setIsAbsen(true))
             setAbsenMasuk(false)
             setAbsenPulang(false)
             sta = "SAM" // sudah absen masuk
-            setStatusAbsen("SAM")
-        } else if (bukaAbsenPulang && absenTodayPulang === null) {
+            // setStatusAbsen("SAM")
+        } else if (plg && absenTodayPulang === null) {
             // dispatch(setIsAbsen(false))
             setAbsenMasuk(false)
             setAbsenPulang(true)
             sta = "WAP" // waktu absen pulang
-            setStatusAbsen("WAP")
-        } else if (bukaAbsenPulang && absenTodayPulang !== null) {
+            // setStatusAbsen("WAP")
+        } else if (plg && absenTodayPulang !== null) {
             // dispatch(setIsAbsen(true))
             setAbsenMasuk(false)
             setAbsenPulang(false)
             sta = "SAP" // sudah absen pulang
-            setStatusAbsen("SAP")
-        } else if (!bukaAbsenMasuk && !bukaAbsenPulang) {
+            // setStatusAbsen("SAP")
+        } else if (!msk && !plg) {
             // dispatch(setIsAbsen(false))
             setAbsenMasuk(false)
             setAbsenPulang(false)
             sta = "DA" // done all
-            setStatusAbsen("DA")
+            // setStatusAbsen("DA")
+        } else {
+            sta = ""
         }
 
-    }
+        // console.log('config absen', absenTodayMasuk)
+        return sta
+
+    })
 
      // locaion -7.745561337439556, 113.2106703321762
     const [location, setLocation] = useState(null);
@@ -120,34 +121,34 @@ const ScreenAbsenAwal = ({ navigation }) => {
     }
 
     
-    
+    // console.log('absens Today :', absenTodayMasuk)
 
     useEffect(() => {
         
-        
+        dispatch(getAbsenTodayAsync());
         const subscribe = navigation.addListener("focus", () => {
             dispatch(getAbsenTodayAsync());
-            configAbsen()
-            console.log('absens Today :', statusAbsen)
         })
-
-        
+        // dispatch(getAbsenTodayAsync());
 
         const interval = setInterval(() => {
             setDate(dayjs().locale("id"))
+            setStatusAbsen(configAbsen(bukaAbsenMasuk, bukaAbsenPulang))
         }, 1000)
         // getLocation()
+        // setStatusAbsen(configAbsen(bukaAbsenMasuk, bukaAbsenPulang))
+        // console.log('absens Today :', absenTodayMasuk)
         return () => {
             subscribe
             clearInterval(interval)
         }
-    }, [navigation, statusAbsen ])
+    }, [navigation, bukaAbsenMasuk, bukaAbsenPulang])
 
   return (
       <SafeAreaView className="flex-1 justify-center items-center">
           <AppLoader visible={waiting} />
-         <TouchableOpacity className="absolute top-8 right-4" onPress={()=> navigation.navigate(ROUTES.HOME_TAB)}>
-            <Icon name="close" color="black" size={32} />
+         <TouchableOpacity className="absolute top-10 right-4" onPress={()=> navigation.navigate(ROUTES.HOME_TAB)}>
+            <Icon name="close" color="black" size={42} />
           </TouchableOpacity> 
 
           <View className="absolute top-20 items-center">
@@ -221,7 +222,7 @@ const ScreenAbsenAwal = ({ navigation }) => {
                   (statusAbsen === "DA") && (
                   <View className="self-center justify-center items-center">
                       <Icon name="calendar-clock" color={tw.color("gray")} size={80} />
-                      <Text className={`pt-1 text-gray font-poppins`}>Selamat beristirahat</Text>
+                      <Text className={`pt-1 text-gray font-poppins`}>Belum Saatnya untuk Absen</Text>
                   </View>
                   )
               }

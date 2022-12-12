@@ -44,10 +44,11 @@ const HistoryScreen = ({navigation}) => {
       {rekaps.length > 0 && (
         <ScrollView className="">
           {rekaps.map((item, i) => {
+            let cc = item.tanggal
             return (
               <View key={i} className="bg-white px-5 py-2 mb-1">
                 <View className="flex-row items-center">
-                  <View className="flex-1">
+                  <View className="flex-1 flex-row">
                     <Text className="font-poppinsThin text-primary text-[30px]">{item.tanggal.slice(-2)}</Text>
                   </View>
                   <View className="">

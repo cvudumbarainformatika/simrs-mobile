@@ -16,6 +16,7 @@ import AppLoaderAnim from '../../components/~global/AppLoaderAnim'
 
 
 import dayjs from 'dayjs'
+import { getAbsenTodayAsync } from '../../redux/features/jadwal/absenReducer'
 require('dayjs/locale/id')
 
 const HomeScreen = () => {
@@ -33,6 +34,7 @@ const HomeScreen = () => {
   const callFirst = () => {
     dispatch(getJadwalsAsync());
     dispatch(getKategoriesAscync());
+    dispatch(getAbsenTodayAsync());
   }
 
   const currentJadwal = useSelector((state) => getCurrentJadwal(state, date.format("dddd")))
