@@ -85,6 +85,41 @@ const ScreenAbsenAwal = ({ navigation }) => {
 
     })
 
+    let sts = ""
+    let icn = "bell-ring"
+    let clr = "primary"
+    if (bukaAbsenMasuk) {
+        if (absenTodayMasuk === null) {
+            sts = "Absen Masuk"
+            icn = "bell-ring"
+            clr = "primary"
+        } else {
+            sts = "Sudah Absen Masuk"
+            icn = "check-decagram"
+            clr = "primary"
+        }
+    } else if (bukaAbsenPulang) {
+        if (absenTodayPulang === null) {
+            sts = "Absen Pulang"
+            icn = "bell-ring"
+            clr = "negative"
+        } else {
+            sts = "Sudah Absen Pulang"
+            icn = "check-decagram"
+            clr = "nnegative"
+        }
+    } else if(!bukaAbsenMasuk && !bukaAbsenPulang) {
+        sts = "Belum Saatnya Absen"
+        icn = "calendar-clock"
+        clr = "gray-dark"
+    } else {
+        sts = "tidak ada jadwal"
+        icn = "calendar-clock"
+        clr = "gray-dark"
+    }
+
+    // console.log(sts)
+
      // locaion -7.745561337439556, 113.2106703321762
     const [location, setLocation] = useState(null);
     const [errorMsg, setErrorMsg] = useState(null);
@@ -122,6 +157,7 @@ const ScreenAbsenAwal = ({ navigation }) => {
 
     
     // console.log('absens Today :', absenTodayMasuk)
+    // console.log('text :', text)
 
     useEffect(() => {
         
@@ -163,8 +199,23 @@ const ScreenAbsenAwal = ({ navigation }) => {
               <Text className={`pt-1 text-primary`}>Absen Success</Text>
             </View> 
           ): ( */}
-          {status === '2' && (<>
-              {
+          {status === '2' && (
+              <>
+                <Icon name={icn} color={tw.color(clr)} size={80} />
+                  <Text className={`pt-1 text-${clr} font-poppins`}>{sts}</Text>
+                  
+
+                  {(sts === "Absen Masuk" || sts === "Absen Pulang") && (
+                      <TouchableOpacity
+                          className="w-18 h-18 bg-dark overflow-hidden absolute bottom-8 rounded-full"
+                          onPress={() => navigation.navigate(ROUTES.QR_SCAN, { kategory_id })}
+                      >
+                          <View className="justify-center items-center self-center h-18 p-4">
+                              <Icon name="qrcode-scan" color={'white'} size={32} />
+                          </View>
+                      </TouchableOpacity>
+                  )}
+              {/* {
                 //   (absenMasuk && absenTodayMasuk === null) && (
                   (statusAbsen === "WAM") && (
                       <>
@@ -225,7 +276,8 @@ const ScreenAbsenAwal = ({ navigation }) => {
                       <Text className={`pt-1 text-gray font-poppins`}>Belum Saatnya untuk Absen</Text>
                   </View>
                   )
-              }
+              } */}
+              
           </>)}   
             
           {/* <View className="self-center justify-center items-center">
