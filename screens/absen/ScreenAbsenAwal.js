@@ -36,7 +36,7 @@ const ScreenAbsenAwal = ({ navigation }) => {
     // console.log(absenTodayPulang)
 
     let bukaAbsenMasuk = date.format("HH:mm") >= kurangiJam(masuk, 1) && date.format("HH:mm") <= kurangiMenit(pulang, 30)
-    let bukaAbsenPulang = date.format("HH:mm") >= kurangiMenit(pulang, 30) && date.format("HH:mm") <= tambahiJam(pulang, 5)
+    let bukaAbsenPulang = date.format("HH:mm") >= kurangiMenit(pulang, 30) && date.format("HH:mm") <= tambahiJam(pulang, 4)
 
     if (pulang >= "21:00:00") {
         bukaAbsenPulang = date.format("HH:mm") >= "23:55"
@@ -106,7 +106,7 @@ const ScreenAbsenAwal = ({ navigation }) => {
         } else {
             sts = "Sudah Absen Pulang"
             icn = "check-decagram"
-            clr = "nnegative"
+            clr = "negative"
         }
     } else if(!bukaAbsenMasuk && !bukaAbsenPulang) {
         sts = "Belum Saatnya Absen"

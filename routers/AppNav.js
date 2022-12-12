@@ -17,7 +17,7 @@ const AppNav = () => {
 
   const { isLoading, userToken, alerts, msgError, msgOk, closeAlerts, resetDevice } = useContext(AuthContext);
 
-  const [isSplash, setIsSplash] = useState(true)
+  const [isSplash, setIsSplash] = useState(false)
 
   function SplashScreen() {
     return (<AppLoaderAnim />);
@@ -25,9 +25,9 @@ const AppNav = () => {
 
 
   useEffect(() => {
-    setTimeout(() => {
-      setIsSplash(false)
-    },3000)
+    // setTimeout(() => {
+    //   setIsSplash(false)
+    // },3000)
   }, [])
 
 
