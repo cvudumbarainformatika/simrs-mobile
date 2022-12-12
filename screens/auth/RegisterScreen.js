@@ -17,12 +17,12 @@ const RegisterScreen = () => {
     const [modal, setModal] = useState(false);
     const [errors, setErrors] = useState({});
     const [inputs, setInputs] = useState({
-        nip: '012001141074',
-        tgllahir:''
+        nik: '',
+        tgllahir:'sa'
     })
     const [details, setDetails] = useState({
         id : '',
-        nip : '',
+        nik : '',
         nama : '',
         foto: '',
         user:null
@@ -41,8 +41,8 @@ const RegisterScreen = () => {
     function validate() {
         Keyboard.dismiss();
         let valid = true;
-        if (!inputs.nip) {
-            handleError('Harap diisi terlebih dahulu', 'nip')
+        if (!inputs.nik) {
+            handleError('Harap diisi terlebih dahulu', 'nik')
             valid = false
         }
         if (!inputs.tgllahir) {
@@ -57,7 +57,7 @@ const RegisterScreen = () => {
         setLoading(true)
         if (valid) {
             let form = {
-                nip: inputs.nip,
+                nik: inputs.nik,
                 tgllahir:inputs.tgllahir
             }
             await api.post(`/v2/data/cari-pegawai`, form)
@@ -77,7 +77,7 @@ const RegisterScreen = () => {
 
                         setDetails({
                             id: det.id,
-                            nip:det.nip,
+                            nik:det.nik,
                             nama: det.nama,
                             foto: det.foto,
                             user:det.user
@@ -109,7 +109,7 @@ const RegisterScreen = () => {
         setErrors(states => ({ ...states, [input]: msg }))
     }
 
-    function toConfirmPassword(nip) {
+    function toConfirmPassword(nik) {
         if (details.user !== null) {
             setModal(false)
             return
@@ -117,7 +117,7 @@ const RegisterScreen = () => {
         setModal(false)
         navigation.navigate(ROUTES.REGISTRASIPASSWORD, {
             pegawai_id: details.id,
-            nip: nip,
+            nik: nik,
             nama:details.nama
         });
     }
@@ -129,14 +129,14 @@ const RegisterScreen = () => {
             {/* CONFIRMASI USER ============================================================================ */}
 
             {modal && (<ModalConfirmKaryawan visible={modal}
-                nip={inputs.nip}
+                nik={inputs.nik}
                 nama={details.nama}
                 id={details.id}
                 foto={details.foto}
                 user={details.user}
                 onDismiss={() => setModal(false)}
                 onOk={() => {
-                    toConfirmPassword(details.nip)
+                    toConfirmPassword(details.nik)
                 }}
             />)}
 
@@ -151,7 +151,7 @@ const RegisterScreen = () => {
                     <View style={tw.style('flex-1')}>
                         <View  style={tw.style('border-2 p-4 rounded-4 ')}>
                             <Text className="font-poppinsBold text-xs">
-                                Masukkan Nip dan tanggal Lahir Anda, 
+                                Masukkan Nik Anda, 
                             </Text>
                             <Text className="font-poppins text-xs">lalu Klik Cari data dan ikuti
                                 langkah selanjutnya</Text>
@@ -173,23 +173,23 @@ const RegisterScreen = () => {
 
                 {/* ================================================================================== FORM INPUT */}
                 <View style={tw.style('px-8 py-4')}>
-                    <AppInput placeholder="Masukkan Nip Anda"
-                        value={inputs.nip}
-                        changed={(val) => handleOnChanged(val, 'nip')}
-                        error={errors.nip}
+                    <AppInput placeholder="Masukkan NIK Anda"
+                        value={inputs.nik}
+                        changed={(val) => handleOnChanged(val, 'nik')}
+                        error={errors.nik}
                         onFocus={() => {
-                            handleError(null,'nip')
+                            handleError(null,'nik')
                         }}
 
                     />
-                    <AppInput placeholder="Tanggal Lahir , Format: yyyy-mm-dd"
+                    {/* <AppInput placeholder="Tanggal Lahir , Format: yyyy-mm-dd"
                         value={inputs.tgllahir}
                         changed={(val) => handleOnChanged(val, 'tgllahir')}
                         error={errors.tgllahir}
                         onFocus={() => {
                             handleError(null,'tgllahir')
                         }}
-                    />
+                    /> */}
                 </View>
             </ScrollView>
             

@@ -19,8 +19,8 @@ const RegistrasiPasswordScreen = () => {
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState({});
     const [inputs, setInputs] = useState({
-        username: route.params.nip,
-        password: route.params.nip,
+        username: route.params.nik,
+        password: '123456789',
         pegawai_id: route.params.pegawai_id,
         device: Device.osInternalBuildId,
         nama:route.params.nama
@@ -96,7 +96,7 @@ const RegistrasiPasswordScreen = () => {
           {loading && (<AppLoader visible={loading} />)}
           <AppAlert visible={alerts} status={ msg.status } msg={msg.msg} onOk={()=> lanjut()} />
           <View style={tw`p-4`}>
-                <Text style={tw`font-bold text-lg mb-4`}>Konfirmasi Password Anda 🔐</Text>
+                <Text style={tw`font-bold text-lg mb-5`}>Konfirmasi Password Anda 🔐</Text>
                 {/* MAD SALEH INFO */}
                 <View style={tw`flex-row`}>
                   <Image

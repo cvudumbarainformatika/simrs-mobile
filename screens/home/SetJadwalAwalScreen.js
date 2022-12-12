@@ -68,8 +68,7 @@ const SetJadwalAwalScreen = ({ navigation }) => {
             end={{x:1,y:0.9}}
             >
               <View style={tw`h-38 w-48 rounded-full border-gray-light border-2 p-8`}>
-                  <Text className="text-white font-poppins">Klik Lanjutkan untuk memilih Kategori jadwal Anda ...
-                      atau logout untuk keluar dari aplikasi</Text>
+                  <Text className="text-white font-poppins">Klik Lanjutkan untuk memilih Kategori jadwal Anda ... </Text>
           </View>
           <View style={tw`h-4 w-4 rounded-full border-gray-light border-2 right-9`} />
           <View style={tw`h-2 w-2 rounded-full border-gray-light border-2 right-6`} />
