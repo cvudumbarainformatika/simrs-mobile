@@ -47,7 +47,7 @@ api.interceptors.response.use(response => new Promise((resolve, reject) => {
     resolve(response);
 }), error => {
 
-    console.log('interceptors.response status:', error.response.status)
+    // console.log('interceptors.response status:', error.response.status)
     // console.log('interceptors.response mess:', error.message)
     // console.log('interceptors.response stack:', error.stack)
         // console.log('error.response :', error.response.status)

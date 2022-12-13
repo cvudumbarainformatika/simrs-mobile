@@ -20,6 +20,24 @@ import * as Notifications from 'expo-notifications';
 import dayjs from 'dayjs'
 require('dayjs/locale/id')
 
+
+
+// const handleNotification = async () => {
+//     await Notifications.scheduleNotificationAsync({
+//         content: {
+//             title: "Absen Masuk! 🔔",
+//             body: 'Anda Sudah Bisa Absen Masuk',
+//             data: { data: 'Absensi Masuk' },
+//         },
+//         trigger: {
+//             seconds: 1,
+//             channelId: 'absensi',
+//         },
+//     });
+
+//     return handleNotification
+// }
+
 const ScreenAbsenAwal = ({ navigation }) => {
     // jadwal harii ini
     const dispatch = useDispatch()
@@ -35,11 +53,11 @@ const ScreenAbsenAwal = ({ navigation }) => {
     
     // console.log(absenTodayPulang)
 
-    let bukaAbsenMasuk = date.format("HH:mm") >= kurangiJam(masuk, 1) && date.format("HH:mm") <= kurangiMenit(pulang, 30)
-    let bukaAbsenPulang = date.format("HH:mm") >= kurangiMenit(pulang, 30) && date.format("HH:mm") <= tambahiJam(pulang, 4)
+    let bukaAbsenMasuk = date.format("HH:mm") >= kurangiJam(masuk, 1) || date.format("HH:mm") <= kurangiMenit(pulang, 30)
+    let bukaAbsenPulang = date.format("HH:mm") >= kurangiMenit(pulang, 30) || date.format("HH:mm") <= tambahiJam(pulang, 4)
 
     if (pulang >= "21:00:00") {
-        bukaAbsenPulang = date.format("HH:mm") >= "23:55"
+        bukaAbsenPulang = date.format("HH:mm") >= "23:30"
     }
     
     const configAbsen = ((msk, plg) => {
@@ -51,7 +69,6 @@ const ScreenAbsenAwal = ({ navigation }) => {
             setAbsenPulang(false)
             sta = "WAM" // waktu absen masuk
             // setStatusAbsen("WAM")
-            handleNotification()
         } else if (msk && absenTodayMasuk !== null) {
             // dispatch(setIsAbsen(true))
             setAbsenMasuk(false)
@@ -173,7 +190,11 @@ const ScreenAbsenAwal = ({ navigation }) => {
         }, 1000)
         // getLocation()
         // setStatusAbsen(configAbsen(bukaAbsenMasuk, bukaAbsenPulang))
-        // console.log('absens Today :', absenTodayMasuk)
+        // if (absenTodayMasuk === null) {
+        //     handleNotification()
+        // }
+        
+        console.log('absens Today :')
         return () => {
             subscribe
             clearInterval(interval)
@@ -294,16 +315,7 @@ const ScreenAbsenAwal = ({ navigation }) => {
 
 export default ScreenAbsenAwal
 
-const handleNotification = async () => {
-    await Notifications.scheduleNotificationAsync({
-    content: {
-      title: "Absen Masuk! 🔔",
-      body: 'Anda Sudah Bisa Absen Masuk',
-      data: { data: 'Absensi Masuk' },
-    },
-    trigger: { seconds: 1 },
-  });
-}
+
 
 
 const kurangiJam = (

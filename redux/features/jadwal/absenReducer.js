@@ -96,16 +96,3 @@ export const getAbsenTodayAsync = createAsyncThunk(
         // return error.response.status
     }
 });
-
-// export const postAbsenAsync = createAsyncThunk(
-//     "absen/postAbsenAsync", 
-//   async (form) => {
-//     try {
-//         const response = await api.post('/v2/absensi/qr/scan', form);
-//         console.log('response absen : ',response.data);
-//         return response.data;
-//     } catch (error) {
-//         console.log(error);
-//         return error.response
-//     }
-// });
