@@ -2,7 +2,7 @@
   "expo": {
     "name": "Xenter Rsud MSaleh",
     "slug": "XenterRsudMSaleh",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/icon/icon.png",
     "userInterfaceStyle": "light",
@@ -22,7 +22,7 @@
     },
     "android": {
       "package": "com.xenter.rsudmsaleh",
-      "versionCode": 2,
+      "versionCode": 3,
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon/adaptive-icon-android.png",
         "backgroundColor": "#0D5A86"

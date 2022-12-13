@@ -77,7 +77,8 @@ const RegisterScreen = () => {
 
                         setDetails({
                             id: det.id,
-                            nik:det.nik,
+                            nip:det.nip,
+                            nik: det.nik,
                             nama: det.nama,
                             foto: det.foto,
                             user:det.user
@@ -117,6 +118,7 @@ const RegisterScreen = () => {
         setModal(false)
         navigation.navigate(ROUTES.REGISTRASIPASSWORD, {
             pegawai_id: details.id,
+            nip:details.nip,
             nik: nik,
             nama:details.nama
         });
@@ -129,6 +131,7 @@ const RegisterScreen = () => {
             {/* CONFIRMASI USER ============================================================================ */}
 
             {modal && (<ModalConfirmKaryawan visible={modal}
+                nip={details.nip}
                 nik={inputs.nik}
                 nama={details.nama}
                 id={details.id}

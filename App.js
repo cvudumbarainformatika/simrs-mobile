@@ -45,10 +45,10 @@ export default function App() {
     'RubikMaze-Regular': require('./assets/fonts/Rubik_Maze/RubikMaze-Regular.ttf'),
   })
 
-  const [expoPushToken, setExpoPushToken] = useState('');
-  const [notification, setNotification] = useState(false);
-  const notificationListener = useRef();
-  const responseListener = useRef();
+  // const [expoPushToken, setExpoPushToken] = useState('');
+  // const [notification, setNotification] = useState(false);
+  // const notificationListener = useRef();
+  // const responseListener = useRef();
 
     
   NativeWindStyleSheet.setOutput({
@@ -57,7 +57,7 @@ export default function App() {
 
 
   SplashScreen.preventAutoHideAsync();
-  setTimeout(SplashScreen.hideAsync, 1000)
+  setTimeout(SplashScreen.hideAsync, 500)
 
   
 
