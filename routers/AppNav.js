@@ -17,18 +17,18 @@ const AppNav = () => {
 
   const { isLoading, userToken, alerts, msgError, msgOk, closeAlerts, resetDevice } = useContext(AuthContext);
 
-  const [isSplash, setIsSplash] = useState(false)
+  // const [isSplash, setIsSplash] = useState(false)
 
-  function SplashScreen() {
-    return (<AppLoaderAnim />);
-  }
+  // function SplashScreen() {
+  //   return (<AppLoaderAnim />);
+  // }
 
 
-  useEffect(() => {
-    // setTimeout(() => {
-    //   setIsSplash(false)
-    // },3000)
-  }, [])
+  // useEffect(() => {
+  //   // setTimeout(() => {
+  //   //   setIsSplash(false)
+  //   // },3000)
+  // }, [])
 
 
 
@@ -49,9 +49,7 @@ const AppNav = () => {
   return (
     <Provider store={store}>
       <NavigationContainer ref={navigationRef} >
-          {isSplash ? (
-            SplashScreen()
-          ) :
+          {
            userToken !== null ? <AppStack />: <AuthStack />
           }
       </NavigationContainer>
