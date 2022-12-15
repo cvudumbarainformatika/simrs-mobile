@@ -8,10 +8,28 @@ const AppCountdown = ({
     seconds
 }) => {
   return (
-    <View>
-      <Text>AppCountdown</Text>
+    <View className="flex-row space-x-2">
+      <View>
+        <Text>{ days } : </Text>
+      </View> 
+      <View>
+        <Text>{ hours } : </Text>
+      </View> 
+      <View>
+        <Text>{ minutes } : </Text>
+      </View> 
+      <View>
+        <Text>{ seconds }</Text>
+      </View> 
     </View>
   )
+}
+
+AppCountdown.defaultProps = {
+  days:'00',
+  hours:'00',
+  minutes:'00',
+  seconds:'00',
 }
 
 export default AppCountdown

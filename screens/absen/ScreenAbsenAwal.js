@@ -131,7 +131,7 @@ const ScreenAbsenAwal = ({ navigation }) => {
         clr = "gray-dark"
     } else {
         sts = "tidak ada jadwal"
-        icn = "calendar-clock"
+        icn = "calendar-clock" 
         clr = "gray-dark"
     }
 
