@@ -26,10 +26,10 @@ const AppCountdown = ({
 }
 
 AppCountdown.defaultProps = {
-  days:'00',
-  hours:'00',
-  minutes:'00',
-  seconds:'00',
+  days:0,
+  hours:0,
+  minutes:0,
+  seconds:0,
 }
 
 export default AppCountdown

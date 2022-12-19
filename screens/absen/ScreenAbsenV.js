@@ -14,8 +14,11 @@ const ScreenAbsenV = ({ navigation }) => {
   const [date, setDate] = useState(dayjs().locale("id"))
 
   const currentJadwal = useSelector((state) => getCurrentJadwal(state, date.format("dddd")))
-  const { hari, masuk, pulang, status, kategory_id } = currentJadwal
-  const { id, interv, absenToday, waiting, isDone, isAbsen, absenTodayMasuk, absenTodayPulang, jam } = useSelector(state => state.absen)
+//   const { hari, masuk, pulang, status, kategory_id } = currentJadwal
+    const { id, interv, absenToday, waiting, isDone, isAbsen, absenTodayMasuk, absenTodayPulang, jam } = useSelector(state => state.absen)
+    const masuk = "12:26:00"
+    const pulang = "12:27:00"
+    
   
   const [timerDays, setTimerDays] = useState()
   const [timerHours, setTimerHours] = useState()
@@ -62,14 +65,16 @@ const ScreenAbsenV = ({ navigation }) => {
   }
 
   
-
+//   console.log('jadwal today', currentJadwal)
 
   //componentDidMount
   useEffect(() => {
     if (cond === '_awal') {
-      dispatch(getAbsenTodayAsync());
+        dispatch(getAbsenTodayAsync());
+        if (masuk === null) setCond("_libur")
       const hariIni = date.format("YYYY-MM-DD")
-      let waktuMasuk = dayjs(hariIni + " " + kurangiJam(masuk))
+    //   let waktuMasuk = dayjs(hariIni + " " + kurangiJam(masuk))
+      let waktuMasuk = dayjs(hariIni + " " + masuk)
       startTimer(waktuMasuk,'_tunggu_masuk' , '_waktu_masuk');
     } else if (cond === '_waktu_masuk') {
       const hariIni = date.format("YYYY-MM-DD")
@@ -87,7 +92,7 @@ const ScreenAbsenV = ({ navigation }) => {
       startTimer(waktuPulang,'_tunggu_pulang' , '_waktu_pulang');
     }
     
-    // console.log('jadwal today', dayjs(hariIni + " " + masuk))
+    console.log('jadwal today', currentJadwal)
     
     return () => {
       clearInterval(interval)
@@ -110,8 +115,10 @@ export default ScreenAbsenV
 const kurangiJam = (
     jam , //jam default
     num = 1, // default jam kurang 
-)=> {
-    let str = jam === null? "07:00:00": jam
+) => {
+    if (jam === null) return false;
+    // let str = jam === null? "07:00:00": jam
+    let str = jam 
     let h = parseInt(str.slice(0, 2)) 
     let hh = (h < 1? 24 : h) - num
     let h_str = hh < 10 ? "0"+ hh : hh

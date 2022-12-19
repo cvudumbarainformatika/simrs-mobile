@@ -9,10 +9,11 @@ import { AppAlert, AppConfirm, AppLoader } from '../../components'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { ROUTES, tw } from '../../constants'
 
-const QrScan = ({navigation}) => {
+const QrScan = ({navigation, route}) => {
 
-
-const dispatch = useDispatch()
+  console.log(route.params)
+  const {status, kategory_id, tanggal, jam} = route.params
+  const dispatch = useDispatch()
     
   const [hasPermission, setHasPermission] = useState(null);
     const [scanned, setScanned] = useState(false);
@@ -21,11 +22,12 @@ const dispatch = useDispatch()
     const [waiting, setWaiting] = useState(false)
     const [msg, setMsg] = useState(null);
     
-    const { id, absenToday } = useSelector(state => state.absen)
+  const { id, absenToday } = useSelector(state => state.absen)
+  
   // METHOD
     useEffect(() => {
         (async () => {
-            dispatch(getAbsenTodayAsync())
+            // dispatch(getAbsenTodayAsync())
             const { status } = await BarCodeScanner.requestPermissionsAsync();
             setHasPermission(status === 'granted');
             // console.log('today qrcode:', id)
@@ -44,29 +46,14 @@ const dispatch = useDispatch()
       id: id,
       qr: data
     }
-    // console.log('absen form : ', form)
     
-    //   setWaiting(true)
-      navigation.navigate(ROUTES.ABSEN_LOADING, {data, id})
-        
-    // await api.post('/v2/absensi/qr/scan', form).then((response) => {
-    // //   console.log('response absen',response.data);
-    // //   let trans_id = response.data.jadwal.data.id;
-        
-    //     dispatch(getAbsenTodayAsync())
-    //     setWaiting(false)
-    // //   dispatch(setWaiting(false))
-    // }).catch(error => {
-    //   setScanned(true)
-    //   console.log('absen :', error.response);
-    //     setWaiting(false)
-    //     setMsg('Maaf Ada Kesalahan Ulangi Lagi')
-    // })
+    navigation.navigate(ROUTES.ABSEN_LOADING, { data, status, kategory_id, tanggal, jam })
        
   };
 
   if (hasPermission === null) {
-      return <AppAlert visible={hasPermission === null} msg="Camera tidak diijinkan" onOk={()=>navigation.goBack()} />
+      // return <AppAlert visible={hasPermission === null} msg="Camera tidak diijinkan" onOk={()=>navigation.goBack()} />
+      return <AppLoader visible={hasPermission === null}  />
     //   (<View className="bg-dark flex-1">
     //       <Text className="self-center text-center">Requesting for camera permission</Text>
     //   </View>
@@ -74,7 +61,8 @@ const dispatch = useDispatch()
   }
 
   if (hasPermission === false) {
-      return <AppAlert visible={hasPermission === false} msg="Camera tidak diijinkan" onOk={()=>navigation.goBack()}/>
+    // return <AppAlert visible={hasPermission === false} msg="Camera tidak diijinkan" onOk={() => navigation.goBack()} />
+    return <AppLoader visible={hasPermission === null}  />
     //   (<View className="bg-dark flex-1">
     //       <Text className="self-center text-center">Requesting for camera permission</Text>
     //   </View>

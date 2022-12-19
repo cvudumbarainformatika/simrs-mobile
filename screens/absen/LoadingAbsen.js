@@ -8,7 +8,7 @@ import { api } from '../../helpers/axiosInterceptor'
 
 const LoadingAbsen = ({ navigation, route }) => {
   
-  const { id, data } = route.params
+  const { data, tanggal, jam, status, kategory_id } = route.params
   const dispatch = useDispatch()
   const [waiting, setWaiting] = useState(false)
   const [msg, setMsg] = useState(null)
@@ -16,8 +16,12 @@ const LoadingAbsen = ({ navigation, route }) => {
   const sendQrCode = async () => {
     setWaiting(true)
     let form = {
-      id: id,
-      qr: data
+      // id: id,
+      qr: data,
+      tanggal: tanggal,
+      jam: jam,
+      status: status,
+      kategory_id:kategory_id
     }
     await api.post('/v2/absensi/qr/scan', form).then((response) => {
       // dispatch(getAbsenTodayAsync())

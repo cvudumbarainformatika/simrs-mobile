@@ -20,6 +20,7 @@ export const GlobalContext = React.createContext({
   filteredEvents: [],
 
 
-
+  // ABSEN
+  active: false,
   
 });

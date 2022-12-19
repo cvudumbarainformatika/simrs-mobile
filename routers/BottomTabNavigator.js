@@ -46,7 +46,6 @@ const BottomTabNavigator = () => {
   
   const routes = (val) => {
     const focusedRoute = getFocusedRouteNameFromRoute(val)
-    console.log('bottom tab :', focusedRoute)
 
     const arr = [
       ROUTES.SET_JADWAL_AWAL,

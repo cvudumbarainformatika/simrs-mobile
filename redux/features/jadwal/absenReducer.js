@@ -22,7 +22,7 @@ const initialState = {
     isAbsen: false,
     qrCode: null,
     
-    jam: dayjs().locale("id").format("HH:mm")
+    cond:'idle' // idle || start
     
 }
 
@@ -34,7 +34,8 @@ export const absenReducer = createSlice({
         setId: (state, action) => { state.id = action.payload },
         setIsDone: (state, action) => { state.isDone = action.payload },
         setIsAbsen: (state, action) => { state.isAbsen = action.payload },
-        setInterv: (state, action) => {state.interv = action.payload}
+        setInterv: (state, action) => { state.interv = action.payload },
+        setCond: (state, action) => {state.cond = action.payload}
     },
 
 
@@ -77,11 +78,12 @@ export const absenReducer = createSlice({
 }) 
 
 
-export const { setId, setIntrv, setWaiting, setIsDone, setIsAbsen } = absenReducer.actions;
+export const { setId, setIntrv, setWaiting, setIsDone, setIsAbsen, setCond } = absenReducer.actions;
 
 export default absenReducer.reducer;
 
 export const stateAbsenTodayMasuk = (state) => state.absenToday.masuk;
+export const stateAbsenActive = (state) => state.isActive;
 
 
 export const getAbsenTodayAsync = createAsyncThunk(

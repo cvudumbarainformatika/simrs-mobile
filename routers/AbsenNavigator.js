@@ -7,6 +7,7 @@ import ScreenAbsenAwal from '../screens/absen/ScreenAbsenAwal';
 import QrScan from '../screens/absen/QrScan';
 import LoadingAbsen from '../screens/absen/LoadingAbsen';
 import ScreenAbsenV from '../screens/absen/ScreenAbsenV';
+import ScreenAbsenVv from '../screens/absen/ScreenAbsenVv';
 
 
 const Stack = createStackNavigator();
@@ -27,7 +28,7 @@ const AbsenNavigator = () => {
       }}
       initialRouteName={ROUTES.SCREEN_ABSEN_AWAL}
     >
-          <Stack.Screen name={ROUTES.SCREEN_ABSEN_AWAL} component={ScreenAbsenV} />
+          <Stack.Screen name={ROUTES.SCREEN_ABSEN_AWAL} component={ScreenAbsenVv} />
           <Stack.Screen name={ROUTES.QR_SCAN} component={QrScan} options={{ 
             unmountOnBlur:true,
            }} />
