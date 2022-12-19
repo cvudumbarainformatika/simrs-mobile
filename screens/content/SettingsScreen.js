@@ -75,7 +75,7 @@ const SettingsScreen = ({ navigation }) => {
             onPress={()=> navigation.navigate(ROUTES.SETTINGS_DETAIL, pegawai)}
             className="bg-primary h-14 justify-center items-end">
             <View className="mr-4 flex-row items-center">
-              <Text className="text-white">Ganti Password</Text>
+              <Text className="text-white font-poppins">Ganti Password</Text>
               <Icon name="chevron-right" color={'white'} size={ 32 } />
             </View>
           </TouchableOpacity>
