@@ -136,29 +136,6 @@ const LoginScreen = (props) => {
           <Text className="text-white font-poppins text-lg" >UOBK RSUD MOHAMMAD SALEH</Text>
           <Text className="text-white text-[32px] font-rubikMaze" >XENTER</Text>
       </View>
-
-      {/* <View className="mx-4">
-        <AppInput icon="account-outline" placeholder="Username"
-          value={inputs.username}
-          changed={(val) => handleOnChanged(val, 'username')}
-          error={errors.username}
-          onFocus={() => {
-              handleError(null,'username')
-          }}
-        />
-        <AppInput icon="key" placeholder="Password" password
-          value={inputs.password}
-          changed={(val) => handleOnChanged(val, 'password')}
-          error={errors.password}
-          onFocus={() => {
-              handleError(null,'password')
-          }}
-        />
-
-        <View className="my-5 mb-16">
-          <AppBtn label="Login" fullwidth rounded color="primary" clicked={() => validate()} />
-        </View>
-      </View> */}
       
 
       {/* ALL BUTTON AWAL */}
@@ -203,57 +180,8 @@ const LoginScreen = (props) => {
           </Animated.View> 
         </View>  
       </View>
-
-
-
-      {/* BOTTOM */}
-      {/* <View className="flex-auto">
-          <View style={tw`flex-row items-center justify-center pt-8`}>
-            <Text style={tw.style('text-xs text-gray-dark')}>Belum Punya Akun? </Text>
-            <TouchableOpacity onPress={registerClicked}>
-              <Text style={tw.style('text-xs text-primary')}> Register disini</Text>
-            </TouchableOpacity>
-          </View>
-      </View> */}
     </View>
   )
 }
-
-// const styles = StyleSheet.create({
-//     container: {
-//       flex: 1,
-//     },
-  
-//   parentContainer: {
-//     width: "100%",
-//     height: "100%",
-//   },
-
-//   square: {
-//     width: 100,
-//     height: 100,
-//     backgroundColor: 'crimson',
-//     position: "absolute",
-//     bottom: 0,
-//     right: 0
-//   },
-
-//   topPlace: {
-//     width: '100%',
-//     height: 280,
-//     position: "absolute",
-//     top: 0,
-//     right: 0,
-//     overflow: 'hidden'
-//   },
-//   bottomPlace: {
-//     width: '100%',
-//     height: '100%',
-//     position: "absolute",
-//     bottom: 0,
-//     left: '70%',
-//     overflow: 'hidden'
-//   }
-//   });
 
 export default LoginScreen

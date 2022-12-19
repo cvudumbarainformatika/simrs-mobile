@@ -137,7 +137,7 @@ const KategoriJadwalScreen = ({ navigation, route }) => {
               
             </TouchableOpacity>)
         })}
-        <View style={{ paddingBottom: 100 }} />
+        <View style={{ paddingBottom: 300 }} />
       </ScrollView>
       <View style={tw`absolute h-30 w-full bottom-0 bg-white`}>
         <View style={tw`flex-row justify-between`}>

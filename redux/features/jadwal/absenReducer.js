@@ -22,7 +22,7 @@ const initialState = {
     isAbsen: false,
     qrCode: null,
     
-    cond:'idle' // idle || start
+    cond:'idle' // idle || start || checkIn || checkOut
     
 }
 

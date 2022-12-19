@@ -45,7 +45,7 @@ const ScreenAbsenVv = ({navigation}) => {
         dispatch(setCond('idle'))
         setSchedule('null')
 
-        currentJadwal
+        // currentJadwal
     }
 
 
@@ -72,12 +72,6 @@ const ScreenAbsenVv = ({navigation}) => {
             console.log(`ambil kondisi Error : ${e}`)
         }
     }
-
-    
-        // const masuk = "23:08:00"
-        // const pulang = "00:00:00"
-        // const kategory_id = 5
-        // const status = "2"
 
     const searchJadwalAndSet = () => {
 
@@ -111,7 +105,7 @@ const ScreenAbsenVv = ({navigation}) => {
             stopWaktuAbsen:stopWaktuAbsen
         }
 
-        saveStore('start')
+        if (cond === 'idle') saveStore('start')
         storeSchedule(newJadwals)
     }
     
@@ -153,7 +147,7 @@ const ScreenAbsenVv = ({navigation}) => {
             } else if (rangePulang) {
                 text = "waktu pulang"
                 if (cond === 'checkOut') {
-                    sts = "Sudah Absen Masuk"
+                    sts = "Sudah Absen Pulang"
                     icn = "check-decagram"
                     clr = "negative"
                     
@@ -197,15 +191,12 @@ const ScreenAbsenVv = ({navigation}) => {
     console.log('schedule', schedule)
 
     const toQrScan = () => {
+        const { mulaiWaktuMasuk, mulaiWaktuPulang, stopWaktuAbsen } = schedule
+
         let tglAbsen;
         let form;
-        const hariIni = date.format("YYYY-MM-DD")
-        if (masuk > pulang) {
-            tglAbsen = dayjs(hariIni).subtract(1, 'day').locale('id')
-        } else {
-            tglAbsen = dayjs(hariIni).locale("id")
-        }
-        tglAbsen = dayjs(tglAbsen).format("YYYY-MM-DD")
+        
+        tglAbsen = dayjs(mulaiWaktuMasuk).format("YYYY-MM-DD")
 
         if (sts === "Absen Masuk") {
             form = {
@@ -224,6 +215,7 @@ const ScreenAbsenVv = ({navigation}) => {
         }
 
         navigation.navigate(ROUTES.QR_SCAN, form)
+        // console.log(tglAbsen)
     }
 
     useEffect(() => {
@@ -232,7 +224,7 @@ const ScreenAbsenVv = ({navigation}) => {
             callFirst();
         })
         
-        console.log('useEffect', stopped)
+        console.log('useEffect', cond)
 
         return ()=> subscribe
     },[rangeMasuk,rangePulang])
@@ -246,7 +238,7 @@ const ScreenAbsenVv = ({navigation}) => {
             </TouchableOpacity> 
             {/* <Text>ScreenAbsenVv  {cond} { text }</Text> */}
             
-            {/* <AppBtn label="test" clicked={()=> saveStore('start')}  /> */}
+            {/* <AppBtn label="test" clicked={()=> saveStore('checkIn')}  /> */}
             {/* <AppBtn label="rem" color={'negative'} clicked={() => removeStore()} /> */}
             
             {status === '2' && (

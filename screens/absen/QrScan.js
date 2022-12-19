@@ -42,10 +42,10 @@ const QrScan = ({navigation, route}) => {
     // alert(`Bar code with type ${type} and data ${data} has been scanned!`);
     setMsg(null)
     setScanned(true)
-    let form = {
-      id: id,
-      qr: data
-    }
+    // let form = {
+    //   id: id,
+    //   qr: data
+    // }
     
     navigation.navigate(ROUTES.ABSEN_LOADING, { data, status, kategory_id, tanggal, jam })
        
