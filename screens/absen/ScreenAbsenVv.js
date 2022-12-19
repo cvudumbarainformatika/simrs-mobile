@@ -28,7 +28,7 @@ const ScreenAbsenVv = ({navigation}) => {
 
     const {cond, waiting} = useSelector(state => state.absen)
     const currentJadwal = useSelector((state) => getCurrentJadwal(state, date.format("dddd")))
-    // const { hari, masuk, pulang, status, kategory_id } = currentJadwal
+    const { hari, masuk, pulang, status, kategory_id } = currentJadwal
 
     const saveStore = async (txt) => {
         await AsyncStorage.setItem('condAbsen', txt)
@@ -74,10 +74,10 @@ const ScreenAbsenVv = ({navigation}) => {
     }
 
     
-        const masuk = "23:08:00"
-        const pulang = "00:00:00"
-        const kategory_id = 5
-        const status = "2"
+        // const masuk = "23:08:00"
+        // const pulang = "00:00:00"
+        // const kategory_id = 5
+        // const status = "2"
 
     const searchJadwalAndSet = () => {
 
@@ -179,11 +179,12 @@ const ScreenAbsenVv = ({navigation}) => {
                 clr = "gray-dark"
             }
 
-            // console.log('range masuk',rangeMasuk)
-            // console.log('range pulang',rangePulang)
-            // console.log('stop',stopped)
+            console.log('range masuk',rangeMasuk)
+            console.log('range pulang',rangePulang)
+            console.log('stop',stopped)
+            console.log('mulai waktu masuk', dayjs(mulaiWaktuMasuk).format("DD MMMM YYYY, HH:mm"))
+            console.log('mulai waktu pulang', dayjs(mulaiWaktuPulang).format("DD MMMM YYYY, HH:mm"))
             console.log('stop waktu absen', dayjs(stopWaktuAbsen).format("YYYY-MM-DD, HH:mm"))
-            // console.log('mulai waktu masuk', dayjs(mulaiWaktuMasuk).format("DD MMMM YYYY, HH:mm"))
         } else {
             text = 'tunggu...'
         }

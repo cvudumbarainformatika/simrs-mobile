@@ -5,16 +5,29 @@ import { AppBtn, BottomTwoBtn } from '../../components'
 import { AuthContext } from '../../context/AuthContext'
 import { PATH_IMG100 } from '../../config'
 import { ScrollView } from 'react-native-gesture-handler'
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 // import { AuthContext } from '../../context/AuthContext'
 
 const SettingsScreen = ({ navigation }) => {
   // const { logout } = useContext(AuthContext);
   const { pegawai } = useContext(AuthContext)
+
+  const {nip, nip_baru} = pegawai
   const [sheet, setSheet] = useState(false)
 
+  let nipB = "-"
+  if (nip_baru === "" || nip_baru === null) {
+    nipB = nip
+  } else {
+    nipB = nip_baru
+  }
+  
+   
+
+  console.log('nip', nipB)
 
   useEffect(() => {
-    console.log(pegawai)
+    // console.log(pegawai)
   },[])
   return (
     <View style={tw`flex-1`}>
@@ -44,7 +57,7 @@ const SettingsScreen = ({ navigation }) => {
           </View>
           <View style={tw`bg-white p-3 mt-[2]`}>
             <Text className="font-poppins text-gray text-xs">💼 Nip</Text>
-            <Text className="font-poppins ">{pegawai.nip}</Text>
+            <Text className="font-poppins ">{nipB}</Text>
           </View>
           <View style={tw`bg-white p-3 mt-[2]`}>
             <Text className="font-poppins text-gray text-xs">🏷️ Nik</Text>
@@ -58,7 +71,14 @@ const SettingsScreen = ({ navigation }) => {
             <Text className="font-poppins text-gray text-xs">📞 Telp</Text>
             <Text className="font-poppins">{ pegawai.telp }</Text>
           </View>
-
+          <TouchableOpacity
+            onPress={()=> navigation.navigate(ROUTES.SETTINGS_DETAIL, pegawai)}
+            className="bg-primary h-14 justify-center items-end">
+            <View className="mr-4 flex-row items-center">
+              <Text className="text-white">Ganti Password</Text>
+              <Icon name="chevron-right" color={'white'} size={ 32 } />
+            </View>
+          </TouchableOpacity>
 
 
 
