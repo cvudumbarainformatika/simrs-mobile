@@ -20,6 +20,8 @@ dayjs.extend(isSameOrBefore)
 dayjs.extend(isSameOrAfter)
 dayjs.extend(isBetween)
 
+
+
 const ScreenAbsenVv = ({navigation}) => {
 
     const dispatch = useDispatch();
@@ -54,15 +56,20 @@ const ScreenAbsenVv = ({navigation}) => {
         try {
             let condition = await AsyncStorage.getItem('condAbsen');
             let nJadwal = await AsyncStorage.getItem('newSchedule');
-            // console.log('condition', condition)
-            if (condition === null) { // idle
+            
+            if (condition === null) { 
                 dispatch(setCond('idle'))
                 searchJadwalAndSet()
             } else {
-
-                // console.log('oooi')
+                if (condition === 'idle') {
+                    // removeStore()
+                    searchJadwalAndSet()
+                }
                 dispatch(setCond(condition))
             }
+
+            
+            console.log('condition callFirst', condition)
 
             if (nJadwal === null) {
                 setSchedule(null)
@@ -113,8 +120,13 @@ const ScreenAbsenVv = ({navigation}) => {
             kategoryStorrage:kategoryStorrage
         }
 
-        if (cond === 'idle') saveStore('start')
         storeSchedule(newJadwals)
+
+        if (mulaiWaktuMasuk !== null) {
+            saveStore('start')
+        }
+
+        
     }
     
 
@@ -134,11 +146,15 @@ const ScreenAbsenVv = ({navigation}) => {
     // if (status === "2" || status === 2) {
     if (schedule !== null) {
         const { mulaiWaktuMasuk, mulaiWaktuPulang, stopWaktuAbsen, statusStorrage, kategoryStorrage } = schedule
-        let checkIn = dayjs(mulaiWaktuMasuk).format("DD MMM YYYY, HH:mm")
-        let checkOut = dayjs(mulaiWaktuPulang).format("DD MMM YYYY, HH:mm")
+        // let checkIn = dayjs(mulaiWaktuMasuk).format("DD MMM YYYY, HH:mm")
+        // let checkOut = dayjs(mulaiWaktuPulang).format("DD MMM YYYY, HH:mm")
 
             
         console.log('schedule Ada :', statusStorrage)
+        // if (statusStorrage === null) { //jika libur
+        //     searchJadwalAndSet()
+        // }
+
         if (statusStorrage === undefined || statusStorrage === 'undefined' || kategoryStorrage === undefined || kategoryStorrage === 'undefined') {
             setSchedule({
                 mulaiWaktuMasuk: mulaiWaktuMasuk,
@@ -193,7 +209,7 @@ const ScreenAbsenVv = ({navigation}) => {
                 setTimeout(() => {
                     navigation.navigate(ROUTES.HOME_TAB)
                 }, 1000 * 60 * 5)
-            } else {
+            } else { 
                 text = "belum saatnya absen"
                 sts = "Belum Saatnya Absen"
                 icn = "calendar-clock"
@@ -201,11 +217,15 @@ const ScreenAbsenVv = ({navigation}) => {
             }
         } else {
             // onClick()
+            
             text = "Tidak Ada Jadwal"
             sts = "Tidak Ada Jadwal"
             icn = "calendar"
             clr = "negative"
-            
+            saveStore('idle')
+            setTimeout(() => {
+                navigation.navigate(ROUTES.HOME_TAB)
+            }, 1000 * 60 * 5)
         }
             
 
@@ -232,8 +252,8 @@ const ScreenAbsenVv = ({navigation}) => {
     // }
 
     
-
-    console.log('schedule', schedule)
+    // console.log('luar', cond)
+    // console.log('schedule', schedule)
     // console.log('schedule asli', currentJadwal)
 
     const toQrScan = () => {
@@ -264,9 +284,11 @@ const ScreenAbsenVv = ({navigation}) => {
         // console.log(tglAbsen)
     }
 
+    // onMounted
     useEffect(() => {
         // if (cond==='idle') removeStore()
         setDate(dayjs().locale("id"))
+        // callFirst();
         const subscribe = navigation.addListener("focus", () => {
             callFirst();
         })
@@ -309,3 +331,6 @@ const ScreenAbsenVv = ({navigation}) => {
 }
 
 export default ScreenAbsenVv
+
+
+
