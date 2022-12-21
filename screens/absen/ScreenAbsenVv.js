@@ -15,6 +15,7 @@ import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
 import isBetween from 'dayjs/plugin/isBetween'
 import { ROUTES, tw } from '../../constants'
+import { useCallback } from 'react'
 dayjs.extend(isSameOrBefore)
 dayjs.extend(isSameOrAfter)
 dayjs.extend(isBetween)
@@ -53,11 +54,13 @@ const ScreenAbsenVv = ({navigation}) => {
         try {
             let condition = await AsyncStorage.getItem('condAbsen');
             let nJadwal = await AsyncStorage.getItem('newSchedule');
-            console.log('condition', condition)
+            // console.log('condition', condition)
             if (condition === null) { // idle
                 dispatch(setCond('idle'))
                 searchJadwalAndSet()
             } else {
+
+                // console.log('oooi')
                 dispatch(setCond(condition))
             }
 
@@ -69,7 +72,7 @@ const ScreenAbsenVv = ({navigation}) => {
             }
 
         } catch (e) {
-            console.log(`ambil kondisi Error : ${e}`)
+            console.log(`storrage Error : ${e}`)
         }
     }
 
@@ -79,36 +82,45 @@ const ScreenAbsenVv = ({navigation}) => {
         let mulaiWaktuMasuk;
         let mulaiWaktuPulang;
         let stopWaktuAbsen;
+        let statusStorrage;
+        let kategoryStorrage;
 
         if (status === "2" || status === 2) {
             mulaiWaktuMasuk = dayjs(hariIni + " " + masuk).subtract(30, 'minute').locale('id')
+            statusStorrage = status;
+            kategoryStorrage = kategory_id;
             if (masuk > pulang) {
                 mulaiWaktuPulang = dayjs(hariIni + " " + pulang).add(1, 'day').locale('id')
                 stopWaktuAbsen = dayjs(hariIni + " " + pulang).add(1, 'day').add(1, 'hour').locale('id')
             } else {
                 mulaiWaktuPulang = dayjs(hariIni + " " + pulang).locale('id')
                 stopWaktuAbsen = dayjs(hariIni + " " + pulang).add(1, 'hour').locale('id')
-                // stopWaktuAbsen = dayjs(hariIni + " " + pulang).add(1, 'm').locale('id')
-                // tglAbsen = dayjs(hariIni).locale('id')
-
             }
         } else {
-            mulaiWaktuMasuk = null,
-            mulaiWaktuPulang = null,
-            stopWaktuAbsen = null
+            mulaiWaktuMasuk = null;
+            mulaiWaktuPulang = null;
+            stopWaktuAbsen = null;
+            statusStorrage = null;
+            kategoryStorrage = null;
         }
         
 
         let newJadwals = {
             mulaiWaktuMasuk: mulaiWaktuMasuk,
             mulaiWaktuPulang: mulaiWaktuPulang,
-            stopWaktuAbsen:stopWaktuAbsen
+            stopWaktuAbsen: stopWaktuAbsen,
+            statusStorrage: statusStorrage,
+            kategoryStorrage:kategoryStorrage
         }
 
         if (cond === 'idle') saveStore('start')
         storeSchedule(newJadwals)
     }
     
+
+    const onClick = useCallback(() => {
+        removeStore()
+    }, []);
 
     let text = 'start'
     let rangeMasuk = false;
@@ -119,26 +131,41 @@ const ScreenAbsenVv = ({navigation}) => {
     let sts = ""
     let icn = "bell-ring"
     let clr = "primary"
-    if (status === "2" || status === 2) {
-        if (schedule !== null) {
-            const { mulaiWaktuMasuk, mulaiWaktuPulang, stopWaktuAbsen } = schedule
-            let checkIn = dayjs(mulaiWaktuMasuk).format("DD MMM YYYY, HH:mm")
-            let checkOut = dayjs(mulaiWaktuPulang).format("DD MMM YYYY, HH:mm")
+    // if (status === "2" || status === 2) {
+    if (schedule !== null) {
+        const { mulaiWaktuMasuk, mulaiWaktuPulang, stopWaktuAbsen, statusStorrage, kategoryStorrage } = schedule
+        let checkIn = dayjs(mulaiWaktuMasuk).format("DD MMM YYYY, HH:mm")
+        let checkOut = dayjs(mulaiWaktuPulang).format("DD MMM YYYY, HH:mm")
 
             
-            rangeMasuk = dayjs().isBetween(dayjs(mulaiWaktuMasuk), dayjs(mulaiWaktuPulang))
-            rangePulang = dayjs().isBetween(dayjs(mulaiWaktuPulang), dayjs(stopWaktuAbsen))
-            stopped = dayjs().isSameOrAfter(dayjs(stopWaktuAbsen))
+        console.log('schedule Ada :', statusStorrage)
+        if (statusStorrage === undefined || statusStorrage === 'undefined' || kategoryStorrage === undefined || kategoryStorrage === 'undefined') {
+            setSchedule({
+                mulaiWaktuMasuk: mulaiWaktuMasuk,
+                mulaiWaktuPulang: mulaiWaktuPulang,
+                stopWaktuAbsen: stopWaktuAbsen,
+                statusStorrage: status,
+                kategoryStorrage: kategory_id
+            })
+
+            console.log('schedule update :', statusStorrage)
+        }
+
+            
+        rangeMasuk = dayjs().isBetween(dayjs(mulaiWaktuMasuk), dayjs(mulaiWaktuPulang))
+        rangePulang = dayjs().isBetween(dayjs(mulaiWaktuPulang), dayjs(stopWaktuAbsen))
+        stopped = dayjs().isSameOrAfter(dayjs(stopWaktuAbsen))
            
            
 
+        if (statusStorrage === 2 || statusStorrage === '2') {
             if (rangeMasuk) {
                 text = "waktu masuk"
                 if (cond === 'checkIn') {
                     sts = "Sudah Absen Masuk"
                     icn = "check-decagram"
                     clr = "primary"
-                    
+                        
                 } else {
                     sts = "Absen Masuk"
                     icn = "bell-ring"
@@ -150,7 +177,7 @@ const ScreenAbsenVv = ({navigation}) => {
                     sts = "Sudah Absen Pulang"
                     icn = "check-decagram"
                     clr = "negative"
-                    
+                        
                 } else {
                     sts = "Absen Pulang"
                     icn = "bell-ring"
@@ -172,26 +199,45 @@ const ScreenAbsenVv = ({navigation}) => {
                 icn = "calendar-clock"
                 clr = "gray-dark"
             }
-
-            console.log('range masuk',rangeMasuk)
-            console.log('range pulang',rangePulang)
-            console.log('stop',stopped)
-            console.log('mulai waktu masuk', dayjs(mulaiWaktuMasuk).format("DD MMMM YYYY, HH:mm"))
-            console.log('mulai waktu pulang', dayjs(mulaiWaktuPulang).format("DD MMMM YYYY, HH:mm"))
-            console.log('stop waktu absen', dayjs(stopWaktuAbsen).format("YYYY-MM-DD, HH:mm"))
         } else {
-            text = 'tunggu...'
+            // onClick()
+            text = "Tidak Ada Jadwal"
+            sts = "Tidak Ada Jadwal"
+            icn = "calendar"
+            clr = "negative"
+            
         }
-    } else {
-        text = "libur"
+            
+
+        console.log('range masuk', rangeMasuk)
+        console.log('range pulang', rangePulang)
+        console.log('stop', stopped)
+        console.log('mulai waktu masuk', dayjs(mulaiWaktuMasuk).format("DD MMMM YYYY, HH:mm"))
+        console.log('mulai waktu pulang', dayjs(mulaiWaktuPulang).format("DD MMMM YYYY, HH:mm"))
+        console.log('stop waktu absen', dayjs(stopWaktuAbsen).format("YYYY-MM-DD, HH:mm"))
+        console.log('condition', cond)
     }
+        // } else {
+        //     removeStore()
+        //     setTimeout(() => {
+        //         navigation.navigate(ROUTES.HOME_TAB)
+        //     }, 1000 * 60 * 5)
+        //     text = 'tunggu...'
+        //     sts = "Ada yang salah"
+        //     icn = "alert-octagram-outline"
+        //     clr = "negative"
+        // }
+    // } else {
+    //     text = "libur"
+    // }
 
-
+    
 
     console.log('schedule', schedule)
+    // console.log('schedule asli', currentJadwal)
 
     const toQrScan = () => {
-        const { mulaiWaktuMasuk, mulaiWaktuPulang, stopWaktuAbsen } = schedule
+        const { mulaiWaktuMasuk, mulaiWaktuPulang, stopWaktuAbsen, statusStorrage, kategoryStorrage } = schedule
 
         let tglAbsen;
         let form;
@@ -203,14 +249,14 @@ const ScreenAbsenVv = ({navigation}) => {
                 tanggal: tglAbsen,
                 jam: date.format("HH:mm:ss"),
                 status: "masuk",
-                kategory_id:kategory_id
+                kategory_id:kategoryStorrage
             }
         } else {
             form = {
                 tanggal: tglAbsen,
                 jam: date.format("HH:mm:ss"),
                 status: "pulang",
-                kategory_id:kategory_id
+                kategory_id:kategoryStorrage
             }
         }
 
@@ -219,12 +265,14 @@ const ScreenAbsenVv = ({navigation}) => {
     }
 
     useEffect(() => {
+        // if (cond==='idle') removeStore()
         setDate(dayjs().locale("id"))
         const subscribe = navigation.addListener("focus", () => {
             callFirst();
         })
         
         console.log('useEffect', cond)
+        console.log('useEffect', currentJadwal)
 
         return ()=> subscribe
     },[rangeMasuk,rangePulang])
@@ -240,29 +288,21 @@ const ScreenAbsenVv = ({navigation}) => {
             
             {/* <AppBtn label="test" clicked={()=> saveStore('checkIn')}  /> */}
             {/* <AppBtn label="rem" color={'negative'} clicked={() => removeStore()} /> */}
-            
-            {status === '2' && (
-                <>
-                    <Icon name={icn} color={tw.color(clr)} size={80} />
-                    <Text className={`pt-1 text-${clr} font-poppins`}>{sts}</Text>
-                    {(sts === "Absen Masuk" || sts === "Absen Pulang") && (
-                      <TouchableOpacity
-                          className="w-18 h-18 bg-dark overflow-hidden absolute bottom-10 rounded-full"
-                          onPress={()=> toQrScan()}
-                      >
-                          <View className="justify-center items-center self-center h-18 p-4">
-                              <Icon name="qrcode-scan" color={'white'} size={32} />
-                          </View>
-                      </TouchableOpacity>
-                    )}
-                  
-                </>
+
+
+
+            <Icon name={icn} color={tw.color(clr)} size={80} />
+            <Text className={`pt-1 text-${clr} font-poppins`}>{sts}</Text>
+            {(sts === "Absen Masuk" || sts === "Absen Pulang") && (
+                <TouchableOpacity
+                    className="w-18 h-18 bg-dark overflow-hidden absolute bottom-10 rounded-full"
+                    onPress={()=> toQrScan()}
+                >
+                    <View className="justify-center items-center self-center h-18 p-4">
+                        <Icon name="qrcode-scan" color={'white'} size={32} />
+                    </View>
+                </TouchableOpacity>
             )}
-            {status === '1' &&(<View className="self-center justify-center items-center">
-              <Icon name="calendar" color={tw.color("negative")} size={80} />
-              <Text className={`pt-1 text-negative font-poppins`}>Tidak Ada Jadwal</Text>
-              {/* <Text>{text}</Text> */}
-          </View>)}
         </View> 
     
   )
