@@ -3,7 +3,7 @@ import React from 'react'
 import { useState } from 'react'
 import { AppBtn, AppLoader } from '../../components'
 import { useDispatch, useSelector } from 'react-redux'
-import { setCond, setIsActive } from '../../redux/features/jadwal/absenReducer'
+import { setCond, setIsActive, setWaiting } from '../../redux/features/jadwal/absenReducer'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useEffect } from 'react'
@@ -84,7 +84,8 @@ const ScreenAbsenVv = ({navigation}) => {
     }
 
     const searchJadwalAndSet = () => {
-
+        
+        dispatch(setWaiting(true))
         const hariIni = date.format("YYYY-MM-DD")
         let mulaiWaktuMasuk;
         let mulaiWaktuPulang;
@@ -124,9 +125,11 @@ const ScreenAbsenVv = ({navigation}) => {
 
         if (mulaiWaktuMasuk !== null) {
             saveStore('start')
+            dispatch(setWaiting(false))
         }
 
         
+        dispatch(setWaiting(false))
     }
     
 
@@ -229,13 +232,13 @@ const ScreenAbsenVv = ({navigation}) => {
         }
             
 
-        console.log('range masuk', rangeMasuk)
-        console.log('range pulang', rangePulang)
-        console.log('stop', stopped)
-        console.log('mulai waktu masuk', dayjs(mulaiWaktuMasuk).format("DD MMMM YYYY, HH:mm"))
-        console.log('mulai waktu pulang', dayjs(mulaiWaktuPulang).format("DD MMMM YYYY, HH:mm"))
-        console.log('stop waktu absen', dayjs(stopWaktuAbsen).format("YYYY-MM-DD, HH:mm"))
-        console.log('condition', cond)
+        // console.log('range masuk', rangeMasuk)
+        // console.log('range pulang', rangePulang)
+        // console.log('stop', stopped)
+        // console.log('mulai waktu masuk', dayjs(mulaiWaktuMasuk).format("DD MMMM YYYY, HH:mm"))
+        // console.log('mulai waktu pulang', dayjs(mulaiWaktuPulang).format("DD MMMM YYYY, HH:mm"))
+        // console.log('stop waktu absen', dayjs(stopWaktuAbsen).format("YYYY-MM-DD, HH:mm"))
+        // console.log('condition', cond)
     }
         // } else {
         //     removeStore()

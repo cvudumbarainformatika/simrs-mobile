@@ -62,6 +62,12 @@ export const AuthProvider = ({ children }) => {
                 setUserId(e.response.data.id)
                 return
             }
+            if (err.response.status === 500) {
+                // console.log(e.response)
+                setMsgError('Server tidak Merespon .. Atau cek jaringan / internet Anda')
+                // setUserId(e.response.data.id)
+                return
+            }
         })
     }
 
