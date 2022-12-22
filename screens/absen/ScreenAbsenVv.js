@@ -99,10 +99,10 @@ const ScreenAbsenVv = ({navigation}) => {
             kategoryStorrage = kategory_id;
             if (masuk > pulang) {
                 mulaiWaktuPulang = dayjs(hariIni + " " + pulang).add(1, 'day').locale('id')
-                stopWaktuAbsen = dayjs(hariIni + " " + pulang).add(1, 'day').add(1, 'hour').locale('id')
+                stopWaktuAbsen = dayjs(hariIni + " " + pulang).add(1, 'day').add(2, 'hour').locale('id')
             } else {
                 mulaiWaktuPulang = dayjs(hariIni + " " + pulang).locale('id')
-                stopWaktuAbsen = dayjs(hariIni + " " + pulang).add(1, 'hour').locale('id')
+                stopWaktuAbsen = dayjs(hariIni + " " + pulang).add(2, 'hour').locale('id')
             }
         } else {
             mulaiWaktuMasuk = null;
