@@ -94,7 +94,7 @@ export const getAbsenTodayAsync = createAsyncThunk(
         // console.log('response absen today : ', response.data);
         return response.data;
     } catch (error) {
-        console.log('reducer tangkap :',error);
-        // return error.response.status
+        // console.log('reducer tangkap :',error);
+        return error.response
     }
 });

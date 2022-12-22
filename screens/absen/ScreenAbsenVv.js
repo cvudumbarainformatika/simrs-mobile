@@ -26,10 +26,11 @@ const ScreenAbsenVv = ({navigation}) => {
 
     const dispatch = useDispatch();
     const [date, setDate] = useState(dayjs().locale("id"))
+    const [waiting, setWaiting] = useState(false)
     // const [cond, setCond] = useState('idle') // idle || start
     const [schedule, setSchedule] = useState(null)
 
-    const {cond, waiting} = useSelector(state => state.absen)
+    const {cond} = useSelector(state => state.absen)
     const currentJadwal = useSelector((state) => getCurrentJadwal(state, date.format("dddd")))
     const { hari, masuk, pulang, status, kategory_id } = currentJadwal
 
@@ -47,45 +48,50 @@ const ScreenAbsenVv = ({navigation}) => {
         await AsyncStorage.removeItem('newSchedule');
         dispatch(setCond('idle'))
         setSchedule('null')
-
-        // currentJadwal
+    }
+    const removeSchedule = async () => {
+        await AsyncStorage.removeItem('newSchedule');
+        setSchedule('null')
     }
 
 
-    const callFirst = async () => {
-        try {
-            let condition = await AsyncStorage.getItem('condAbsen');
-            let nJadwal = await AsyncStorage.getItem('newSchedule');
+    // const callFirst = async () => {
+    //     try {
+    //         let condition = await AsyncStorage.getItem('condAbsen');
+    //         let nJadwal = await AsyncStorage.getItem('newSchedule');
             
-            if (condition === null) { 
-                dispatch(setCond('idle'))
-                searchJadwalAndSet()
-            } else {
-                if (condition === 'idle') {
-                    // removeStore()
-                    searchJadwalAndSet()
-                }
-                dispatch(setCond(condition))
-            }
+    //         if (condition === null) { 
+    //             dispatch(setCond('idle'))
+    //             searchJadwalAndSet()
+    //         } else {
+    //             if (condition === 'idle') {
+    //                 // removeStore()
+    //                 searchJadwalAndSet()
+    //             }
+    //             dispatch(setCond(condition))
+    //         }
 
             
-            console.log('condition callFirst', condition)
+    //         console.log('condition callFirst', condition)
 
-            if (nJadwal === null) {
-                setSchedule(null)
-            } else {
-                nJadwal = JSON.parse(nJadwal)
-                setSchedule(nJadwal)
-            }
+    //         if (nJadwal === null) {
+    //             setSchedule(null)
+    //         } else {
+    //             nJadwal = JSON.parse(nJadwal)
+    //             setSchedule(nJadwal)
+    //         }
 
-        } catch (e) {
-            console.log(`storrage Error : ${e}`)
-        }
-    }
+    //     } catch (e) {
+    //         console.log(`storrage Error : ${e}`)
+    //     }
+    // }
 
-    const searchJadwalAndSet = () => {
+    const searchJadwalAndSet = async () => {
         
-        dispatch(setWaiting(true))
+        setWaiting(true)
+        await AsyncStorage.removeItem('newSchedule');
+        
+
         const hariIni = date.format("YYYY-MM-DD")
         let mulaiWaktuMasuk;
         let mulaiWaktuPulang;
@@ -121,15 +127,18 @@ const ScreenAbsenVv = ({navigation}) => {
             kategoryStorrage:kategoryStorrage
         }
 
-        storeSchedule(newJadwals)
+        await AsyncStorage.setItem('newSchedule', JSON.stringify(newJadwals))
 
         if (mulaiWaktuMasuk !== null) {
             saveStore('start')
-            dispatch(setWaiting(false))
         }
-
+        // setTimeout(() => {
+        //     setWaiting(false)
+        // }, 500)
         
-        dispatch(setWaiting(false))
+        setWaiting(false)
+        // console.log('searchJadwalAndSet :', newJadwals)
+        
     }
     
 
@@ -166,15 +175,17 @@ const ScreenAbsenVv = ({navigation}) => {
                 statusStorrage: status,
                 kategoryStorrage: kategory_id
             })
-
-            console.log('schedule update :', statusStorrage)
         }
 
+        console.log('schedule update :', statusStorrage)
             
         rangeMasuk = dayjs().isBetween(dayjs(mulaiWaktuMasuk), dayjs(mulaiWaktuPulang))
         rangePulang = dayjs().isBetween(dayjs(mulaiWaktuPulang), dayjs(stopWaktuAbsen))
         stopped = dayjs().isSameOrAfter(dayjs(stopWaktuAbsen))
-           
+         
+        console.log('range masuk', rangeMasuk)
+        console.log('range pulang', rangePulang)
+        console.log('stop', stopped)
            
 
         if (statusStorrage === 2 || statusStorrage === '2') {
@@ -207,38 +218,35 @@ const ScreenAbsenVv = ({navigation}) => {
                 sts = "Absen Complete"
                 icn = "check-decagram"
                 clr = "secondary"
-
-                removeStore()
-                setTimeout(() => {
-                    navigation.navigate(ROUTES.HOME_TAB)
-                }, 1000 * 60 * 5)
+                saveStore('idle')
+                // removeStore()
+                // setTimeout(() => {
+                //     navigation.navigate(ROUTES.HOME_TAB)
+                // }, 1000 * 60 * 5)
             } else { 
                 text = "belum saatnya absen"
                 sts = "Belum Saatnya Absen"
                 icn = "calendar-clock"
                 clr = "gray-dark"
+                saveStore('idle')
             }
         } else {
-            // onClick()
-            
             text = "Tidak Ada Jadwal"
             sts = "Tidak Ada Jadwal"
             icn = "calendar"
             clr = "negative"
             saveStore('idle')
-            setTimeout(() => {
-                navigation.navigate(ROUTES.HOME_TAB)
-            }, 1000 * 60 * 5)
+            // setTimeout(() => {
+            //     navigation.navigate(ROUTES.HOME_TAB)
+            // }, 1000 * 60 * 5)
         }
             
 
-        // console.log('range masuk', rangeMasuk)
-        // console.log('range pulang', rangePulang)
-        // console.log('stop', stopped)
+        
         // console.log('mulai waktu masuk', dayjs(mulaiWaktuMasuk).format("DD MMMM YYYY, HH:mm"))
         // console.log('mulai waktu pulang', dayjs(mulaiWaktuPulang).format("DD MMMM YYYY, HH:mm"))
         // console.log('stop waktu absen', dayjs(stopWaktuAbsen).format("YYYY-MM-DD, HH:mm"))
-        // console.log('condition', cond)
+        // console.log('condition terbaru: ', cond)
     }
         // } else {
         //     removeStore()
@@ -288,24 +296,58 @@ const ScreenAbsenVv = ({navigation}) => {
     }
 
     // onMounted
+    // useEffect(() => {
+    //     setDate(dayjs().locale("id"))
+    //     const subscribe = navigation.addListener("focus", () => {
+    //         callFirst();
+    //     })
+        
+    //     console.log('useEffect', cond)
+    //     console.log('useEffect', currentJadwal)
+
+    //     return ()=> subscribe
+    // }, [rangeMasuk, rangePulang])
+
+    const callFirst = async () => {
+                try {
+                    let condition = await AsyncStorage.getItem('condAbsen');
+
+                    if (condition === null) {
+                        searchJadwalAndSet()
+                    } else if(condition === 'idle') {
+                        // removeSchedule()
+                        searchJadwalAndSet()
+                    } else {
+                        dispatch(setCond(condition))
+                    }
+                    
+                    console.log('condition callFirst', condition)
+
+                } catch (e) {
+                    console.log(`storrage Error : ${e}`)
+                }
+            }
+    
+
     useEffect(() => {
-        // if (cond==='idle') removeStore()
         setDate(dayjs().locale("id"))
-        // callFirst();
         const subscribe = navigation.addListener("focus", () => {
             callFirst();
         })
         
-        console.log('useEffect', cond)
+        // console.log('useEffect', cond)
         console.log('useEffect', currentJadwal)
 
-        return ()=> subscribe
-    },[rangeMasuk,rangePulang])
+        return () => {
+            subscribe
+        }
+        
+    },[rangeMasuk, rangePulang])
 
 
     return (
         <View className="flex-1 justify-center items-center">
-            <AppLoader visible={waiting} />
+            
              <TouchableOpacity className="absolute top-10 right-4" onPress={()=> navigation.navigate(ROUTES.HOME_TAB)}>
                 <Icon name="close" color="black" size={42} />
             </TouchableOpacity> 
@@ -315,9 +357,22 @@ const ScreenAbsenVv = ({navigation}) => {
             {/* <AppBtn label="rem" color={'negative'} clicked={() => removeStore()} /> */}
 
 
+            {waiting && (
+                <>
+                    <Icon name={'calendar-clock'} color={tw.color('gray')} size={80} />
+                    <Text className={`pt-1 text-gray font-poppins`}>Harap tunggu ...</Text>
+                </>
+            )}
 
-            <Icon name={icn} color={tw.color(clr)} size={80} />
-            <Text className={`pt-1 text-${clr} font-poppins`}>{sts}</Text>
+            {!waiting && (
+                 <>
+                    <Icon name={icn} color={tw.color(clr)} size={80} />
+                    <Text className={`pt-1 text-${clr} font-poppins`}>{sts}</Text>
+                </>
+            )}
+
+            
+            
             {(sts === "Absen Masuk" || sts === "Absen Pulang") && (
                 <TouchableOpacity
                     className="w-18 h-18 bg-dark overflow-hidden absolute bottom-10 rounded-full"
