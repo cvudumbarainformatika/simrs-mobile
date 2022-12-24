@@ -49,7 +49,9 @@
     "twrnc": "^3.4.1",
     "expo-updates": "~0.14.7",
     "expo-splash-screen": "~0.16.2",
-    "expo-notifications": "~0.16.1"
+    "expo-notifications": "~0.16.1",
+    "expo-camera": "~12.4.0",
+    "expo-face-detector": "~11.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

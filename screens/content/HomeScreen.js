@@ -66,10 +66,16 @@ const HomeScreen = () => {
     
   }, [navigation])
 
+  // if (loading) {
+  //   return (
+  //      <AppLoader visible={loading} />
+  //   )
+  // }
+
   return (
     <View style={tw`flex-1 bg-gray-light`}>
       {/* <ModalPengaturanJadwal visible={config} /> */}
-      <AppLoader visible={loading} />
+     
       {/* <GradientTop  /> */}
       <HeaderUser bellClick={() => alert(`ini alert percobaan`)} />
       {/* <AppBtn label="MM" clicked={()=> navigation.navigate(ROUTES.SET_JADWAL_AWAL, {jadwals})} /> */}

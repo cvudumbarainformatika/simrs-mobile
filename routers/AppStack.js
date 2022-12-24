@@ -31,6 +31,10 @@ const AppStack = () => {
   }, [jadwals.length])
 
   const Stack = createStackNavigator()
+
+
+  
+
   return (
     <>
       {loading && (<AppLoaderAnim visible={loading} />)}

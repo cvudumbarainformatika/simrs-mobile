@@ -78,6 +78,7 @@ export const getKategoriesAscync = createAsyncThunk(
             const resp = await api.get('/v2/absensi/jadwal/kategori')
             return resp.data
         } catch (error) {
+            console.log(error)
             return error.response
         }
      

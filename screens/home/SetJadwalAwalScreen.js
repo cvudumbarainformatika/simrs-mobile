@@ -58,9 +58,16 @@ const SetJadwalAwalScreen = ({ navigation }) => {
     },[kategories.length])
 
     
+  // if (loading) {
+  //   return (
+  //      <AppLoaderAnim visible={loading} />
+  //   )
+  // }
+  
+  
   return (
     <ScrollView contentContainerStyle={tw`flex-1`}>
-          <AppLoader visible={loading} />
+          
           <LinearGradient 
             className="flex-1 justify-center items-center"
             colors={[tw.color('secondary'), tw.color('primary')]}

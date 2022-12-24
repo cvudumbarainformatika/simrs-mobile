@@ -99,7 +99,6 @@ const BottomTabNavigator = () => {
       <Tab.Screen name={ROUTES.JADWAL_TAB} component={JadwalNavigator}/>
       <Tab.Screen name={ROUTES.ABSEN_TAB} component={AbsenNavigator}
         options={{
-          // unmountOnBlur:true,
           tabBarIcon: ({ focused }) => (
             <Icon name={'qrcode-scan'} size={32} color={`${ focused? tw.color('gray-light') : tw.color('gray') }`} />
           ),

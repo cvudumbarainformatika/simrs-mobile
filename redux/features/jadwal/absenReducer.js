@@ -22,7 +22,8 @@ const initialState = {
     isAbsen: false,
     qrCode: null,
     
-    cond:'idle' // idle || start || checkIn || checkOut
+    cond: 'idle', // idle || start || checkIn || checkOut
+    schedule: null
     
 }
 
@@ -35,7 +36,8 @@ export const absenReducer = createSlice({
         setIsDone: (state, action) => { state.isDone = action.payload },
         setIsAbsen: (state, action) => { state.isAbsen = action.payload },
         setInterv: (state, action) => { state.interv = action.payload },
-        setCond: (state, action) => {state.cond = action.payload}
+        setCond: (state, action) => { state.cond = action.payload },
+        setSchedule:(state, action) => { state.schedule = action.payload }
     },
 
 
@@ -78,7 +80,7 @@ export const absenReducer = createSlice({
 }) 
 
 
-export const { setId, setIntrv, setWaiting, setIsDone, setIsAbsen, setCond } = absenReducer.actions;
+export const { setId, setIntrv, setWaiting, setIsDone, setIsAbsen, setCond, setSchedule } = absenReducer.actions;
 
 export default absenReducer.reducer;
 

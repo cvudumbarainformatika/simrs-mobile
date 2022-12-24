@@ -38,6 +38,8 @@ export const jadwalsReducer = createSlice({
         setTotalJam: (state) => state.jadwals.map(x => x.status === '2' || x.status === 2 ? x.jam : 0).reduce((r, x) => r + x, 0),
         setTotalMenit: (state) => state.jadwals.map(x => x.status === '2' || x.status === 2 ? x.menit : 0).reduce((r, x) => r + x, 0)
 
+        
+
     },
     extraReducers: (builder) => {
     
@@ -71,8 +73,10 @@ export const jadwalsReducer = createSlice({
             state.error = null;
         })
             .addCase(updateJadwalsAsync.fulfilled, (state, action) => {
-            state.jadwals = [...state.jadwals]
-            state.jadwals = state.jadwals.map(x => x.id === action.payload.id ? x = action.payload : x)
+                let newJadwals = [...state.jadwals]
+                state.jadwals = newJadwals.map(x => x.id === action.payload.id ? x = action.payload : x)
+            // state.jadwals = [...state.jadwals]
+            // state.jadwals = state.jadwals.map(x => x.id === action.payload.id ? x = action.payload : x)
             
             state.libur = action.payload.status === '1' || action.payload.status === 1 ? state.libur + 1 : state.libur - 1
                 state.masuk = action.payload.status === '1' || action.payload.status === 1 ? state.masuk - 1 : state.masuk + 1
@@ -128,7 +132,7 @@ export const updateJadwalsAsync = createAsyncThunk(
   async (form) => {
     try {
         const response = await api.post('/v2/absensi/jadwal/update', form);
-        // console.log('response',response.data.data);
+        console.log('response update jadwals',response.data.data);
       return response.data.data;
     } catch (error) {
         console.error(error);

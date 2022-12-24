@@ -95,7 +95,7 @@ export const AuthProvider = ({ children }) => {
         }).catch(err => {
             console.log('me :', err)
             removeToken()
-            // setIsLoading(false)
+            
         })
     }
 
