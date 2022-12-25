@@ -1,12 +1,13 @@
 import { View, Text, Image } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { AppBtn, AppConfirm, AppLoader } from '../../components'
 import { IMGS, ROUTES, tw } from '../../constants'
 import { useDispatch } from 'react-redux'
-import { getAbsenTodayAsync, setCond } from '../../redux/features/jadwal/absenReducer'
+// import { getAbsenTodayAsync, setCond } from '../../redux/features/jadwal/absenReducer'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { api } from '../../helpers/axiosInterceptor'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { AbsenContext } from '../../context/AbsenContext'
 
 const LoadingAbsen = ({ navigation, route }) => {
   
@@ -15,6 +16,8 @@ const LoadingAbsen = ({ navigation, route }) => {
   const [waiting, setWaiting] = useState(false)
   const [msg, setMsg] = useState(null)
   const [isError, setIsError] = useState(false)
+
+  const { saveStore } = useContext(AbsenContext)
 
   // console.log(route)
 
@@ -30,15 +33,20 @@ const LoadingAbsen = ({ navigation, route }) => {
       status: status,
       kategory_id:kategory_id
     }
+
+    // console.log('form ... ',form)
+    // setMsg('Absensi Telah Success terkirim, Terimakasih ...')
+    // setWaiting(false)
+
     await api.post('/v2/absensi/qr/scan2', form).then((response) => {
-      setWaiting(false)
       status === 'masuk'? saveStore('checkIn') : saveStore('checkOut')
       setMsg('Absensi Telah Success terkirim, Terimakasih ...')
+      setWaiting(false)
     }).catch(error => {
       console.log('absen error :', error.response);
-      setWaiting(false)
       setIsError(true)
       setMsg('Maaf Ada Kesalahan, Harap Ulangi')
+      setWaiting(false)
     })
   }
 
@@ -47,10 +55,10 @@ const LoadingAbsen = ({ navigation, route }) => {
     navigation.navigate(ROUTES.QR_SCAN)
   }
 
-  const saveStore = async (txt) => {
-        await AsyncStorage.setItem('condAbsen', txt)
-        dispatch(setCond(txt))
-    }
+  // const saveStore = async (txt) => {
+  //       await AsyncStorage.setItem('condAbsen', txt)
+  //       dispatch(setCond(txt))
+  //   }
 
   useEffect(() => {
     (() => {
@@ -58,24 +66,19 @@ const LoadingAbsen = ({ navigation, route }) => {
       })()
     },[])
   return (
-    <View className="flex-1 justify-center items-center">
+    <View className="flex-1 justify-center items-center p-10">
       <AppLoader visible={waiting} />
-      {/* <AppConfirm visible={msg !== null} msg={msg} status="Error"
-        onOk={() => scanAgain()}
-        onDismiss={() => navigation.navigate(ROUTES.SCREEN_ABSEN_AWAL)}
-        labelBtnBack="Kembali" labelBtnOk='Ok'
-      /> */}
       {isError ? (
       <Icon name="alert-octagram-outline" color={tw.color('negative')} size={80} />
       ) : (
           <Image
-            style={tw.style('w-48 h-64')}
+            className="w-28 h-36"
             source={IMGS.madSalehMinum}
           /> 
       )}
       
-      <View className="my-4">
-        <Text className={`font-poppins ${isError? 'text-negative': ''}`} >{ msg }</Text>
+      <View className="my-8">
+        <Text className={`font-poppins text-center ${isError? 'text-negative': ''}`} >{ msg }</Text>
       </View>
       <AppBtn color={`${isError? 'negative':'primary'}`} label="Kembali" clicked={()=>navigation.navigate(ROUTES.SCREEN_ABSEN_AWAL)} />
     </View>

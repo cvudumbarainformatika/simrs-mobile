@@ -38,36 +38,50 @@ export const AuthProvider = ({ children }) => {
             setIsLoading(false)
             // console.log(token)
         }).catch(e => {
-            // if (e.response) {
-            //     console.log(e.response.data);
-            //     console.log(e.response.status);
-            //     console.log(e.response.headers);
-            // }
             const err = e
             console.log('auth context : ', err);
-            setIsLoading(false)
-            setAlerts(true)
             
-            if (err.response.status === 406) {
-                setMsgError('Maaf, Kamu sudah terdaftar pada device lain ... Harap menghubungi admin untuk mengganti device')
-                return
-            }
-            if (err.response.status === 409) {
-                setMsgError('Username dan Password Tidak Valid !')
-                return
-            }
-            if (err.response.status === 410) {
-                // console.log(e.response)
-                setMsgOk('Klik OK untuk ganti device')
-                setUserId(e.response.data.id)
-                return
-            }
-            if (err.response.status === 500) {
-                // console.log(e.response)
+            
+            if (err.response) {
+                setIsLoading(false)
+               if (err.response.status === 406) {
+                    setMsgError('Maaf, Kamu sudah terdaftar pada device lain ... Harap menghubungi admin untuk mengganti device')
+                    setAlerts(true)
+                    return
+                }
+                if (err.response.status === 409) {
+                    setMsgError('Username dan Password Tidak Valid !')
+                    setAlerts(true)
+                    return
+                }
+                if (err.response.status === 410) {
+                    // console.log(e.response)
+                    setMsgOk('Klik OK untuk ganti device')
+                    setUserId(e.response.data.id)
+                    setAlerts(true)
+                    return
+                }
+                if (err.response.status === 500) {
+                    // console.log(e.response)
+                    setMsgError('Server tidak Merespon .. Atau cek jaringan / internet Anda')
+                    setAlerts(true)
+                    // setUserId(e.response.data.id)
+                    return
+                } 
+            } else if (err.request) {
+                // The request was made but no response was received
+                // Error details are stored in err.reqeust
+                console.log(err.request);
                 setMsgError('Server tidak Merespon .. Atau cek jaringan / internet Anda')
-                // setUserId(e.response.data.id)
-                return
+                setAlerts(true)
+            } else {
+                // Some other errors
+                console.log('Error', err.message);
+                setMsgError('Server tidak Merespon .. Atau cek jaringan / internet Anda')
+                setAlerts(true)
             }
+
+            
         })
     }
 
@@ -95,6 +109,47 @@ export const AuthProvider = ({ children }) => {
         }).catch(err => {
             console.log('me :', err)
             removeToken()
+
+
+            if (err.response) {
+                setIsLoading(false)
+               if (err.response.status === 406) {
+                    setMsgError('Maaf, Kamu sudah terdaftar pada device lain ... Harap menghubungi admin untuk mengganti device')
+                    setAlerts(true)
+                    return
+                }
+                if (err.response.status === 409) {
+                    setMsgError('Username dan Password Tidak Valid !')
+                    setAlerts(true)
+                    return
+                }
+                if (err.response.status === 410) {
+                    // console.log(e.response)
+                    setMsgOk('Klik OK untuk ganti device')
+                    setUserId(e.response.data.id)
+                    setAlerts(true)
+                    return
+                }
+                if (err.response.status === 500) {
+                    // console.log(e.response)
+                    setMsgError('Server tidak Merespon .. Atau cek jaringan / internet Anda')
+                    setAlerts(true)
+                    // setUserId(e.response.data.id)
+                    return
+                } 
+            } else if (err.request) {
+                // The request was made but no response was received
+                // Error details are stored in err.reqeust
+                console.log(err.request);
+                setMsgError('Server tidak Merespon .. Atau cek jaringan / internet Anda')
+                setAlerts(true)
+            } else {
+                // Some other errors
+                console.log('Error', err.message);
+                setMsgError('Server tidak Merespon .. Atau cek jaringan / internet Anda')
+                setAlerts(true)
+            }
+
             
         })
     }

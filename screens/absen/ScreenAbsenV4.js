@@ -1,10 +1,11 @@
 
 import React, { useContext, useState } from 'react'
 import { View, Text, TouchableOpacity } from 'react-native'
-import { AppAlert, AppLoader } from '../../components'
+import { AppAlert, AppBtn, AppLoader } from '../../components'
 import { ROUTES, tw } from '../../constants'
 import { AbsenContext } from '../../context/AbsenContext'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import { useFocusEffect } from '@react-navigation/native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import dayjs from 'dayjs'
@@ -66,12 +67,17 @@ const ScreenAbsenV4 = ({ navigation }) => {
         // console.log(form)
     }
 
+    function toFaceScan(sts) {
+        navigation.navigate(ROUTES.FACE_SCAN)
+    }
+
 
     
     function renderHeader() {
-
+        let libur = false;
+        libur = statusStorrage === "1" || statusStorrage === 1 || statusStorrage === null
         
-        console.log('renderHeader...', mulaiWaktuMasuk)
+        console.log('renderHeader...', libur)
 
         return (
             <View className="px-3 pt-8 pb-2 bg-white">
@@ -88,7 +94,8 @@ const ScreenAbsenV4 = ({ navigation }) => {
                         </TouchableOpacity>
                     </View>
                 </View>
-                <View className="mt-2 mx-2">
+                {!libur && (
+                    <View className="mt-2 mx-2">
                     <View className="flex-row justify-between">
                         <View>
                             <Text className="font-poppins text-xs text-gray">Mulai Absen Masuk</Text>
@@ -100,6 +107,7 @@ const ScreenAbsenV4 = ({ navigation }) => {
                         </View>
                     </View>
                 </View>
+                )}
             </View>
         )
     }
@@ -113,10 +121,11 @@ const ScreenAbsenV4 = ({ navigation }) => {
 
         // console.log('schedule update :', schedule)
         // console.log('updateJadwal', schedule.mulaiWaktuMasuk)
-        libur = statusStorrage === "1" || statusStorrage === 1
+        libur = statusStorrage === "1" || statusStorrage === 1 || statusStorrage=== null
         rangeMasuk = dayjs().isBetween(dayjs(mulaiWaktuMasuk), dayjs(mulaiWaktuPulang))
-        rangePulang = dayjs().isBetween(dayjs(mulaiWaktuPulang), dayjs(stopWaktuAbsen))
-        stopped = dayjs().isSameOrAfter(dayjs(stopWaktuAbsen))
+        rangePulang = dayjs().isBetween(dayjs(mulaiWaktuPulang), dayjs(stopWaktuAbsen)) // waktunya 2 jam
+        // stopped = dayjs().isSameOrAfter(dayjs(stopWaktuAbsen)) 
+        stopped = dayjs().isBetween(dayjs(stopWaktuAbsen), dayjs(stopWaktuAbsen).add(5, 'minute'));
 
         console.log('range masuk', rangeMasuk)
         console.log('range pulang', rangePulang)
@@ -139,23 +148,23 @@ const ScreenAbsenV4 = ({ navigation }) => {
                     icn = "check-decagram"
                     clr = "primary"
                         
-                } else {
+                } else { // cond === start
                     sts = "Absen Masuk"
                     icn = "bell-ring"
                     clr = "primary"
                 }
-            } else if (rangePulang) {
-                if (cond === 'checkOut') {
-                    sts = "Sudah Absen Pulang"
-                    icn = "check-decagram"
-                    clr = "negative"
+            } else if (rangePulang) { // cond bisa start bisa juga checkIn
+                // if (cond === 'checkOut') {
+                //     sts = "Sudah Absen Pulang"
+                //     icn = "check-decagram"
+                //     clr = "negative"
                         
-                } else {
+                // } else {
                     sts = "Absen Pulang"
                     icn = "bell-ring"
                     clr = "negative"
-                }
-            } else if (stopped) {
+                // }
+            } else if (stopped || cond === 'checkOut') {
                 sts = "Absen Complete"
                 icn = "check-decagram"
                 clr = "secondary"
@@ -173,8 +182,9 @@ const ScreenAbsenV4 = ({ navigation }) => {
         return (
             <>
             <View className="flex-1 items-center justify-center">
-                <Icon name={icn} color={tw.color(clr)} size={80} />
-                <Text className={`pt-1 text-${clr} font-poppinsBold`}>{sts}</Text>
+                <Icon name={icn} color={tw.color(clr)} size={60} />
+                    <Text className={`pt-1 text-${clr} font-poppinsBold`}>{sts}</Text>
+                    <Text>{ cond }</Text>
             </View>
             
             {renderFooter(sts)}
@@ -186,39 +196,73 @@ const ScreenAbsenV4 = ({ navigation }) => {
     function renderFooter(sts) {
         const active = sts === "Absen Masuk" || sts === "Absen Pulang"
         console.log('render footer ... ', active)
-        if (active) {
-           return (
-                <View>
+        // if (active) {
+        //    return (
+        //        <View>
+        //            <View className="p-4 bg-white">
+        //             <Text className="font-poppinsBold text-xs mb-2">🏷️  Informasi</Text>
+        //             <Text className="font-poppinsItalic text-xs">
+        //                 Jika Halaman ini Error ... Harap Kembali Kehalaman Utama lalu kembali ke halaman ini ...
+        //             </Text>
+        //         </View>
+        //             <View className="flex-row">
+        //                 <TouchableOpacity className="flex-1 bg-dark p-4 items-center justify-center flex-row" onPress={()=>toQrScan(sts)}>
+        //                     <Icon name="qrcode-scan" color={'white'} size={22} />
+        //                     <Text className="font-poppins text-white ml-2">Scan Qr</Text>
+        //                 </TouchableOpacity>
+        //                 <TouchableOpacity className="flex-1 bg-primary p-4 items-center justify-center flex-row" onPress={()=>console.log('ok')}>
+        //                     <Icon name="camera" color={'white'} size={22} />
+        //                     <Text className="font-poppins text-white ml-2">Scan Wajah</Text>
+        //                 </TouchableOpacity>
+        //             </View>
+        //         </View>
+        //     ) 
+        // } else {
+        //     return (
+        //         <View className="p-4 bg-white">
+        //             <Text className="font-poppinsBold text-xs mb-2">🏷️  Informasi</Text>
+        //             <Text className="font-poppins text-xs">
+        //                 Tombol Scan Akan Aktif jika sudah masuk interval antara waktu masuk dan pulang ... serta tambahan toleransi waktu pulang selama 
+        //                 <Text className="font-poppinsBold"> 2 Jam </Text>
+        //             </Text>
+        //             <Text className="font-poppinsItalic text-xs">
+        //                 Jika Halaman ini Error ... Harap Kembali Kehalaman Utama lalu kembali ke halaman ini ...
+        //             </Text>
+        //         </View>
+        //     )
+        // }
+        
+        return (
+               <View>
+                   <View className="p-4 bg-white">
+                    <Text className="font-poppinsBold text-xs mb-2">🏷️  Informasi</Text>
+                    <Text className="font-poppinsItalic text-xs">
+                        Jika Halaman ini Error ... Harap Kembali Kehalaman Utama lalu kembali ke halaman ini ...
+                    </Text>
+                </View>
                     <View className="flex-row">
                         <TouchableOpacity className="flex-1 bg-dark p-4 items-center justify-center flex-row" onPress={()=>toQrScan(sts)}>
                             <Icon name="qrcode-scan" color={'white'} size={22} />
                             <Text className="font-poppins text-white ml-2">Scan Qr</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity className="flex-1 bg-primary p-4 items-center justify-center flex-row" onPress={()=>console.log('ok')}>
+                        <TouchableOpacity className="flex-1 bg-primary p-4 items-center justify-center flex-row" onPress={()=>toFaceScan(sts)}>
                             <Icon name="camera" color={'white'} size={22} />
                             <Text className="font-poppins text-white ml-2">Scan Wajah</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
             ) 
-        } else {
-            return (
-                <View className="p-4 bg-white">
-                    <Text className="font-poppinsBold text-xs mb-2">🏷️  Informasi</Text>
-                    <Text className="font-poppins text-xs">
-                        Tombol Scan Akan Aktif jika sudah masuk interval antara waktu masuk dan pulang ... serta tambahan toleransi waktu pulang selama 
-                        <Text className="font-poppinsBold"> 2 Jam </Text>
-                    </Text>
-                    <Text className="font-poppinsItalic text-xs">
-                        Jika Halaman ini Tidak cocok
-                    </Text>
-                </View>
-            )
-        }
         
     }
     
     
+
+    useFocusEffect(
+        React.useCallback(() => {
+            console.log('focus effect :', currentJadwal);
+        }, [currentJadwal]),
+    );
+
     
     React.useEffect(() => {
         setDate(dayjs().locale("id"))
@@ -234,9 +278,6 @@ const ScreenAbsenV4 = ({ navigation }) => {
 
           {/* content */}
           {renderContent()}
-
-          {/* footer */}
-          {/* {renderFooter()} */}
     </View>
   )
 }

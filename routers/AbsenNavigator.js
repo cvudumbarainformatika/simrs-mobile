@@ -9,6 +9,7 @@ import ScreenAbsenV4 from '../screens/absen/ScreenAbsenV4';
 import { AbsenProvider } from '../context/AbsenContext';
 import { NavigationContainer } from '@react-navigation/native';
 import QrScanV2 from '../screens/absen/QrScanV2';
+import FaceScan from '../screens/absen/FaceScan';
 
 
 const Stack = createStackNavigator();
@@ -31,7 +32,10 @@ const NavigationAbsen = () => {
         <Stack.Screen name={ROUTES.SCREEN_ABSEN_AWAL} component={ScreenAbsenV4} />
         <Stack.Screen name={ROUTES.QR_SCAN} component={QrScanV2} options={{
           unmountOnBlur: true,
-        }} />
+      }} />
+        <Stack.Screen name={ROUTES.FACE_SCAN} component={FaceScan} options={{
+          unmountOnBlur: true,
+      }}/>
         <Stack.Screen name={ROUTES.ABSEN_LOADING} component={LoadingAbsen} />
       </Stack.Navigator>
   )
