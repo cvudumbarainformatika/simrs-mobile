@@ -68,7 +68,28 @@ const ScreenAbsenV4 = ({ navigation }) => {
     }
 
     function toFaceScan(sts) {
-        navigation.navigate(ROUTES.FACE_SCAN)
+
+        let tglAbsen;
+        let form;
+        
+        tglAbsen = dayjs(mulaiWaktuMasuk).format("YYYY-MM-DD")
+
+        if (sts === "Absen Masuk") {
+            form = {
+                tanggal: tglAbsen,
+                jam: date.format("HH:mm:ss"),
+                status: "masuk",
+                kategory_id:kategoryStorrage
+            }
+        } else {
+            form = {
+                tanggal: tglAbsen,
+                jam: date.format("HH:mm:ss"),
+                status: "pulang",
+                kategory_id:kategoryStorrage
+            }
+        }
+        navigation.navigate(ROUTES.ABSEN_MAP)
     }
 
 
@@ -266,7 +287,7 @@ const ScreenAbsenV4 = ({ navigation }) => {
     
     React.useEffect(() => {
         setDate(dayjs().locale("id"))
-        console.log('useEffect', currentJadwal)
+        console.log('useEffect ...', currentJadwal)
     },[navigation])
 
   return (

@@ -10,6 +10,7 @@ import { AbsenProvider } from '../context/AbsenContext';
 import { NavigationContainer } from '@react-navigation/native';
 import QrScanV2 from '../screens/absen/QrScanV2';
 import FaceScan from '../screens/absen/FaceScan';
+import AbsenMap from '../screens/absen/AbsenMap';
 
 
 const Stack = createStackNavigator();
@@ -33,6 +34,7 @@ const NavigationAbsen = () => {
         <Stack.Screen name={ROUTES.QR_SCAN} component={QrScanV2} options={{
           unmountOnBlur: true,
       }} />
+      <Stack.Screen name={ROUTES.ABSEN_MAP} component={AbsenMap} />
         <Stack.Screen name={ROUTES.FACE_SCAN} component={FaceScan} options={{
           unmountOnBlur: true,
       }}/>

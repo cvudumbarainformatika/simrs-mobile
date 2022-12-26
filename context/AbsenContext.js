@@ -3,6 +3,7 @@ import React, { createContext, useState } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useSelector } from 'react-redux'
 import { getCurrentJadwal } from '../redux/features/jadwal/jadwalsReducer'
+import { useFocusEffect, useNavigation } from '@react-navigation/native'
 
 
 
@@ -11,7 +12,6 @@ import 'dayjs/locale/id'
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
 import isBetween from 'dayjs/plugin/isBetween'
-import { useFocusEffect } from '@react-navigation/native'
 dayjs.extend(isSameOrBefore)
 dayjs.extend(isSameOrAfter)
 dayjs.extend(isBetween)
@@ -93,16 +93,28 @@ export const AbsenProvider = ({ children }) => {
         console.log('searchJadwalAndSet', newJadwals)
     }
 
-    useFocusEffect(
-        React.useCallback(() => {
-            console.log('focus effect :', currentJadwal);
-        }, [currentJadwal]),
-    );
+    // useFocusEffect(
+    //     React.useCallback(() => {
+    //         console.log('focus effect in context... :', currentJadwal);
+    //     }, [currentJadwal]),
+    // );
+
+    // const navigation = useNavigation()
+
+    const appContextValue = React.useMemo(
+    () => ({
+            currentJadwal
+    }),[currentJadwal])
+    
+    console.log('appContextValue :', appContextValue)
 
     React.useEffect(() => {
         setDate(dayjs().locale("id"))
         const init = async () => {
             setIsWait(true)
+
+
+
             try {
                 const condition = await AsyncStorage.getItem('condAbsen');
                 const nJadwal = await AsyncStorage.getItem('newSchedule');
@@ -121,7 +133,7 @@ export const AbsenProvider = ({ children }) => {
             
         }
        init()
-    },[])
+    },[appContextValue])
 
     if (schedule === null || !schedule || cond === null) {
         return null
@@ -129,8 +141,8 @@ export const AbsenProvider = ({ children }) => {
 
   return (
       <AbsenContext.Provider value={{
-          cond, schedule, isWait, currentJadwal,
-          setCond, setSchedule, searchJadwalAndSet, saveStore
+          cond, schedule, isWait, currentJadwal, 
+          setCond, setSchedule, searchJadwalAndSet, saveStore, 
       }}>
           {children}
     </AbsenContext.Provider>
