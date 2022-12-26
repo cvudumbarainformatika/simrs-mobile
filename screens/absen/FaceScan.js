@@ -73,7 +73,6 @@ const FaceScan = ({navigation, route}) => {
           <Camera
               style={styles.camera}
             ratio={'16:9'}
-            useCamera2Api={true}
             type={Camera.Constants.Type.front}
             autoFocus={Camera.Constants.AutoFocus.on}
             onFacesDetected={handleFaceDetected}
