@@ -37,7 +37,7 @@ const AbsenMap = ({navigation, route}) => {
 
 
     const [errorMsg, setErrorMsg] = useState(null)
-    const [radius, setRadius] = useState(50) //default 30 kesepakatan
+    const [radius, setRadius] = useState(35) //default 30 kesepakatan
     const [distance, setDistance] = useState(0) // jarak
 
     // let text = 'Waiting..';
