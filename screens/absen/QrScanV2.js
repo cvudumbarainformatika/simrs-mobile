@@ -77,7 +77,7 @@ const QrScanV2 = ({ navigation, route }) => {
     return (
       <View className="flex-1">
             <View className="flex-1 relative">
-                <Text className="font-poppinsBold z-10 bg-white text-center pt-10 pb-2">Qrcode Scanner</Text>
+                <Text className="font-poppinsBold z-10 bg-white text-center pt-10 pb-2">Qrcode Scann Absensi { status }</Text>
                 
                 <BarCodeScanner
                     flashMode={flash}

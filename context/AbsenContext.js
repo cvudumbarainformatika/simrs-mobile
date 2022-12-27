@@ -125,15 +125,15 @@ export const AbsenProvider = ({ children }) => {
                 } else {
                     setCond(condition)
                 }
-                setTimeout(()=> setIsWait(false), 1000)
+                setTimeout(() => setIsWait(false), 1000)
             } catch (e) {
                 console.log(`storrage Error : ${e}`)
-                setTimeout(()=> setIsWait(false), 1000)
+                setTimeout(() => setIsWait(false), 1000)
             }
             
-        }
-       init()
-    },[appContextValue])
+        };
+        init();
+    },[appContextValue])  
 
     if (schedule === null || !schedule || cond === null) {
         return null

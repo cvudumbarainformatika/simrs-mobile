@@ -1,64 +1,130 @@
-import { View, Text, ScrollView } from 'react-native'
+import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
 import React from 'react'
 import MapView, { Callout, Circle, Marker } from 'react-native-maps';
 
 import * as Location from 'expo-location';
 import { useState } from 'react';
-import { tw } from '../../constants';
+import { ROUTES, tw } from '../../constants';
+import { AppAlert, AppBtn, AppLoader } from '../../components';
 
 const AbsenMap = ({navigation, route}) => {
 // -7.745297732746753, 113.21064194843156
     const mapRef = React.useRef();
+
+    const { status, kategory_id, tanggal, jam } = route.params
+    // console.log('route map',route.params)
+
+    // rumah ku dibuat defaul location
     const [location, setLocation] = useState({
-        latitude: -7.745489896339227,
-        longitude: 113.21069094863365,
-        latitudeDelta: 0.0015,
-        longitudeDelta: 0.0015,
+        latitude: -6.745297732746753,
+        longitude: 113.20952966064942,
     });
+    // const [mapRegion, setMapRegion] = useState({
+    //     latitude: -7.7586092975848295,
+    //     longitude: 113.21064194843156,
+    //     latitudeDelta: 0.0015,
+    //     longitudeDelta: 0.0015,
+    // });
     const [mapRegion, setMapRegion] = useState({
-        latitude: -7.745297732746753,
-        longitude: 113.21064194843156,
+        latitude: -7.7586092975848295,
+        longitude: 113.20952966064942,
         latitudeDelta: 0.0015,
         longitudeDelta: 0.0015,
     });
 
-    const [errorMsg, setErrorMsg] = useState(false)
-    const [distance, setDistance] = useState(30)
+    const [wait, setWait] = useState(false)
 
-    let text = 'Waiting..';
-    if (errorMsg) {
-        text = 'KAMU MEMATIKAN LOKASI';
-    } else if (location) {
-        let jarakKamuDariKantor = hitungJarak(location, mapRegion)
-        if (jarakKamuDariKantor > distance) {
-            text = 'Jarak Anda dari kantor Sekitar ' + jarakKamuDariKantor + ' Meter';
-        } else {
-            text = 'Kamu di Area Kantor ...'+ jarakKamuDariKantor + ' Meter';
-        }
-    }
+
+
+    const [errorMsg, setErrorMsg] = useState(null)
+    const [radius, setRadius] = useState(50) //default 30 kesepakatan
+    const [distance, setDistance] = useState(0) // jarak
+
+    // let text = 'Waiting..';
+    // let isFar = false;
+    // if (errorMsg) {
+    //     text = 'KAMU MEMATIKAN LOKASI';
+    //     isFar = false;
+    // } else if (location) {
+    //     let jarakKamuDariKantor = hitungJarak(location, mapRegion)
+    //     if (jarakKamuDariKantor > distance) {
+    //         text = 'Jarak Anda dari kantor Sekitar ' + jarakKamuDariKantor + ' Meter';
+    //         isFar = false;
+
+    //     } else {
+    //         text = 'Kamu berada di Area Kantor';
+    //         isFar = true;
+    //     }
+    // }
 
     console.log('aaa', location)
 
     React.useEffect(() => {
     (async () => {
-        
+        setWait(true)
         let { status } = await Location.requestForegroundPermissionsAsync();
         if (status !== 'granted') {
-            setErrorMsg('Permission to access location was denied');
+            setLocation(null)
+            setErrorMsg('Harap Ijinkan Lokasi Anda ...');
+            setWait(false)
             return;
         }
 
         let location = await Location.getCurrentPositionAsync({ enableHighAccuracy: true });
-        let result = {
-            latitude: location.coords.latitude,
-            longitude: location.coords.longitude,
-            latitudeDelta: 0.0015,
-            longitudeDelta: 0.0015,
-        }
-        setLocation(result);
+        setLocation(location.coords);
         console.log('useEffect absenMap ...', location)
         })();
     }, []);
+
+
+    
+
+    if (errorMsg !== null) {
+        return (
+            <AppAlert visible={errorMsg !== null} msg={errorMsg} onOk={() => {
+                setErrorMsg(null);
+                navigation.goBack()
+            }} />
+        )
+    }
+
+
+    function renderLocation() {
+        let isFar = false;
+        if (errorMsg) {
+            isFar = false;
+        } else if (location) {
+            // let jarakKamuDariKantor = hitungJarak(location, mapRegion)
+            if (distance > radius) {
+                isFar = false;
+
+            } else {
+                isFar = true;
+            }
+        }
+
+        return (
+            <View className="">
+                <TouchableOpacity className={`h-16 ${isFar ? 'bg-primary' : 'bg-dark'} w-full justify-center items-center`}
+                    onPress={() => {
+                        if (isFar) {
+                            navigation.navigate(ROUTES.FACE_SCAN, {status, kategory_id, tanggal, jam })
+                        } else {
+                            navigation.goBack()
+                        }
+                    }}
+                >
+                    {isFar ? <Text className="font-poppins text-white">Lanjutkan Absen </Text> :
+                    (<Text className="font-poppins text-white"> Kamu jauh dari kantor </Text>)
+                }
+                </TouchableOpacity>
+                
+            </View>
+        )
+    }
+
+
+    
 
   return (
       <View className="flex-1">
@@ -66,9 +132,13 @@ const AbsenMap = ({navigation, route}) => {
           <MapView className="flex-1"
               ref={map => {map = map}}
               initialRegion={mapRegion}
-              customMapStyle={retroStyle}
               showsUserLocation={true}
-              showsCompass={true}
+              onUserLocationChange={(e) => {
+                  console.log(e.nativeEvent.coordinate)
+                  setLocation(e.nativeEvent.coordinate)
+                  setDistance(hitungJarak(location, mapRegion))
+              }}
+              userLocationUpdateInterval={6000}
             >
               <Marker
                   coordinate={mapRegion}
@@ -81,19 +151,32 @@ const AbsenMap = ({navigation, route}) => {
 
                 <Circle
                     center={mapRegion}
-                  radius={distance}
+                  radius={radius}
                   fillColor={tw.color('red-500/50')}
                   strokeColor={tw.color('red-500')}
                 />   
 
           </MapView>
-          <View className="h-1/2 bg-white rounded-t-2xl overflow-hidden">
-              <Text className="font-poppinsBold px-4 pt-3">Absensi</Text>
-              <Text className="font-poppins px-4 text-gray text-xs">{ text }</Text>
+          <View className="h-1/3 bg-white rounded-t-2xl overflow-hidden">
+              <Text className="font-poppinsBold px-4 pt-3">Absensi { status }</Text>
+              <Text className="font-poppins px-4 text-gray-dark text-xs">
+                  {`Jarak Kamu Dari Kantor Sekitar ${distance} Meter`}
+              </Text>
               {/* <View className="border-t border-gray-light" /> */}
-              <ScrollView>
-                  <Text className="font-poppins">dsfds</Text>
+              <ScrollView className="">
+                  <View className="p-4 pb-14">
+                      <Text className="font-poppins text-gray-dark">
+                          Scan Wajah ini di khususkan Bagi Karyawan yang sedang 
+                          DINAS LUAR serta untuk kebutuhan lainnya ... 
+                      </Text>
+                      
+                      
+                  </View>
+
+                  <View className="pb-96 " />
               </ScrollView>
+
+              {location ? renderLocation() : undefined }
           </View>
     </View>
   )

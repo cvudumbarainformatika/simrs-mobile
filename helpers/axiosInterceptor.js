@@ -54,9 +54,9 @@ api.interceptors.response.use(response => new Promise((resolve, reject) => {
     
 
     if (!error.response) {
-        // if (error.code === 'ERR_NETWORK' || error.message === 'Network Error') {
-        //     RootNavigation.navigate(ROUTES.ERROR_TIMEOUT, { timeout: true });
-        // } 
+        if (error.code === 'ERR_NETWORK' || error.message === 'Network Error') {
+            RootNavigation.navigate(ROUTES.ERROR_TIMEOUT, { timeout: true });
+        } 
         return new Promise((resolve, reject) => {
             reject(error)
         })

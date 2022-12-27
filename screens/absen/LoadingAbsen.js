@@ -1,4 +1,4 @@
-import { View, Text, Image } from 'react-native'
+import { View, Text, Image, BackHandler } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import { AppBtn, AppConfirm, AppLoader } from '../../components'
 import { IMGS, ROUTES, tw } from '../../constants'
@@ -34,7 +34,8 @@ const LoadingAbsen = ({ navigation, route }) => {
       kategory_id:kategory_id
     }
 
-    // console.log('form ... ',form)
+    console.log('form ... ', form)
+    // setMsg('Absensi Telah Success terkirim, Terimakasih ...')
     // setMsg('Absensi Telah Success terkirim, Terimakasih ...')
     // setWaiting(false)
 
@@ -42,11 +43,13 @@ const LoadingAbsen = ({ navigation, route }) => {
       status === 'masuk'? saveStore('checkIn') : saveStore('checkOut')
       setMsg('Absensi Telah Success terkirim, Terimakasih ...')
       setWaiting(false)
+      waktuTutup()
     }).catch(error => {
       console.log('absen error :', error.response);
       setIsError(true)
       setMsg('Maaf Ada Kesalahan, Harap Ulangi')
       setWaiting(false)
+      waktuTutup()
     })
   }
 
@@ -55,15 +58,25 @@ const LoadingAbsen = ({ navigation, route }) => {
     navigation.navigate(ROUTES.QR_SCAN)
   }
 
-  // const saveStore = async (txt) => {
-  //       await AsyncStorage.setItem('condAbsen', txt)
-  //       dispatch(setCond(txt))
-  //   }
+  function waktuTutup() {
+    setTimeout(() => {
+      navigation.navigate(ROUTES.SCREEN_ABSEN_AWAL)
+    },3000)
+  }
 
   useEffect(() => {
     (() => {
         sendQrCode()
-      })()
+    })()
+    
+    const backAction = () => {
+            navigation.navigate(ROUTES.SCREEN_ABSEN_AWAL)
+            return true;
+        };
+
+        const backHandler = BackHandler.addEventListener("hardwareBackPress", backAction);
+        
+        return () => backHandler.remove();
     },[])
   return (
     <View className="flex-1 justify-center items-center p-10">

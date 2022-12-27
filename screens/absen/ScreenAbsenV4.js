@@ -1,6 +1,6 @@
 
 import React, { useContext, useState } from 'react'
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity, Alert } from 'react-native'
 import { AppAlert, AppBtn, AppLoader } from '../../components'
 import { ROUTES, tw } from '../../constants'
 import { AbsenContext } from '../../context/AbsenContext'
@@ -13,6 +13,7 @@ import 'dayjs/locale/id'
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
 import isBetween from 'dayjs/plugin/isBetween'
+import { AuthContext } from '../../context/AuthContext'
 dayjs.extend(isSameOrBefore)
 dayjs.extend(isSameOrAfter)
 dayjs.extend(isBetween)
@@ -26,7 +27,9 @@ const ScreenAbsenV4 = ({ navigation }) => {
         cond, schedule, isWait, currentJadwal,
         searchJadwalAndSet, saveStore
     } = useContext(AbsenContext)
-    
+
+    const {pegawai} = useContext(AuthContext)
+    // console.log('screenAbsen4 :',pegawai)
     const { mulaiWaktuMasuk, mulaiWaktuPulang, statusStorrage, kategoryStorrage, stopWaktuAbsen } = schedule
 
     
@@ -68,28 +71,59 @@ const ScreenAbsenV4 = ({ navigation }) => {
     }
 
     function toFaceScan(sts) {
+        console.log(pegawai.user.status)
 
-        let tglAbsen;
-        let form;
+        const khusus = (pegawai.user.status === "8" || pegawai.user.status === "9" || pegawai.user.status === 8 || pegawai.user.status === 9 || pegawai.user.status === "7" || pegawai.user.status === 7);
+
+        const IT = (pegawai.user.status === "7" || pegawai.user.status === 7)
+
+        if (!khusus) {
+            console.log('khusus', khusus)
+            console.log('IT', IT)
+            Alert.alert("INFORMASI !", "Maaf... Scan Wajah Hanya bisa digunakan untuk keperluan DINAS LUAR dan Keperluan Lainnya ... Terimakasih");
+            return
+        } 
+            
+        console.log('bukan khusus', khusus)
+            
+       let tglAbsen;
+            let form;
+            
+            tglAbsen = dayjs(mulaiWaktuMasuk).format("YYYY-MM-DD")
+
+            if (sts === "Absen Masuk") {
+                form = {
+                    tanggal: tglAbsen,
+                    jam: date.format("HH:mm:ss"),
+                    status: "masuk",
+                    kategory_id:kategoryStorrage
+                }
+            } else {
+                form = {
+                    tanggal: tglAbsen,
+                    jam: date.format("HH:mm:ss"),
+                    status: "pulang",
+                    kategory_id:kategoryStorrage
+                }
+            }
         
-        tglAbsen = dayjs(mulaiWaktuMasuk).format("YYYY-MM-DD")
+        if (IT) {
+                console.log("ini khusus IT")
+                let aaa;
+                aaa = {
+                    data: "wajah",
+                    tanggal: tglAbsen,
+                    jam: date.format("HH:mm:ss"),
+                    status: "pulang",
+                    kategory_id:kategoryStorrage
+                }
+                navigation.navigate(ROUTES.ABSEN_LOADING, form)
+            } else {
+                navigation.navigate(ROUTES.ABSEN_MAP, form)
+            }
+            
 
-        if (sts === "Absen Masuk") {
-            form = {
-                tanggal: tglAbsen,
-                jam: date.format("HH:mm:ss"),
-                status: "masuk",
-                kategory_id:kategoryStorrage
-            }
-        } else {
-            form = {
-                tanggal: tglAbsen,
-                jam: date.format("HH:mm:ss"),
-                status: "pulang",
-                kategory_id:kategoryStorrage
-            }
-        }
-        navigation.navigate(ROUTES.ABSEN_MAP)
+        
     }
 
 
@@ -217,48 +251,13 @@ const ScreenAbsenV4 = ({ navigation }) => {
     function renderFooter(sts) {
         const active = sts === "Absen Masuk" || sts === "Absen Pulang"
         console.log('render footer ... ', active)
-        // if (active) {
-        //    return (
-        //        <View>
-        //            <View className="p-4 bg-white">
-        //             <Text className="font-poppinsBold text-xs mb-2">🏷️  Informasi</Text>
-        //             <Text className="font-poppinsItalic text-xs">
-        //                 Jika Halaman ini Error ... Harap Kembali Kehalaman Utama lalu kembali ke halaman ini ...
-        //             </Text>
-        //         </View>
-        //             <View className="flex-row">
-        //                 <TouchableOpacity className="flex-1 bg-dark p-4 items-center justify-center flex-row" onPress={()=>toQrScan(sts)}>
-        //                     <Icon name="qrcode-scan" color={'white'} size={22} />
-        //                     <Text className="font-poppins text-white ml-2">Scan Qr</Text>
-        //                 </TouchableOpacity>
-        //                 <TouchableOpacity className="flex-1 bg-primary p-4 items-center justify-center flex-row" onPress={()=>console.log('ok')}>
-        //                     <Icon name="camera" color={'white'} size={22} />
-        //                     <Text className="font-poppins text-white ml-2">Scan Wajah</Text>
-        //                 </TouchableOpacity>
-        //             </View>
-        //         </View>
-        //     ) 
-        // } else {
-        //     return (
-        //         <View className="p-4 bg-white">
-        //             <Text className="font-poppinsBold text-xs mb-2">🏷️  Informasi</Text>
-        //             <Text className="font-poppins text-xs">
-        //                 Tombol Scan Akan Aktif jika sudah masuk interval antara waktu masuk dan pulang ... serta tambahan toleransi waktu pulang selama 
-        //                 <Text className="font-poppinsBold"> 2 Jam </Text>
-        //             </Text>
-        //             <Text className="font-poppinsItalic text-xs">
-        //                 Jika Halaman ini Error ... Harap Kembali Kehalaman Utama lalu kembali ke halaman ini ...
-        //             </Text>
-        //         </View>
-        //     )
-        // }
-        
-        return (
+        if (active) {
+           return (
                <View>
                    <View className="p-4 bg-white">
-                    <Text className="font-poppinsBold text-xs mb-2">🏷️  Informasi</Text>
+                    <Text className="font-poppinsBold text-xs mb-2">🏷️ Informasi</Text>
                     <Text className="font-poppinsItalic text-xs">
-                        Jika Halaman ini Error ... Harap Kembali Kehalaman Utama lalu kembali ke halaman ini ...
+                        Jika Halaman ini tidak merubah status Anda ... Mohon Klik tombol X di atas atau tekan tombol back di device anda ... lalu kembali lagi ke halaman ini
                     </Text>
                 </View>
                     <View className="flex-row">
@@ -273,6 +272,42 @@ const ScreenAbsenV4 = ({ navigation }) => {
                     </View>
                 </View>
             ) 
+        } else {
+            return (
+                <View className="p-4 bg-white">
+                    <Text className="font-poppinsBold text-xs mb-2">🏷️ Informasi</Text>
+                    <Text className="font-poppins text-xs">
+                        Tombol Scan Akan Aktif jika sudah masuk interval antara waktu masuk dan pulang ... serta tambahan toleransi waktu pulang selama 
+                        <Text className="font-poppinsBold"> 2 Jam </Text>
+                    </Text>
+                    <Text className="font-poppinsItalic text-xs">
+                        Jika Halaman ini Error ... Harap Kembali Kehalaman Utama lalu kembali ke halaman ini ...
+                    </Text>
+                </View>
+            )
+        }
+        
+        // UNTUK PERCOBAAN
+        // return (
+        //        <View>
+        //            <View className="p-4 bg-white">
+        //             <Text className="font-poppinsBold text-xs mb-2">🏷️  Informasi</Text>
+        //             <Text className="font-poppinsItalic text-xs">
+        //                 Jika Halaman ini Error ... Harap Kembali Kehalaman Utama lalu kembali ke halaman ini ...
+        //             </Text>
+        //         </View>
+        //             <View className="flex-row">
+        //                 <TouchableOpacity className="flex-1 bg-dark p-4 items-center justify-center flex-row" onPress={()=>toQrScan(sts)}>
+        //                     <Icon name="qrcode-scan" color={'white'} size={22} />
+        //                     <Text className="font-poppins text-white ml-2">Scan Qr</Text>
+        //                 </TouchableOpacity>
+        //                 <TouchableOpacity className="flex-1 bg-primary p-4 items-center justify-center flex-row" onPress={()=>toFaceScan(sts)}>
+        //                     <Icon name="camera" color={'white'} size={22} />
+        //                     <Text className="font-poppins text-white ml-2">Scan Wajah</Text>
+        //                 </TouchableOpacity>
+        //             </View>
+        //         </View>
+        //     ) 
         
     }
     
