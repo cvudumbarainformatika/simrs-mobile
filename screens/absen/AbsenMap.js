@@ -1,26 +1,43 @@
-import { View, Text } from 'react-native'
+import { View, Text, ScrollView } from 'react-native'
 import React from 'react'
 import MapView, { Callout, Circle, Marker } from 'react-native-maps';
 
 import * as Location from 'expo-location';
 import { useState } from 'react';
+import { tw } from '../../constants';
 
 const AbsenMap = ({navigation, route}) => {
-
+// -7.745297732746753, 113.21064194843156
     const mapRef = React.useRef();
     const [location, setLocation] = useState({
         latitude: -7.745489896339227,
         longitude: 113.21069094863365,
+        latitudeDelta: 0.0015,
+        longitudeDelta: 0.0015,
     });
     const [mapRegion, setMapRegion] = useState({
-        latitude: -7.745489896339227,
-        longitude: 113.21069094863365,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
+        latitude: -7.745297732746753,
+        longitude: 113.21064194843156,
+        latitudeDelta: 0.0015,
+        longitudeDelta: 0.0015,
     });
 
+    const [errorMsg, setErrorMsg] = useState(false)
+    const [distance, setDistance] = useState(30)
 
+    let text = 'Waiting..';
+    if (errorMsg) {
+        text = 'KAMU MEMATIKAN LOKASI';
+    } else if (location) {
+        let jarakKamuDariKantor = hitungJarak(location, mapRegion)
+        if (jarakKamuDariKantor > distance) {
+            text = 'Jarak Anda dari kantor Sekitar ' + jarakKamuDariKantor + ' Meter';
+        } else {
+            text = 'Kamu di Area Kantor ...'+ jarakKamuDariKantor + ' Meter';
+        }
+    }
 
+    console.log('aaa', location)
 
     React.useEffect(() => {
     (async () => {
@@ -34,7 +51,9 @@ const AbsenMap = ({navigation, route}) => {
         let location = await Location.getCurrentPositionAsync({ enableHighAccuracy: true });
         let result = {
             latitude: location.coords.latitude,
-            longitude: location.coords.longitude
+            longitude: location.coords.longitude,
+            latitudeDelta: 0.0015,
+            longitudeDelta: 0.0015,
         }
         setLocation(result);
         console.log('useEffect absenMap ...', location)
@@ -45,19 +64,11 @@ const AbsenMap = ({navigation, route}) => {
       <View className="flex-1">
           <Text className="font-poppinsBold z-10 bg-white text-center pt-6 pb-2">Lokasi Absen</Text>
           <MapView className="flex-1"
-              ref={mapRef}
+              ref={map => {map = map}}
               initialRegion={mapRegion}
               customMapStyle={retroStyle}
               showsUserLocation={true}
-              onUserLocationChange={(e) => {
-                  console.log('onUserLocationChange', e.nativeEvent)
-                  setLocation({
-                      latitude: e.nativeEvent.coordinate.latitude,
-                      longitude:e.nativeEvent.coordinate.longitude
-                  })
-              }}
-              
-
+              showsCompass={true}
             >
               <Marker
                   coordinate={mapRegion}
@@ -67,25 +78,55 @@ const AbsenMap = ({navigation, route}) => {
                       <Text className="font-poppins">Kantor</Text>
                   </Callout>
               </Marker>
+
                 <Circle
                     center={mapRegion}
-                    radius={50}
-              />
-              
-              <Marker
-                  coordinate={location}
-              >
-                  
-              </Marker>
+                  radius={distance}
+                  fillColor={tw.color('red-500/50')}
+                  strokeColor={tw.color('red-500')}
+                />   
+
           </MapView>
-          <View className="h-1/2 bg-white rounded-t-xl">
-              
+          <View className="h-1/2 bg-white rounded-t-2xl overflow-hidden">
+              <Text className="font-poppinsBold px-4 pt-3">Absensi</Text>
+              <Text className="font-poppins px-4 text-gray text-xs">{ text }</Text>
+              {/* <View className="border-t border-gray-light" /> */}
+              <ScrollView>
+                  <Text className="font-poppins">dsfds</Text>
+              </ScrollView>
           </View>
     </View>
   )
 }
 
 export default AbsenMap
+
+function hitungJarak(lokasiku, lokasiKantor) {
+    console.log('hitung jarak ...', lokasiku)
+    if (lokasiku.latitude == lokasiKantor.latitude && lokasiku.longitude == lokasiKantor.longitude) {
+        return 0;
+    }
+
+    const radlat1 = (Math.PI * lokasiku.latitude) / 180;
+    const radlat2 = (Math.PI * lokasiKantor.latitude) / 180;
+
+    const theta = lokasiku.longitude - lokasiKantor.longitude;
+    const radtheta = (Math.PI * theta) / 180;
+
+    let dist =
+        Math.sin(radlat1) * Math.sin(radlat2) +
+        Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+
+    if (dist > 1) {
+        dist = 1;
+    }
+
+    dist = Math.acos(dist);
+    dist = (dist * 180) / Math.PI;
+    dist = dist * 60 * 1.1515;
+    dist = dist * 1.609344; //convert miles to km
+    return Math.trunc( dist * 1000 );
+}
 
 const retroStyle = [
   {

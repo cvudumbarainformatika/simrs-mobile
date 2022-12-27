@@ -23,11 +23,16 @@
     "android": {
       "package": "com.xenter.rsudmsaleh",
       "versionCode": 6,
+      "softwareKeyboardLayoutMode": "pan",
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon/adaptive-icon-android.png",
         "backgroundColor": "#0D5A86"
       },
-      "softwareKeyboardLayoutMode": "pan"
+      "config": {
+          "googleMaps": {
+              "apiKey": "AIzaSyAf-FbHD_DAJQQhvj59xzCYw8aggbyqUzg"
+          }
+      }
     },
     "androidStatusBar":{
       "translucent":true
