@@ -209,17 +209,17 @@ const ScreenAbsenV4 = ({ navigation }) => {
                     clr = "primary"
                 }
             } else if (rangePulang) { // cond bisa start bisa juga checkIn
-                // if (cond === 'checkOut') {
-                //     sts = "Sudah Absen Pulang"
-                //     icn = "check-decagram"
-                //     clr = "negative"
-                        
-                // } else {
+                if (cond === 'checkOut') {
+                    sts = "Sudah Absen Pulang"
+                    icn = "check-decagram"
+                    clr = "negative"
+                   saveStore('idle')     
+                } else {
                     sts = "Absen Pulang"
                     icn = "bell-ring"
                     clr = "negative"
-                // }
-            } else if (stopped || cond === 'checkOut') {
+                }
+            } else if (stopped) {
                 sts = "Absen Complete"
                 icn = "check-decagram"
                 clr = "secondary"
