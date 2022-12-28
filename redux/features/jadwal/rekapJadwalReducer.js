@@ -8,7 +8,15 @@ const initialState = {
     error: null,
     
     hadir: [],
-    libur:[]
+    libur: [],
+
+
+    // FLAG
+    IJIN: 0,
+    SAKIT: 0,
+    CUTI: 0,
+    DL: 0,
+    EXTRA:0,
 }
 
 export const rekapJadwalReducer = createSlice({
@@ -32,7 +40,21 @@ export const rekapJadwalReducer = createSlice({
             .addCase(getRekapAsync.fulfilled, (state, action) => {
                 state.rekaps = action.payload
                 state.hadir = action.payload.masuk? action.payload.masuk:[]
-                state.libur = action.payload.libur? action.payload.libur:[]
+                state.libur = action.payload.libur ? action.payload.libur : []
+                // FLAG
+                state.CUTI = action.payload.libur ?
+                    action.payload.libur.filter(x => x.flag === 'CUTI').length : 0
+                state.IJIN = action.payload.libur ?
+                    action.payload.libur.filter(x => x.flag === 'IJIN').length : 0
+                state.SAKIT = action.payload.libur ?
+                    action.payload.libur.filter(x => x.flag === 'SAKIT').length : 0
+                state.DL = action.payload.libur ?
+                    action.payload.libur.filter(x => x.flag === 'DL').length : 0
+                state.EXTRA = action.payload.libur ?
+                    action.payload.libur.filter(x => x.flag === 'EXTRA').length : 0
+                
+                
+                // the other
                 state.waiting = false
                 state.error = null
                 state.isError = false
@@ -54,7 +76,7 @@ export const getRekapAsync = createAsyncThunk(
   async (bulan) => {
     try {
         const response = await api.get(`/v2/absensi/jadwal/rekap-by-user-libur?bulan=${bulan}`);
-        console.log('getRekapAsync :', response.data)
+        console.log('getRekapAsync :', response.data.libur)
       return response.data;
     } catch (error) {
         // console.error(error);

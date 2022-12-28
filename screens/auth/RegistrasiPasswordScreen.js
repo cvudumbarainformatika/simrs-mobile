@@ -154,7 +154,7 @@ const RegistrasiPasswordScreen = () => {
                             handleError(null,'password')
                         }}
                   />
-                  
+                  <View className="pb-96" />
               </ScrollView>
             </View>
           <BottomTwoBtn

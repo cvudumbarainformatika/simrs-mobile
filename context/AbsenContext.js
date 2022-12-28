@@ -105,7 +105,7 @@ export const AbsenProvider = ({ children }) => {
             currentJadwal
     }),[currentJadwal])
     
-    console.log('appContextValue :', appContextValue)
+    // console.log('appContextValue :', appContextValue)
 
     React.useEffect(() => {
         setDate(dayjs().locale("id"))

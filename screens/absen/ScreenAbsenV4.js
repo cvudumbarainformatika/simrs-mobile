@@ -160,6 +160,16 @@ const ScreenAbsenV4 = ({ navigation }) => {
                             <Text className="font-poppins">{ dayjs(mulaiWaktuPulang).format("DD MMM YYYY , HH:mm") }</Text>
                         </View>
                     </View>
+                    <View className="flex-row justify-between pt-2">
+                        <View>
+                            <Text className="font-poppins text-xs text-primary">Jadwal Masuk</Text>
+                            <Text className="font-poppins text-primary">{ dayjs(mulaiWaktuMasuk).add(30,'m').format("dddd , HH:mm") }</Text>
+                        </View>
+                        <View>
+                            <Text className="font-poppins text-xs text-negative text-right">Jadwal Pulang</Text>
+                            <Text className="font-poppins text-negative text-right">{ dayjs(mulaiWaktuPulang).format("dddd, HH:mm") }</Text>
+                        </View>
+                    </View>
                 </View>
                 )}
             </View>

@@ -15,16 +15,29 @@ const AppLoaderAnim = ({ visible = false }) => {
           start={{ x: 1, y: 0 }}
           end={{x:1,y:0.9}}
       >
-      <Animatable.Image
+      {/* <Animatable.Image
         source={IMGS.loadingAnim}
         animation="fadeIn"
         className="h-40 w-20"
+        iterationCount={1}
+      /> */}
+      <Animatable.Image
+        source={IMGS.logo}
+        animation="fadeIn"
+        className="h-24 w-24"
         iterationCount={1}
       />
       <Animatable.Text
         animation="fadeIn"
         iterateCount={1}
-        className="text-lg my-10 text-white font-bold text-center"
+        className="text-4xl mt-10 text-white text-center font-rubikMaze"
+      >
+        XENTER
+      </Animatable.Text>
+      <Animatable.Text
+        animation="fadeIn"
+        iterateCount={1}
+        className="text-lg mb-10 text-white text-center font-poppinsBold"
       >
         UOBK RSUD MOH SALEH
       </Animatable.Text>

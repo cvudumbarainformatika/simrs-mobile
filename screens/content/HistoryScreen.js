@@ -4,17 +4,17 @@ import Icon from 'react-native-vector-icons/AntDesign'
 import { HeaderUser } from '../../components'
 import { useDispatch, useSelector } from 'react-redux'
 import { getRekapAsync } from '../../redux/features/jadwal/rekapJadwalReducer'
+import { tw } from '../../constants'
 
 import dayjs from 'dayjs'
-import { tw } from '../../constants'
-require('dayjs/locale/id')
+import 'dayjs/locale/id'
 
 
 const HistoryScreen = ({navigation}) => {
 
   const dispatch = useDispatch()
-  const { hadir } = useSelector(state => state.rekap)
-  console.log('rekap', hadir)
+  const { hadir, CUTI } = useSelector(state => state.rekap)
+  // console.log('rekap', CUTI)
 
   const [date, setDate] = useState(dayjs().locale('id'))
 
@@ -29,6 +29,10 @@ const HistoryScreen = ({navigation}) => {
       }
     
   }, [navigation, date])
+
+  function formatter(tgl) {
+    return dayjs(tgl).locale("id").format("HH:mm")
+  }
   
   const viewHistory = () => {
     return (
@@ -39,17 +43,18 @@ const HistoryScreen = ({navigation}) => {
               <View key={i} className="bg-white px-5 py-2 mb-1">
                 <View className="flex-row items-center">
                   <View className="flex-1 flex-row">
-                    <Text className="font-poppinsThin text-primary text-[30px]">{item.tanggal.slice(-2)}</Text>
+                    <Text className="font-poppinsThin text-primary text-2xl">{item.tanggal.slice(-2)} </Text>
+                    <Text className="font-poppins text-primary ">{ dayjs(item.tanggal +' 07:00').locale("id").format("dddd") } </Text>
                   </View>
                   <View className="">
-                    <Text className="font-poppins">Absen Masuk : { item.masuk }</Text>
-                    <Text className="font-poppins">Absen Pulang: { item.pulang === null? '-': item.pulang }</Text>
+                    <Text className="font-poppins text-xs text-right">AM : { item.masuk ? formatter(item.created_at) : ' - ' }</Text>
+                    <Text className="font-poppins text-xs text-right">AP : { item.pulang ? formatter(item.updated_at) : ' - '}</Text>
                   </View>
                 </View>
               </View>
             )
           })}
-          <View style={{ paddingBottom: 100 }} />
+          <View style={{ paddingBottom: 300 }} />
       </ScrollView>
     )
   }
@@ -66,31 +71,11 @@ const HistoryScreen = ({navigation}) => {
   return (
     <View className="flex-1 bg-gray-light">
       <HeaderUser />
-      <View className="p-5 bg-white mb-2">
+      <View className="px-4 py-3 bg-white mb-2">
         <Text className="font-poppins">History Absensi Bulan { date.format("MMMM") }</Text>
+        <Text className="font-poppins text-xs text-gray">Waktu Absensi Menggunakan Waktu Server</Text>
       </View>
       {hadir.length > 0? viewHistory(): emptyHistory()}
-      {/* {rekaps.length > 0 && (
-        <ScrollView className="">
-          {rekaps.map((item, i) => {
-            let cc = item.tanggal
-            return (
-              <View key={i} className="bg-white px-5 py-2 mb-1">
-                <View className="flex-row items-center">
-                  <View className="flex-1 flex-row">
-                    <Text className="font-poppinsThin text-primary text-[30px]">{item.tanggal.slice(-2)}</Text>
-                  </View>
-                  <View className="">
-                    <Text className="font-poppins">Absen Masuk : { item.masuk }</Text>
-                    <Text className="font-poppins">Absen Pulang: { item.pulang === null? '-': item.pulang }</Text>
-                  </View>
-                </View>
-              </View>
-            )
-          })}
-          <View style={{ paddingBottom: 100 }} />
-        </ScrollView>
-      )} */}
     </View>
   )
 }

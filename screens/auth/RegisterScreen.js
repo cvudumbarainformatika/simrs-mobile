@@ -183,7 +183,7 @@ const RegisterScreen = () => {
                         onFocus={() => {
                             handleError(null,'nik')
                         }}
-
+                        keyboardType="number-pad"
                     />
                     {/* <AppInput placeholder="Tanggal Lahir , Format: yyyy-mm-dd"
                         value={inputs.tgllahir}
@@ -194,6 +194,7 @@ const RegisterScreen = () => {
                         }}
                     /> */}
                 </View>
+                <View className="pb-96" />
             </ScrollView>
             
             <BottomTwoBtn labelBtnOk="Cari Data"

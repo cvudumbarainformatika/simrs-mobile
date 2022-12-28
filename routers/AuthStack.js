@@ -6,6 +6,7 @@ import { TRANSITION_HORIZONTAL } from '../constants/transitions'
 import { LoginScreen, RegisterScreen, RegistrasiPasswordScreen } from '../screens'
 import Logout from '../screens/Logout'
 import { AuthContext } from '../context/AuthContext'
+import LoginScreenV2 from '../screens/auth/LoginScreenV2'
 
 
 const AuthStack = () => {

@@ -86,16 +86,17 @@ const SettingsScreen = ({ navigation }) => {
         </ScrollView>
         <View className="absolute bottom-0 w-full">
           <View className="flex-row items-center justify-between">
+            <TouchableOpacity style={tw`h-14 w-1/2 bg-negative justify-center items-center`}
+            onPress={()=> navigation.navigate(ROUTES.LOGOUT, {expired:true})}
+          >
+              <Text className="font-poppins text-white">Logout</Text>
+          </TouchableOpacity>
             <TouchableOpacity style={tw`h-14 w-1/2 bg-dark justify-center items-center`}
             onPress={()=> navigation.goBack()}
           >
               <Text className="font-poppins text-white">Kembali</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={tw`h-14 w-1/2 bg-negative justify-center items-center`}
-            onPress={()=> navigation.navigate(ROUTES.LOGOUT, {expired:true})}
-          >
-              <Text className="font-poppins text-white">Logout</Text>
-          </TouchableOpacity>
+          
           </View>
         </View>
       </View>

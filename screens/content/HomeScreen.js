@@ -12,12 +12,13 @@ import { getCurrentJadwal, getJadwalsAsync, showError, showJadwals, showLoading 
 import { getKategoriesAscync } from '../../redux/features/jadwal/kategoryJadwalReducer'
 import { LinearGradient } from 'expo-linear-gradient'
 import { AuthContext } from '../../context/AuthContext'
+import { getAbsenTodayAsync } from '../../redux/features/jadwal/absenReducer'
+import { getRekapAsync } from '../../redux/features/jadwal/rekapJadwalReducer'
 import AppLoaderAnim from '../../components/~global/AppLoaderAnim'
 
 
 import dayjs from 'dayjs'
-import { getAbsenTodayAsync } from '../../redux/features/jadwal/absenReducer'
-require('dayjs/locale/id')
+import 'dayjs/locale/id'
 
 const HomeScreen = () => {
 
@@ -28,6 +29,7 @@ const HomeScreen = () => {
 
   const {jadwals, loading, error} = useSelector(state => state.jadwal)
   const { kategories } = useSelector(state => state.kategory)
+  const { hadir, IJIN, SAKIT, CUTI, DL } = useSelector(state => state.rekap)
   
   const [date, setDate] = useState(dayjs().locale("id"))
 
@@ -35,6 +37,7 @@ const HomeScreen = () => {
     dispatch(getJadwalsAsync());
     dispatch(getKategoriesAscync());
     dispatch(getAbsenTodayAsync());
+    dispatch(getRekapAsync(date.format("MM")))
   }
 
   const currentJadwal = useSelector((state) => getCurrentJadwal(state, date.format("dddd")))
@@ -49,9 +52,6 @@ const HomeScreen = () => {
       callFirst()
       currentJadwal
     })
-
-    
-
     // console.log('jadwal dari home effect :', jadwals.length)
     // console.log('kategori dari home effect :', kategories.length)
     console.log('jadwal use selector :', jadwals.length)
@@ -88,18 +88,18 @@ const HomeScreen = () => {
         <View className="bg-white py-4 pb-5 rounded">
           <View className="flex-row items-center justify-between space-x-4 px-4">
             <View className="flex-1 mb-2">
-              {componentRekap(0,'Hadir','select1')}
+              {componentRekap(hadir.length? hadir.length:0,'Hadir','select1')}
             </View>
             <View className="flex-1 mb-2">
-              {componentRekap(0,'Sakit','disconnect')}
+              {componentRekap(SAKIT,'Sakit','disconnect')}
             </View>
           </View>
           <View className="flex-row items-center justify-between space-x-4 px-4">
             <View className="flex-1 mb-2">
-              {componentRekap(0,'Izin','paperclip')}
+              {componentRekap(IJIN,'Izin','paperclip')}
             </View>
             <View className="flex-1 mb-2">
-              {componentRekap(0,'Cuti','rest')}
+              {componentRekap(CUTI,'Cuti','rest')}
             </View>
           </View>
           {/* <View className="flex-row items-center justify-between space-x-4 px-4">
@@ -112,6 +112,38 @@ const HomeScreen = () => {
           </View> */}
         </View>
       </>
+    )
+  }
+
+  const renderJadwalHariIni = () => {
+    return (
+      <View style={tw`bg-white p-4 pb-5 rounded`}>
+            {status === '2' ? (
+              <View className="flex-row items-center space-x-4">
+                <View style={tw`flex-1 items-center`}>
+                  <View style={tw`rounded-lg p-3 w-full items-center border-gray-light border-2`}>
+                    <Text className="font-poppins text-gray-dark" >🕒  {masuk.slice(0, -3)}</Text>
+                    <Text className="font-poppins" style={tw`text-primary`}>Waktu Masuk</Text>
+                  </View>
+                </View>
+                <View className="flex-1 items-center">
+                  <View style={tw`rounded-lg p-3 w-full items-center border-gray-light border-2`}>
+                    <Text className="font-poppins text-gray-dark">🕒  {pulang.slice(0, -3)}</Text>
+                    <Text className="font-poppins" style={tw`text-dark`}>Waktu Pulang</Text>
+                  </View>
+                </View>
+              </View>
+              
+            ): (
+              <View className="flex-1 items-center">
+                <View style={tw`rounded-lg p-3 w-full items-center border-gray-light border-2`}>
+                  <Text className="font-poppins text-gray-dark"> Libur </Text>
+                  <Text className="font-poppins" style={tw`text-negative`}>Tidak Ada Jadwal</Text>
+                </View>
+                </View>
+              )
+            }
+          </View>
     )
   }
 
@@ -139,55 +171,14 @@ const HomeScreen = () => {
         </View>
 
         <View className="pt-2">
-          {renderAbsensiBulanIni()}
-          {/* <Text className="font-poppinsBold" style={tw`px-4 py-2 text-gray-dark`}>Jadwal Hari Ini 📅</Text>
-          <View style={tw`bg-white p-4 pb-5 rounded`}>
-            {status === '2' ? (
-              <View style={tw`flex-row justify-between `}>
-                <View style={tw`flex-1 items-center`}>
-                  <Text style={tw`text-primary`}>Waktu Masuk</Text>
-                  <View style={tw`rounded-l-lg p-3 w-full items-center bg-primary`}>
-                    <Text className="font-poppins" style={tw`text-white text-[14px] `}>🕒  {masuk.slice(0, -3)}</Text>
-                  </View>
-                </View>
-                <View style={tw`flex-1 items-center`}>
-                  <Text style={tw`text-dark`}>Waktu Pulang</Text>
-                  <View style={tw`rounded-r-lg p-3 w-full items-center bg-dark`}>
-                    <Text className="font-poppins"  style={tw`text-white text-[14px] `}>🕒  {pulang.slice(0, -3)}</Text>
-                  </View>
-                </View>
-              </View>
-            ): (
-              <View style={tw`flex-1 items-center`}>
-                <Text className="font-poppins" style={tw`text-negative`}>Tidak Ada Jadwal</Text>
-                <View style={tw`rounded-lg p-3 w-full items-center bg-negative`}>
-                  <Text className="font-poppins" style={tw`text-white text-[14px] `}> Libur </Text>
-                </View>
-                </View>
-              )
-            }
-          </View> */}
+          <Text className="font-poppinsBold" style={tw`px-4 py-2 text-gray-dark`}>Jadwal Hari Ini 📅</Text>
+          {renderJadwalHariIni()}
         </View>
-        {/* PRESENSI HARI INI */}
-        {/* <View style={tw`pt-2`}>
-            <Text className="font-poppinsBold" style={tw`px-4 py-2 text-gray-dark`}>Statistik Presensi Bulan ini 📈</Text>
-          <View style={tw`bg-white p-3 pb-5 rounded`}>
-            <View style={tw`flex-row justify-between`}>
-              <View style={tw`flex-1 h-24 w-full bg-primary rounded justify-center items-center m-1`}>
-                <Text className="font-poppins" style={tw`text-xs text-gray-light`}>Hadir</Text>
-                <Text className="font-poppinsBold" style={tw`text-[40px] text-white`}>20</Text>
-              </View>
-              <View style={tw`flex-1 h-24 w-full bg-negative rounded justify-center items-center m-1`}>
-                <Text className="font-poppins" style={tw`text-xs text-gray-light`}>Tidak Hadir</Text>
-                <Text className="font-poppinsBold" style={tw`text-[40px] text-white`}>2</Text>
-              </View>
-             <View style={tw`flex-1 h-24 w-full border-primary border rounded justify-center items-center m-1 p-2`}>
-                <Text className="font-poppins" style={tw`text-xs text-gray text-center`}>Seharusnya</Text>
-                <Text className="font-poppinsBold" style={tw`text-[40px]`}>20</Text>
-              </View>
-            </View>
-          </View>
-        </View> */}
+        <View className="pt-2">
+          {renderAbsensiBulanIni()}
+        </View>
+
+
         {/* Calendar */}
         <View style={tw`py-2 pb-40`}>
           <Text className="font-poppinsBold" style={tw`px-4 py-2 text-gray-dark`}> Kalender Bulan Ini  🗓️</Text>

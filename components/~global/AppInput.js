@@ -10,6 +10,9 @@ const AppInput = ({
     error,
     password,
     onFocus = () => {},
+  onPressIn = () => { },
+  editable,
+    keyboardType,
     ...props
 }) => {
   const [isFocused, setIsFocused] = React.useState(false)
@@ -28,6 +31,8 @@ const AppInput = ({
         />
         <TextInput
           secureTextEntry={hidePassword}
+          editable={editable}
+          keyboardType={keyboardType}
           autoCorrect={false}
           onFocus={() => {
             onFocus();
@@ -37,6 +42,7 @@ const AppInput = ({
           onBlur={() => {
             setIsFocused(false)
           }}
+          onPressIn={onPressIn}
           onChangeText ={props.changed}
           className="flex-1"
           style={{fontFamily:"Poppins-Regular"}}
