@@ -103,7 +103,7 @@ const QrScanV2 = ({ navigation, route }) => {
                         )}
                     </View>
                 </BarCodeScanner>
-                <View className="h-48 absolute bottom-0 left-0 right-0 px-8 justify-center">
+                <View className="h-32 absolute bottom-0 left-0 right-0 px-8 justify-center">
                     <View className="flex-row items-center justify-between">
                         <TouchableOpacity className="bg-dark p-4 rounded-full"
                             onPress={()=> handleFlash()}

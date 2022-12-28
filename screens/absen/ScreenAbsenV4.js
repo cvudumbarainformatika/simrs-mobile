@@ -1,6 +1,6 @@
 
 import React, { useContext, useState } from 'react'
-import { View, Text, TouchableOpacity, Alert } from 'react-native'
+import { View, Text, TouchableOpacity, Alert, BackHandler } from 'react-native'
 import { AppAlert, AppBtn, AppLoader } from '../../components'
 import { ROUTES, tw } from '../../constants'
 import { AbsenContext } from '../../context/AbsenContext'
@@ -38,8 +38,7 @@ const ScreenAbsenV4 = ({ navigation }) => {
     function handleScheduleAndBackToHome() {
         if (cond === 'idle') {
             searchJadwalAndSet()
-        }
-
+        } 
         navigation.navigate(ROUTES.HOME_TAB)
     }
 
@@ -111,15 +110,15 @@ const ScreenAbsenV4 = ({ navigation }) => {
                 console.log("ini khusus IT")
                 let aaa;
                 aaa = {
-                    data: "wajah",
+                    data: "khusus",
                     tanggal: tglAbsen,
                     jam: date.format("HH:mm:ss"),
                     status: "pulang",
                     kategory_id:kategoryStorrage
                 }
-                navigation.navigate(ROUTES.ABSEN_LOADING, form)
+                navigation.navigate(ROUTES.ABSEN_LOADING, aaa)
             } else {
-                navigation.navigate(ROUTES.ABSEN_MAP, form)
+                navigation.navigate(ROUTES.ABSEN_MAP, aaa)
             }
             
 
@@ -210,14 +209,18 @@ const ScreenAbsenV4 = ({ navigation }) => {
                 }
             } else if (rangePulang) { // cond bisa start bisa juga checkIn
                 if (cond === 'checkOut') {
-                    sts = "Sudah Absen Pulang"
+                    sts = "Absen Complete"
                     icn = "check-decagram"
-                    clr = "negative"
-                   saveStore('idle')     
-                } else {
+                    clr = "secondary"
+                } else if (cond === 'start' || cond === 'checkIn') {
                     sts = "Absen Pulang"
                     icn = "bell-ring"
                     clr = "negative"
+                } else {
+                    // if cond === idle
+                    sts = "Absen Complete"
+                    icn = "check-decagram"
+                    clr = "secondary"
                 }
             } else if (stopped) {
                 sts = "Absen Complete"
@@ -239,7 +242,12 @@ const ScreenAbsenV4 = ({ navigation }) => {
             <View className="flex-1 items-center justify-center">
                 <Icon name={icn} color={tw.color(clr)} size={60} />
                     <Text className={`pt-1 text-${clr} font-poppinsBold`}>{sts}</Text>
-                    <Text>{ cond }</Text>
+                    {/* <Text>{ cond }</Text> */}
+                    {/* {cond === 'checkOut' && (
+                        <View className="mt-8">
+                            <AppBtn label="Tutup Sesi" color="dark" clicked={()=>handleScheduleAndBackToHome()} />
+                        </View>
+                    )} */}
             </View>
             
             {renderFooter(sts)}
@@ -281,7 +289,7 @@ const ScreenAbsenV4 = ({ navigation }) => {
                         <Text className="font-poppinsBold"> 2 Jam </Text>
                     </Text>
                     <Text className="font-poppinsItalic text-xs">
-                        Jika Halaman ini Error ... Harap Kembali Kehalaman Utama lalu kembali ke halaman ini ...
+                        Jika Halaman ini tidak merubah status Anda ... Mohon Klik tombol X di atas atau tekan tombol back di device anda ... lalu kembali lagi ke halaman ini
                     </Text>
                 </View>
             )
@@ -323,7 +331,10 @@ const ScreenAbsenV4 = ({ navigation }) => {
     React.useEffect(() => {
         setDate(dayjs().locale("id"))
         console.log('useEffect ...', currentJadwal)
-    },[navigation])
+        
+    }, [navigation])
+    
+    
 
   return (
       <View className="flex-1 bg-gray-light">

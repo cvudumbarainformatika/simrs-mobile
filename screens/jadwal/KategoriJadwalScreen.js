@@ -6,10 +6,10 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchKategoryJadwals, updateJadwalToDb } from '../../redux/actions/jadwalActions'
 import { AppAlert, AppConfirm, AppLoader } from '../../components'
-import dayjs from 'dayjs'
 import { ScrollView } from 'react-native-gesture-handler'
 import { updateJadwalsAsync } from '../../redux/features/jadwal/jadwalsReducer'
-require('dayjs/locale/id')
+import dayjs from 'dayjs'
+import 'dayjs/locale/id'
 
 const KategoriJadwalScreen = ({ navigation, route }) => {
   
@@ -65,9 +65,11 @@ const KategoriJadwalScreen = ({ navigation, route }) => {
         return
       }
       dispatch(updateJadwalsAsync(form))
+      // useSelector((state) => getCurrentJadwal(state, date.format("dddd")))
       navigation.goBack()
     } else {
       dispatch(updateJadwalsAsync(form))
+      useSelector((state) => getCurrentJadwal(state, date.format("dddd")))
       navigation.goBack()
     }
   }
@@ -110,7 +112,7 @@ const KategoriJadwalScreen = ({ navigation, route }) => {
       />
 
       <View style={tw`px-3 py-4 border-b-2 border-gray bg-white flex-row justify-between`}>
-        <Text style={tw`font-bold`}>Pilih Kategory Shift Hari </Text>
+        <Text className="font-poppinsBold">Pilih Kategory Shift Hari </Text>
         <TouchableOpacity  onPress={()=> navigation.goBack()}><Icon name="close" size={22} /></TouchableOpacity>
       </View>
       <ScrollView>
@@ -128,8 +130,8 @@ const KategoriJadwalScreen = ({ navigation, route }) => {
                       marginRight:10
                     }} />
                     <View style={tw``}>
-                      <Text >{kat.nama}</Text>
-                    <Text style={[tw`text-xs text-gray`, {color: kat.warna}]}>{kat.masuk} - { kat.pulang }</Text>
+                      <Text className="font-poppins" >{kat.nama}</Text>
+                    <Text className="font-poppins" style={[tw`text-xs text-gray`, {color: kat.warna}]}>{kat.masuk} - { kat.pulang }</Text>
                     </View>
                 </View>
                 {kategori === kat.id && (<Icon name="check-all" size={22} color={tw.color('primary')} />)}
@@ -149,14 +151,14 @@ const KategoriJadwalScreen = ({ navigation, route }) => {
               }
             }}
           >
-            <Text style={tw`text-white`}>Pilih Libur</Text>
+            <Text className="font-poppins text-white">Pilih Libur</Text>
           </TouchableOpacity>
           <TouchableOpacity style={tw`bg-dark h-full w-1/2 justify-center items-center`}
             onPress={() => {
               simpanShift('2', kategori)
             }}
           >
-            <Text style={tw`text-white`} >Simpan Shift</Text>
+            <Text className="font-poppins text-white" >Simpan Shift</Text>
           </TouchableOpacity>
         </View>
       </View>

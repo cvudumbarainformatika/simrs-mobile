@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { IMGS, ROUTES, tw } from '../../constants'
 import { AppBtn, AppLoader, GradientTop, HeaderUser } from '../../components'
 import { StackActions, useNavigation, useRoute } from '@react-navigation/native'
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import Icon from 'react-native-vector-icons/AntDesign'
 import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
 import { useDispatch, useSelector } from 'react-redux'
 import { getCurrentJadwal, getJadwalsAsync, showError, showJadwals, showLoading } from '../../redux/features/jadwal/jadwalsReducer'
@@ -66,11 +66,54 @@ const HomeScreen = () => {
     
   }, [navigation])
 
-  // if (loading) {
-  //   return (
-  //      <AppLoader visible={loading} />
-  //   )
-  // }
+  
+  const componentRekap = (x, txt, icn) => {
+    return (
+      <View className="w-full border-2 border-gray-light rounded-md p-4">
+        <View className="flex-row items-center">
+          <Icon name={icn} size={40} color={tw.color('primary')} />
+          <View className="ml-3">
+            <Text className="font-poppins text-xl -mb-1 text-gray-dark"> {x }</Text>
+            <Text className="font-poppins text-gray-dark"> {txt}</Text>
+          </View>
+        </View>
+      </View>
+    )
+  }
+
+  const renderAbsensiBulanIni = () => {
+    return (
+      <>
+        <Text className="font-poppinsBold" style={tw`px-4 py-2 text-gray-dark`}>Absensi Bulan Ini 📅</Text>
+        <View className="bg-white py-4 pb-5 rounded">
+          <View className="flex-row items-center justify-between space-x-4 px-4">
+            <View className="flex-1 mb-2">
+              {componentRekap(0,'Hadir','select1')}
+            </View>
+            <View className="flex-1 mb-2">
+              {componentRekap(0,'Sakit','disconnect')}
+            </View>
+          </View>
+          <View className="flex-row items-center justify-between space-x-4 px-4">
+            <View className="flex-1 mb-2">
+              {componentRekap(0,'Izin','paperclip')}
+            </View>
+            <View className="flex-1 mb-2">
+              {componentRekap(0,'Cuti','rest')}
+            </View>
+          </View>
+          {/* <View className="flex-row items-center justify-between space-x-4 px-4">
+            <View className="flex-1 mb-2">
+              {componentRekap(0,'Hadir','checkbox-multiple-marked-circle-outline')}
+            </View>
+            <View className="flex-1 mb-2">
+              {componentRekap(0,'Hadir','checkbox-multiple-marked-circle-outline')}
+            </View>
+          </View> */}
+        </View>
+      </>
+    )
+  }
 
   return (
     <View style={tw`flex-1 bg-gray-light`}>
@@ -95,10 +138,10 @@ const HomeScreen = () => {
           </LinearGradient>
         </View>
 
-        <View style={tw`pt-2`}>
-          <Text className="font-poppinsBold" style={tw`px-4 py-2 text-gray-dark`}>Jadwal Hari Ini 📅</Text>
+        <View className="pt-2">
+          {renderAbsensiBulanIni()}
+          {/* <Text className="font-poppinsBold" style={tw`px-4 py-2 text-gray-dark`}>Jadwal Hari Ini 📅</Text>
           <View style={tw`bg-white p-4 pb-5 rounded`}>
-            {/* JIKA BUKAN LIBUR */}
             {status === '2' ? (
               <View style={tw`flex-row justify-between `}>
                 <View style={tw`flex-1 items-center`}>
@@ -123,8 +166,7 @@ const HomeScreen = () => {
                 </View>
               )
             }
-
-          </View>
+          </View> */}
         </View>
         {/* PRESENSI HARI INI */}
         {/* <View style={tw`pt-2`}>

@@ -55,24 +55,28 @@ const JadwalScreen = ({ navigation }) => {
             <View style={[tw`w-3 h-3 rounded-3 mr-1`,
               { backgroundColor: item.kategory ? item.kategory.warna : tw.color('negative') }
             ]} />
-            <Text style={{
-              fontWeight: 'bold',
-            }}>{ item.hari }</Text>
+            <Text className="font-poppinsBold">{ item.hari }</Text>
           </View>
-          <Text style={{
-            fontSize:12,
-            // color: item.kategory ? item.kategory.warna : '',
-            borderWidth: 2,
-            paddingHorizontal: 10,
+          <Text className="font-poppins text-xs text-center -mt-1" style={{
+            borderWidth: 1,
+            paddingHorizontal: 5,
             paddingVertical: 4,
             borderColor: item.kategory ? item.kategory.warna : tw.color('negative'),
             borderRadius: 20
           }}>{item.kategory?item.kategory.nama: 'LIBUR'}</Text>
         </View>
-        <View>
-          <Text style={tw`text-xs text-gray`}>🕒 Masuk: {item.masuk}</Text>
-          <Text style={tw`text-xs text-gray`}>🕒 Pulang: {item.pulang}</Text>
-        </View>
+        {
+          item.kategory ? (
+            <View className="items-end">
+              <Text className="font-poppins text-gray-dark text-xs">Masuk  : {item.masuk}</Text>
+              <Text className="font-poppins text-gray text-xs">Pulang : {item.pulang}</Text>
+            </View>
+          ) : (
+              <View>
+                <Text className="font-poppins text-gray text-xs">LIBUR</Text>
+              </View>
+          )
+        }
       </View>
     </TouchableOpacity>
   );

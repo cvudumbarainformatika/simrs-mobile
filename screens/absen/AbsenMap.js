@@ -19,18 +19,18 @@ const AbsenMap = ({navigation, route}) => {
         latitude: -6.745297732746753,
         longitude: 113.20952966064942,
     });
-    // const [mapRegion, setMapRegion] = useState({
-    //     latitude: -7.7586092975848295,
-    //     longitude: 113.21064194843156,
-    //     latitudeDelta: 0.0015,
-    //     longitudeDelta: 0.0015,
-    // });
     const [mapRegion, setMapRegion] = useState({
         latitude: -7.7586092975848295,
-        longitude: 113.20952966064942,
+        longitude: 113.21064194843156,
         latitudeDelta: 0.0015,
         longitudeDelta: 0.0015,
     });
+    // const [mapRegion, setMapRegion] = useState({
+    //     latitude: -7.7586092975848295,
+    //     longitude: 113.20952966064942,
+    //     latitudeDelta: 0.0015,
+    //     longitudeDelta: 0.0015,
+    // });
 
     const [wait, setWait] = useState(false)
 

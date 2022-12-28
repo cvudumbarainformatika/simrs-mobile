@@ -60,7 +60,7 @@ export const jadwalsReducer = createSlice({
 
         })
         .addCase(getJadwalsAsync.rejected, (state, action) => {
-            state.error = action.payload
+            state.error = "error response"
             state.loading = false;
             state.waiting = false;
         })
@@ -86,7 +86,7 @@ export const jadwalsReducer = createSlice({
         })
 
         .addCase(updateJadwalsAsync.rejected, (state, action) => {
-            state.error = action.payload
+            state.error = "error response"
             // state.loading = false;
             state.waiting = false;
         })

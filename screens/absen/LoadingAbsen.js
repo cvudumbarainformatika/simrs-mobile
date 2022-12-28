@@ -38,19 +38,34 @@ const LoadingAbsen = ({ navigation, route }) => {
     // setMsg('Absensi Telah Success terkirim, Terimakasih ...')
     // setMsg('Absensi Telah Success terkirim, Terimakasih ...')
     // setWaiting(false)
-
-    await api.post('/v2/absensi/qr/scan2', form).then((response) => {
-      status === 'masuk'? saveStore('checkIn') : saveStore('checkOut')
-      setMsg('Absensi Telah Success terkirim, Terimakasih ...')
-      setWaiting(false)
-      waktuTutup()
-    }).catch(error => {
-      console.log('absen error :', error.response);
-      setIsError(true)
-      setMsg('Maaf Ada Kesalahan, Harap Ulangi')
-      setWaiting(false)
-      waktuTutup()
-    })
+    if (data === "wajah" || data==="khusus") {
+      await api.post('/v2/absensi/qr/wajah', form).then((response) => {
+        status === 'masuk'? saveStore('checkIn') : saveStore('checkOut')
+        setMsg('Absensi Telah Success terkirim, Terimakasih ...')
+        setWaiting(false)
+        waktuTutup()
+      }).catch(error => {
+        console.log('absen wajah error :', error.response.data);
+        setIsError(true)
+        setMsg('Maaf Ada Kesalahan, Harap Ulangi')
+        setWaiting(false)
+        waktuTutup()
+      })
+    } else {
+      await api.post('/v2/absensi/qr/scan2', form).then((response) => {
+        status === 'masuk'? saveStore('checkIn') : saveStore('checkOut')
+        setMsg('Absensi Telah Success terkirim, Terimakasih ...')
+        setWaiting(false)
+        waktuTutup()
+      }).catch(error => {
+        console.log('absen error :', error.response);
+        setIsError(true)
+        setMsg('Maaf Ada Kesalahan, Harap Ulangi')
+        setWaiting(false)
+        waktuTutup()
+      })
+    }
+    
   }
 
   const scanAgain = () => {

@@ -5,7 +5,10 @@ const initialState = {
     rekaps: [],
     waiting: false,
     isError: false,
-    error:null
+    error: null,
+    
+    hadir: [],
+    libur:[]
 }
 
 export const rekapJadwalReducer = createSlice({
@@ -28,6 +31,8 @@ export const rekapJadwalReducer = createSlice({
             })
             .addCase(getRekapAsync.fulfilled, (state, action) => {
                 state.rekaps = action.payload
+                state.hadir = action.payload.masuk? action.payload.masuk:[]
+                state.libur = action.payload.libur? action.payload.libur:[]
                 state.waiting = false
                 state.error = null
                 state.isError = false
@@ -48,7 +53,7 @@ export const getRekapAsync = createAsyncThunk(
     "rekap/getRekapAsync", 
   async (bulan) => {
     try {
-        const response = await api.get(`/v2/absensi/jadwal/rekap-by-user?bulan=${bulan}`);
+        const response = await api.get(`/v2/absensi/jadwal/rekap-by-user-libur?bulan=${bulan}`);
         console.log('getRekapAsync :', response.data)
       return response.data;
     } catch (error) {

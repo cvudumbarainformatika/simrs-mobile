@@ -64,6 +64,7 @@ export const AbsenProvider = ({ children }) => {
             statusStorrage = null;
             kategoryStorrage = null;
         } else { // jika masuk
+            saveStore('start')
             mulaiWaktuMasuk = dayjs(hariIni + " " + masuk).subtract(30, 'minute').locale('id')
             statusStorrage = status;
             kategoryStorrage = kategory_id;
@@ -76,7 +77,6 @@ export const AbsenProvider = ({ children }) => {
             }
         }
 
-
         let newJadwals = {
             mulaiWaktuMasuk: mulaiWaktuMasuk,
             mulaiWaktuPulang: mulaiWaktuPulang,
@@ -87,10 +87,9 @@ export const AbsenProvider = ({ children }) => {
 
         saveSchedule(newJadwals)
 
-        if (mulaiWaktuMasuk !== null) {
-            saveStore('start')
-        }
+        
         console.log('searchJadwalAndSet', newJadwals)
+        return 
     }
 
     // useFocusEffect(
@@ -112,9 +111,7 @@ export const AbsenProvider = ({ children }) => {
         setDate(dayjs().locale("id"))
         const init = async () => {
             setIsWait(true)
-
-
-
+            
             try {
                 const condition = await AsyncStorage.getItem('condAbsen');
                 const nJadwal = await AsyncStorage.getItem('newSchedule');
@@ -122,10 +119,11 @@ export const AbsenProvider = ({ children }) => {
                 
                 if (condition === null || condition === 'idle') {
                     searchJadwalAndSet()
+                    setTimeout(() => setIsWait(false), 1000)
                 } else {
                     setCond(condition)
+                    setTimeout(() => setIsWait(false), 1000)
                 }
-                setTimeout(() => setIsWait(false), 1000)
             } catch (e) {
                 console.log(`storrage Error : ${e}`)
                 setTimeout(() => setIsWait(false), 1000)
