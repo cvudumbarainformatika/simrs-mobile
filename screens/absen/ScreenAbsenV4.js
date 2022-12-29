@@ -64,8 +64,9 @@ const ScreenAbsenV4 = ({ navigation }) => {
                 kategory_id:kategoryStorrage
             }
         }
+        console.log('qr san ... ', form)
 
-        navigation.navigate(ROUTES.QR_SCAN, form)
+        // navigation.navigate(ROUTES.QR_SCAN, form)
         // console.log(form)
     }
 
@@ -107,22 +108,21 @@ const ScreenAbsenV4 = ({ navigation }) => {
             }
         
         if (IT) {
-                console.log("ini khusus IT")
-                let aaa;
+        console.log("ini khusus IT")
+            let aaa;
+                // sts==="Absen Masuk"?
                 aaa = {
                     data: "khusus",
                     tanggal: tglAbsen,
                     jam: date.format("HH:mm:ss"),
-                    status: "pulang",
+                    status: sts==="Absen Masuk"? "masuk":"pulang",
                     kategory_id:kategoryStorrage
                 }
-                navigation.navigate(ROUTES.ABSEN_LOADING, aaa)
-            } else {
-                navigation.navigate(ROUTES.ABSEN_MAP, aaa)
-            }
-            
+            navigation.navigate(ROUTES.ABSEN_LOADING, aaa)
+            return
+        } 
 
-        
+        navigation.navigate(ROUTES.ABSEN_MAP, form)
     }
 
 
@@ -253,11 +253,11 @@ const ScreenAbsenV4 = ({ navigation }) => {
                 <Icon name={icn} color={tw.color(clr)} size={60} />
                     <Text className={`pt-1 text-${clr} font-poppinsBold`}>{sts}</Text>
                     {/* <Text>{ cond }</Text> */}
-                    {/* {cond === 'checkOut' && (
+                    {cond === 'checkOut' && (
                         <View className="mt-8">
-                            <AppBtn label="Tutup Sesi" color="dark" clicked={()=>handleScheduleAndBackToHome()} />
+                            <AppBtn label="Tutup Sesi" color="dark" clicked={()=>saveStore('idle')} />
                         </View>
-                    )} */}
+                    )}
             </View>
             
             {renderFooter(sts)}
