@@ -45,18 +45,32 @@ const QrScanV2 = ({ navigation, route }) => {
     }
 
     const handleBarCodeScanned = ({bounds, data}) => {
+        let kotak = (bounds === undefined || bounds === 'undefined' || bounds=== null || bounds === false)
         // setScanned(true);
-        const { origin, size } = bounds
-        setX(origin.x)
-        setY(origin.y)
-        setHeight(size.height)
-        setWidth(size.width)
+        // console.log('handleBarcodeScanned', kotak)
+        // console.log('handleBarcodeScanned data ..', data)
+        if (!kotak) {
+            const { origin, size } = bounds
+            setX(origin.x)
+            setY(origin.y)
+            setHeight(size.height)
+            setWidth(size.width)
 
-        if (size.width === width || size.height === height || X=== origin.x) {
-            setScanned(true);
-            console.log(data)
-            navigation.navigate(ROUTES.ABSEN_LOADING, { data, status, kategory_id, tanggal, jam })
+            if (size.width === width || size.height === height || X=== origin.x) {
+                setScanned(true);
+                console.log(data)
+                navigation.navigate(ROUTES.ABSEN_LOADING, { data, status, kategory_id, tanggal, jam })
+                
+            }
+        } else {
+            if (data) {
+                setScanned(true);
+                console.log('kotak gakbisa ', data)
+                navigation.navigate(ROUTES.ABSEN_LOADING, { data, status, kategory_id, tanggal, jam })
+            }
         }
+
+        
     };
 
     const handleCamera = () => {
@@ -65,12 +79,12 @@ const QrScanV2 = ({ navigation, route }) => {
         )
         console.log('type:', type)
     }
-    const handleFlash = () => {
-        setFlash(
-            flash === Camera.Constants.FlashMode.off? Camera.Constants.FlashMode.torch : Camera.Constants.FlashMode.off
-        )
-        console.log('type:', type)
-    }
+    // const handleFlash = () => {
+    //     setFlash(
+    //         flash === Camera.Constants.FlashMode.off? Camera.Constants.FlashMode.torch : Camera.Constants.FlashMode.off
+    //     )
+    //     console.log('type:', type)
+    // }
     
 
 
@@ -105,12 +119,13 @@ const QrScanV2 = ({ navigation, route }) => {
                 </BarCodeScanner>
                 <View className="h-32 absolute bottom-0 left-0 right-0 px-8 justify-center">
                     <View className="flex-row items-center justify-between">
-                        <TouchableOpacity className="bg-dark p-4 rounded-full"
+                        {/* <TouchableOpacity className="bg-dark p-4 rounded-full"
                             onPress={()=> handleFlash()}
                         >
                             <Icon name={flash=== Camera.Constants.FlashMode.off? "flashlight-off" : "flashlight"} size={30} color="white" />
-                        </TouchableOpacity>
-                        <TouchableOpacity className="bg-dark p-4 rounded-full"
+                        </TouchableOpacity> */}
+                        <View></View>
+                        <TouchableOpacity className="bg-dark p-4 rounded-full self-end"
                             onPress={()=> navigation.goBack()}
                         >
                             <Icon name="close" size={30} color="white" />

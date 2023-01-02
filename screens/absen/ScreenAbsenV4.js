@@ -66,12 +66,13 @@ const ScreenAbsenV4 = ({ navigation }) => {
         }
         console.log('qr san ... ', form)
 
-        // navigation.navigate(ROUTES.QR_SCAN, form)
+        navigation.navigate(ROUTES.QR_SCAN, form)
         // console.log(form)
     }
 
     function toFaceScan(sts) {
-        console.log(pegawai.user.status)
+        console.log('face scan...',pegawai.user.status)
+        console.log('face scan status...',sts)
 
         const khusus = (pegawai.user.status === "8" || pegawai.user.status === "9" || pegawai.user.status === 8 || pegawai.user.status === 9 || pegawai.user.status === "7" || pegawai.user.status === 7);
 
@@ -110,7 +111,6 @@ const ScreenAbsenV4 = ({ navigation }) => {
         if (IT) {
         console.log("ini khusus IT")
             let aaa;
-                // sts==="Absen Masuk"?
                 aaa = {
                     data: "khusus",
                     tanggal: tglAbsen,

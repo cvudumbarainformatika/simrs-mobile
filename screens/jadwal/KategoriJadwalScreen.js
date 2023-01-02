@@ -65,7 +65,6 @@ const KategoriJadwalScreen = ({ navigation, route }) => {
         return
       }
       dispatch(updateJadwalsAsync(form))
-      // useSelector((state) => getCurrentJadwal(state, date.format("dddd")))
       navigation.goBack()
     } else {
       dispatch(updateJadwalsAsync(form))
