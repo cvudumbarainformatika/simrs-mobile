@@ -253,11 +253,11 @@ const ScreenAbsenV4 = ({ navigation }) => {
                 <Icon name={icn} color={tw.color(clr)} size={60} />
                     <Text className={`pt-1 text-${clr} font-poppinsBold`}>{sts}</Text>
                     {/* <Text>{ cond }</Text> */}
-                    {cond === 'checkOut' && (
+                    {/* {cond === 'checkOut' && (
                         <View className="mt-8">
                             <AppBtn label="Tutup Sesi" color="dark" clicked={()=>saveStore('idle')} />
                         </View>
-                    )}
+                    )} */}
             </View>
             
             {renderFooter(sts)}
