@@ -5,6 +5,7 @@ import AppLoader from "./AppLoader";
 import AppLoaderAnim from "./AppLoaderAnim";
 import AppConfirm from "./AppConfirm";
 import AppCountdown from "./AppCountdown";
+import AppBtnIcon from "./AppBtnIcon";
 
 
 export {
@@ -14,5 +15,6 @@ export {
     AppLoaderAnim,
     AppAlert,
     AppConfirm,
-    AppCountdown
+    AppCountdown,
+    AppBtnIcon
 }

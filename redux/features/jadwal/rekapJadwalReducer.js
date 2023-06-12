@@ -1,12 +1,15 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import { api } from "../../../helpers/axiosInterceptor"
 
+import dayjs from 'dayjs'
+import 'dayjs/locale/id'
+
 const initialState = {
     rekaps: [],
     waiting: false,
     isError: false,
     error: null,
-    
+
     hadir: [],
     libur: [],
 
@@ -16,7 +19,11 @@ const initialState = {
     SAKIT: 0,
     CUTI: 0,
     DL: 0,
-    EXTRA:0,
+    EXTRA: 0,
+
+    // getMonth
+    currentmonth: dayjs().month(),
+    date: dayjs().locale('id')
 }
 
 export const rekapJadwalReducer = createSlice({
@@ -27,7 +34,24 @@ export const rekapJadwalReducer = createSlice({
         setWaiting: (state, action) => { state.waiting = action.payload },
         getRekap: (state, action) => { state.rekaps = action.payload },
         setIsError: (state, action) => { state.isError = action.payload },
-        setError: (state,action) => {state.error = action.payload}
+        setError: (state, action) => { state.error = action.payload },
+        setNextMonth: (state) => {
+            const m = dayjs().month()
+            if (state.currentmonth !== m) {
+                let month = state.currentmonth + 1
+                state.currentmonth = month
+                state.date = dayjs().month(month).locale('id')
+            }
+        },
+        setPrevMonth: (state) => {
+            if (state.currentmonth > 0) {
+                let month = state.currentmonth - 1
+                state.currentmonth = month
+                state.date = dayjs().month(month).locale('id')
+            }
+        },
+
+        setDate: (state) => { state.date = dayjs().locale('id') }
     },
 
     extraReducers: (builder) => {
@@ -39,7 +63,7 @@ export const rekapJadwalReducer = createSlice({
             })
             .addCase(getRekapAsync.fulfilled, (state, action) => {
                 state.rekaps = action.payload
-                state.hadir = action.payload.masuk? action.payload.masuk:[]
+                state.hadir = action.payload.masuk ? action.payload.masuk : []
                 state.libur = action.payload.libur ? action.payload.libur : []
                 // FLAG
                 state.CUTI = action.payload.libur ?
@@ -52,8 +76,8 @@ export const rekapJadwalReducer = createSlice({
                     action.payload.libur.filter(x => x.flag === 'DL').length : 0
                 state.EXTRA = action.payload.libur ?
                     action.payload.libur.filter(x => x.flag === 'EXTRA').length : 0
-                
-                
+
+
                 // the other
                 state.waiting = false
                 state.error = null
@@ -63,23 +87,23 @@ export const rekapJadwalReducer = createSlice({
                 state.waiting = false
                 state.error = action.payload
                 state.isError = true
-        })
+            })
     }
 })
 
-export const { setWaiting, getRekap, setIsError, setError } = rekapJadwalReducer.actions;
+export const { setWaiting, getRekap, setIsError, setError, setNextMonth, setPrevMonth, setDate } = rekapJadwalReducer.actions;
 
 export default rekapJadwalReducer.reducer;
 
 export const getRekapAsync = createAsyncThunk(
-    "rekap/getRekapAsync", 
-  async (bulan) => {
-    try {
-        const response = await api.get(`/v2/absensi/jadwal/rekap-by-user-libur?bulan=${bulan}`);
-        console.log('getRekapAsync :', response.data.libur)
-      return response.data;
-    } catch (error) {
-        // console.error(error);
-        return error.response
-    }
-});
+    "rekap/getRekapAsync",
+    async (bulan) => {
+        try {
+            const response = await api.get(`/v2/absensi/jadwal/rekap-by-user-libur?bulan=${bulan}`);
+            console.log('getRekapAsync :', response.data.libur)
+            return response.data;
+        } catch (error) {
+            // console.error(error);
+            return error.response
+        }
+    });
