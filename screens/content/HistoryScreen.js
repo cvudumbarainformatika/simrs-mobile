@@ -14,7 +14,7 @@ function HistoryScreen({ navigation }) {
 
   const dispatch = useDispatch()
   const { hadir, CUTI, waiting, currentmonth, date } = useSelector(state => state.rekap)
-  console.log('rekap', date)
+  console.log('rekap', dayjs().daysInMonth())
   // const [date, setDate] = useState(dayjs().month(currentmonth).locale('id'))
 
   useEffect(() => {
@@ -48,10 +48,10 @@ function HistoryScreen({ navigation }) {
     // dispatch(getRekapAsync(date.format("MM")));
   }
 
-  const viewHistory = () => {
+  const viewHistory = (hdr) => {
     return (
       <ScrollView className="">
-        {hadir.map((item, i) => {
+        {/* {hadir.map((item, i) => {
           let cc = item.tanggal
           return (
             <View key={i} className="bg-white px-5 py-2 mb-1">
@@ -63,6 +63,44 @@ function HistoryScreen({ navigation }) {
                 <View className="">
                   <Text className="font-poppins text-xs text-right">AM : {item.masuk ? formatter(item.created_at) : ' - '}</Text>
                   <Text className="font-poppins text-xs text-right">AP : {item.pulang ? formatter(item.updated_at) : ' - '}</Text>
+                </View>
+              </View>
+            </View>
+          )
+        })} */}
+
+        {[...Array(dayjs(date).daysInMonth())].map((num, i) => {
+          let urut = i + 1
+          let tgl = urut > 9 ? urut.toString() : `0${urut}`
+          let bln = dayjs(date).month() + 1 > 9 ? dayjs(date).month() + 1 : `0${dayjs(date).month() + 1}`
+          let thn = dayjs(date).year()
+          let tanggal = `${thn}-${bln}-${tgl}`
+          let data = hdr.filter(data => data.tanggal === tanggal)[0]
+          let hari = dayjs(`${tanggal} 07:00:00`).locale("id").format("dddd")
+          let msk = data ? data.masuk : false
+          let masuk = msk ? formatter(data.created_at) : '-'
+          let plg = data ? data.pulang : false
+          let pulang = msk ? formatter(data.updated_at) : '-'
+          // console.log('r', )
+          return (
+            <View key={i} className="bg-white px-4 py-2 mb-1">
+              <View className="flex-row items-center">
+                <View className="flex-1 flex-row">
+                  <Text className="font-poppinsThin text-primary text-2xl w-8">{tgl}</Text>
+                  <Text className="font-poppins text-primary ml-1">{hari}</Text>
+                </View>
+                <View className="">
+                  {(!msk && !plg) ?
+                    <>
+                      <Text className="font-poppins text-xs text-right">LB/CB</Text>
+                    </>
+                    :
+                    <>
+                      <Text className="font-poppins text-xs text-right">AM : {masuk}</Text>
+                      <Text className="font-poppins text-xs text-right">AP : {pulang}</Text>
+                    </>
+                  }
+
                 </View>
               </View>
             </View>
@@ -101,7 +139,7 @@ function HistoryScreen({ navigation }) {
         </View>
       </View>
 
-      {hadir.length > 0 ? viewHistory() : emptyHistory()}
+      {hadir.length > 0 ? viewHistory(hadir) : emptyHistory()}
     </View>
   )
 }

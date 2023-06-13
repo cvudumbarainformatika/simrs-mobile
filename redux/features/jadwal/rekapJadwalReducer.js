@@ -100,7 +100,7 @@ export const getRekapAsync = createAsyncThunk(
     async (bulan) => {
         try {
             const response = await api.get(`/v2/absensi/jadwal/rekap-by-user-libur?bulan=${bulan}`);
-            console.log('getRekapAsync :', response.data.libur)
+            console.log('getRekapAsync :', response.data)
             return response.data;
         } catch (error) {
             // console.error(error);
