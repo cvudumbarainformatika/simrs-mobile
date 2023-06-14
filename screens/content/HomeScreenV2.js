@@ -19,6 +19,7 @@ import AppLoaderAnim from '../../components/~global/AppLoaderAnim'
 
 import dayjs from 'dayjs'
 import 'dayjs/locale/id'
+import AllMenu from '../home/comp/AllMenu'
 
 const HomeScreenV2 = () => {
 
@@ -174,11 +175,11 @@ const HomeScreenV2 = () => {
 
                 {/* JAM DIGITAL */}
 
-                <View className="h-32 w-full overflow-hidden">
+                <View className="h-24 w-full overflow-hidden">
                     <LinearGradient
                         className="flex-1 justify-center items-center"
                         colors={[tw.color('secondary'), tw.color('primary')]}
-                        start={{ x: 1, y: 0.5 }}
+                        start={{ x: 1, y: 0.8 }}
                         end={{ x: 1, y: 0.08 }}
                     >
                         <Text className="text-white text-4xl font-poppinsBold">{date.format("HH:mm")}</Text>
@@ -186,10 +187,20 @@ const HomeScreenV2 = () => {
                     </LinearGradient>
                 </View>
 
+                {/* KUMPULAN MENU */}
+                <View className="pt-2">
+                    <Text className="font-poppinsBold" style={tw`px-4 py-2 text-gray-dark`}>Aplikasi 📇</Text>
+                    <AllMenu />
+                </View>
+
+
+                {/* JADWAL HARINI */}
                 <View className="pt-2">
                     <Text className="font-poppinsBold" style={tw`px-4 py-2 text-gray-dark`}>Jadwal Hari Ini 📅</Text>
                     {renderJadwalHariIni()}
                 </View>
+
+                {/* Absensi Bulan Ini */}
                 <View className="pt-2">
                     {renderAbsensiBulanIni()}
                 </View>
