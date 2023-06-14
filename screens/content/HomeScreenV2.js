@@ -88,34 +88,34 @@ const HomeScreenV2 = () => {
             <>
                 <Text className="font-poppinsBold" style={tw`px-4 py-2 text-gray-dark`}>Absensi Bulan Ini 📅</Text>
                 <View className="bg-white py-4 pb-5 rounded">
-                    <View className="flex-row items-center justify-between space-x-4 px-4">
+                    <View className="flex-row items-center justify-between space-x-2 px-4">
                         <View className="flex-1 mb-2">
                             {componentRekap(HADIR, 'Hadir', 'select1')}
                         </View>
                         <View className="flex-1 mb-2">
-                            {componentRekap(SAKIT, 'Sakit', 'disconnect')}
+                            {componentRekap(SAKIT, 'Sakit', 'medicinebox')}
                         </View>
                         <View className="flex-1 mb-2">
                             {componentRekap(IJIN, 'Izin', 'paperclip')}
                         </View>
                     </View>
-                    <View className="flex-row items-center justify-between space-x-4 px-4">
+                    <View className="flex-row items-center justify-between space-x-2 px-4">
                         <View className="flex-1 mb-2">
                             {componentRekap(CUTI, 'Cuti', 'rest')}
                         </View>
                         <View className="flex-1 mb-2">
-                            {componentRekap(DL, 'DL', 'paperclip')}
+                            {componentRekap(DL, 'DL', 'rocket1')}
                         </View>
                         <View className="flex-1 mb-2">
-                            {componentRekap(DISPEN, 'Dispen', 'rest')}
+                            {componentRekap(DISPEN, 'Dispen', 'retweet')}
                         </View>
                     </View>
-                    <View className="flex-row items-center justify-between space-x-4 px-4">
+                    <View className="flex-row items-center justify-between space-x-2 px-4">
                         <View className="flex-1 mb-2">
-                            {componentRekap(A, 'Alpha', 'paperclip')}
+                            {componentRekap(A, 'Alpha', 'disconnect')}
                         </View>
                         <View className="flex-grow mb-2">
-                            {componentRekap(TERLAMBAT, 'Terlambat', 'rest')}
+                            {componentRekap(TERLAMBAT, 'Terlambat', 'exception1')}
                         </View>
                     </View>
                     {/* <View className="flex-row items-center justify-between space-x-4 px-4">
