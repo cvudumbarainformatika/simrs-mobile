@@ -26,6 +26,8 @@ const initialState = {
     DISPEN: 0,
     A: 0,
     CB: 0,
+    TERLAMBAT: '0',
+    HADIR: 0,
 
     // getMonth
     currentmonth: dayjs().month(),
@@ -33,6 +35,8 @@ const initialState = {
     date: dayjs().locale('id'),
 
     days: dayjs().daysInMonth(),
+
+    tanggalSekarang: dayjs().locale('id').format('YYYY-MM-DD')
 }
 
 export const rekapjadwalv2Reducer = createSlice({
@@ -76,12 +80,15 @@ export const rekapjadwalv2Reducer = createSlice({
                 let ijins = rekaps.libur ? rekaps.libur : []
                 let alphas = rekaps.alpha ? rekaps.alpha : []
                 let protas = rekaps.prota ? rekaps.prota : []
+                let jadwal = rekaps.jadwal ? rekaps.jadwal : false
                 state.rekaps = rekaps
                 state.hadir = hadirs
                 state.libur = ijins
                 state.alphas = alphas
 
                 let bukanShift = hadirs[0].kategory_id < 3 //INI UNTUK KATEGORY BUKAN SHIft
+
+                // let colTerakhirHadir = hadirs.length ? hadirs[hadirs.length - 1].tanggal : false
 
                 let details = []
                 for (let i = 0; i < state.days; i++) {
@@ -108,19 +115,29 @@ export const rekapjadwalv2Reducer = createSlice({
                     }
 
                     let status = false
-                    if (dataijin) {
-                        status = 'IJIN'
-                    } else {
-                        if (msk) {
-                            status = 'MSK'
+                    let terlambat = 0
+                    if (state.tanggalSekarang >= tanggal) {
+                        if (dataijin) {
+                            status = 'IJIN'
                         } else {
-                            if (dataprota) {
-                                status = 'CB'
+                            if (msk) {
+                                status = 'MSK'
+                                terlambat = hitungTelat(data)
                             } else {
-                                status = dataalpha ? 'A' : 'LB/BLM'
+                                if (dataprota) {
+                                    status = 'CB'
+                                } else {
+                                    status = dataalpha ? 'A' :
+                                        state.tanggalSekarang === tanggal ? 'WAIT' : 'LIBUR'
+                                }
                             }
                         }
                     }
+
+                    // if (state.tanggalSekarang <= tanggal) {
+                    //     status = false
+                    // }
+
                     let obj = {
                         tgl: tgl,
                         tanggal: tanggal,
@@ -132,13 +149,19 @@ export const rekapjadwalv2Reducer = createSlice({
                         prota: dataprota ? true : false,
                         kategory: kategory,
                         not_shift: bukanShift,
-                        status: status
+                        status: status,
+                        terlambat: terlambat
 
                     }
                     details.push(obj)
 
+
+
+
                 }
-                state.details = details
+                // this.items.sort((a, b) => a.TAKMASOK - b.TAKMASOK) : this.items = this.items.sort((a, b) => b.TAKMASOK - a.TAKMASOK)
+                state.details = details.length > 0 ?
+                    details.sort((a, b) => a.tanggal > b.tanggal ? -1 : 1) : []
                 // FLAG
                 state.CUTI = details.filter(x => x.ijin === 'CUTI').length
                 state.IJIN = details.filter(x => x.ijin === 'IJIN').length
@@ -146,8 +169,11 @@ export const rekapjadwalv2Reducer = createSlice({
                 state.DL = details.filter(x => x.ijin === 'DL').length
                 state.EXTRA = details.filter(x => x.ijin === 'EXTRA').length
                 state.DISPEN = details.filter(x => x.ijin === 'DISPEN').length
+                state.HADIR = details.filter(x => x.status === 'MSK').length
                 state.A = details.filter(x => x.status === 'A').length
 
+                // terlambat
+                state.TERLAMBAT = toHoursAndMinutes(details.reduce((a, v) => a = a + v.terlambat, 0))
 
                 // the other
                 state.waiting = false
@@ -162,6 +188,38 @@ export const rekapjadwalv2Reducer = createSlice({
     }
 })
 
+const hitungTelat = (x) => {
+    const kategoryMasuk = x.kategory ? x.kategory.masuk : '00:00:00'
+    const jamMasukServer = dayjs(x.created_at).format('HH:mm:ss')
+    const tglMasukServer = dayjs(x.created_at).format('YYYY-MM-DD')
+
+
+    const date1 = dayjs(tglMasukServer + ' ' + jamMasukServer)
+    const date2 = dayjs(tglMasukServer + ' ' + kategoryMasuk)
+
+    const terlambat = date1 > date2
+    let hitung = 0
+
+    if (terlambat) {
+        hitung = date1.diff(date2, 'minute')
+    }
+    return hitung
+}
+
+function toHoursAndMinutes(totalMinutes) {
+    const hours = Math.floor(totalMinutes / 60)
+    const minutes = totalMinutes % 60
+
+    return `${hours > 0 ? ` ${hours} jam` : ''}` +
+        `${minutes > 0 ? ` ${minutes.toFixed(0)} mnt` : ''}`
+}
+
+function lihatjadwal(x) {
+    if (x) {
+        return x.status === '2' ? 'BLM' : 'LIBUR'
+    }
+}
+
 export const { setWaiting, getRekap, setIsError, setError, setNextMonth, setPrevMonth, setDate } = rekapjadwalv2Reducer.actions;
 
 export default rekapjadwalv2Reducer.reducer;
@@ -171,7 +229,7 @@ export const getRekapAsync = createAsyncThunk(
     async (bulan) => {
         try {
             const response = await api.get(`/v2/absensi/history/data?bulan=${bulan}`);
-            // console.log('getRekapv2Async :', response.data)
+            console.log('getRekapv2Async :', response.data.jadwal)
             return response.data;
         } catch (error) {
             // console.error(error);

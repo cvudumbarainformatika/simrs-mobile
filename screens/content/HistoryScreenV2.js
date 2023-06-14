@@ -14,9 +14,9 @@ function HistoryScreenV2({ navigation }) {
 
     const dispatch = useDispatch()
     const { rekaps, hadir, waiting, currentmonth, date, days, details,
-        CUTI, IJIN, SAKIT, DL, DISPEN, A
+        CUTI, IJIN, SAKIT, DL, DISPEN, A, TERLAMBAT, HADIR
     } = useSelector(state => state.rekapv2)
-    console.log('rekap', details)
+    // console.log('rekap', details)
     // const [date, setDate] = useState(dayjs().month(currentmonth).locale('id'))
 
     useEffect(() => {
@@ -52,57 +52,120 @@ function HistoryScreenV2({ navigation }) {
             <ScrollView className="">
                 {details.map((item, i) => {
                     // console.log('r', )
-                    return (
-                        <View key={i} className="bg-white px-4 py-2 mb-1">
-                            <View className="flex-row items-center">
-                                <View className="flex-1 flex-row">
-                                    <Text className="font-poppinsThin text-primary text-2xl w-8">{item.tgl}</Text>
-                                    <Text className="font-poppins text-primary ml-1">{item.hari}</Text>
-                                </View>
-                                <View className="">
-                                    {item.status === 'MSK' && (
-                                        <>
-                                            <Text className="font-poppins text-xs text-right">AM : {item.masuk}</Text>
-                                            <Text className="font-poppins text-xs text-right">AP : {item.pulang ? item.pulang : 'TAP'}</Text>
-                                        </>
+                    if (item.status !== false) {
+                        return (
+                            <View key={i} className="bg-white px-4 py-2 mb-1">
+                                <View className="flex-row items-center">
+                                    <View className="flex-1 flex-row">
+                                        <Text className="font-poppinsThin text-primary text-2xl w-8">{item.tgl}</Text>
+                                        <Text className="font-poppins text-primary ml-1">{item.hari}</Text>
+                                    </View>
+                                    <View className="">
+                                        {/* <Text>{item.terlambat}</Text> */}
+                                        {item.status === 'MSK' && (
+                                            <>
+                                                {/* <Text>{item.terlambat}</Text> */}
+                                                <Text className="font-poppins text-xs text-right">AM : {item.masuk}</Text>
+                                                <Text
+                                                    style={tw`font-poppins text-xs text-right ${item.pulang ? '' : 'text-negative'}`}>AP : {item.pulang ? item.pulang : 'TAP'}
+                                                </Text>
+                                            </>
 
-                                    )}
-                                    {item.status === 'CB' && (
-                                        <>
-                                            <Text className="font-poppins text-xs text-right text-primary">CB</Text>
-                                        </>
-                                    )}
-                                    {item.status === 'A' && (
-                                        <>
-                                            {/* <View style={tw`bg-negative items-center justify-center rounded-2 ml-2 w-14 p-2`}>
+                                        )}
+                                        {item.status === 'CB' && (
+                                            <>
+                                                <Text className="font-poppinsBold text-lg text-right text-primary">CB</Text>
+                                            </>
+                                        )}
+                                        {item.status === 'A' && (
+                                            <>
+                                                {/* <View style={tw`bg-negative items-center justify-center rounded-2 ml-2 w-14 p-2`}>
                                                 <Text style={{ fontSize: 9, color: 'white' }}>A</Text>
                                             </View> */}
-                                            <Text className="font-poppins text-xs text-right text-negative">A</Text>
-                                        </>
+                                                <Text className="font-poppinsBold text-lg text-right text-negative">A</Text>
+                                            </>
 
-                                    )}
-                                    {item.status === 'LB/BLM' && (
-                                        <>
-                                            <Text className="font-poppins text-xs text-right text-primary">LB/BL</Text>
-                                        </>
+                                        )}
+                                        {item.status === 'LIBUR' && (
+                                            <>
+                                                <Text className="font-poppins text-xs text-right text-negative">LIBUR</Text>
+                                            </>
 
-                                    )}
-                                    {item.status === 'IJIN' && (
-                                        <>
-                                            <Text className="font-poppins text-xs text-right text-secondary">{item.ijin}</Text>
-                                        </>
+                                        )}
+                                        {item.status === 'IJIN' && (
+                                            <>
+                                                <Text className="font-poppinsBold text-lg text-right text-secondary">{item.ijin}</Text>
+                                            </>
 
-                                    )}
+                                        )}
+                                    </View>
                                 </View>
                             </View>
-                        </View>
-                    )
+                        )
+                    }
+
                 })}
-                <View>
-                    <Text>{SAKIT}</Text>
-                </View>
+                {cardRekap()}
                 <View style={{ paddingBottom: 300 }} />
             </ScrollView>
+        )
+    }
+
+    const cardRekap = () => {
+        return (
+            <View className="p-3">
+                <Text className="font-poppins text-xs py-2 text-gray">Rekap Absensi Bulan {date.format("MMMM")}</Text>
+                <View className="bg-secondary text-white rounded-t-xl rounded-b-xl">
+                    <View className=" border-gray-light border-b-2">
+                        <View className="flex-row items-center p-3 ">
+                            <Text className="font-poppins flex-1 ">HADIR</Text>
+                            <Text className="font-poppinsBold text-lg">{HADIR}</Text>
+                        </View>
+                    </View>
+                    <View className=" border-gray-light border-b-2">
+                        <View className="flex-row items-center p-3 ">
+                            <Text className="font-poppins flex-1 ">SAKIT</Text>
+                            <Text className="font-poppinsBold text-lg">{SAKIT}</Text>
+                        </View>
+                    </View>
+                    <View className="border-gray-light border-b-2">
+                        <View className="flex-row items-center p-3">
+                            <Text className="font-poppins flex-1">IJIN</Text>
+                            <Text className="font-poppinsBold text-lg">{IJIN}</Text>
+                        </View>
+                    </View>
+                    <View className="border-gray-light border-b-2">
+                        <View className="flex-row items-center p-3">
+                            <Text className="font-poppins flex-1">CUTI</Text>
+                            <Text className="font-poppinsBold text-lg">{CUTI}</Text>
+                        </View>
+                    </View>
+                    <View className="border-gray-light border-b-2">
+                        <View className="flex-row items-center p-3">
+                            <Text className="font-poppins flex-1">DL (Dinas Luar)</Text>
+                            <Text className="font-poppinsBold text-lg">{DL}</Text>
+                        </View>
+                    </View>
+                    <View className="border-gray-light border-b-2">
+                        <View className="flex-row items-center p-3">
+                            <Text className="font-poppins flex-1">DISPEN</Text>
+                            <Text className="font-poppinsBold text-lg">{DISPEN}</Text>
+                        </View>
+                    </View>
+                    <View className="border-gray-light border-b-2">
+                        <View className="flex-row items-center p-3">
+                            <Text className="font-poppins flex-1">A (Alpha)</Text>
+                            <Text className="font-poppinsBold text-lg">{A}</Text>
+                        </View>
+                    </View>
+                    <View className="border-gray-light">
+                        <View className="flex-row items-center p-3">
+                            <Text className="font-poppins flex-1 text-negative">Rekap Terlambat</Text>
+                            <Text className="font-poppinsBold text-negative">{TERLAMBAT}</Text>
+                        </View>
+                    </View>
+                </View>
+            </View>
         )
     }
 
