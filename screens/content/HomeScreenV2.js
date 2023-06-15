@@ -67,8 +67,11 @@ const HomeScreenV2 = () => {
     }, [navigation])
 
 
-    function clickedMenu() {
-        console.log('menu ok')
+    function clickedMenu(val) {
+        console.log('menu ok', val)
+        if (val.route) {
+            navigation.navigate(val.route)
+        }
     }
 
 
@@ -194,7 +197,7 @@ const HomeScreenV2 = () => {
                 {/* KUMPULAN MENU */}
                 <View className="pt-2 w-full">
                     <Text className="font-poppinsBold" style={tw`px-4 py-2 text-gray-dark`}>Aplikasi 📇</Text>
-                    <AllMenu clicked={() => clickedMenu()} />
+                    <AllMenu clicked={(val) => clickedMenu(val)} />
                 </View>
 
 

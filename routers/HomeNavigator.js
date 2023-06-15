@@ -7,6 +7,8 @@ import KategoriJadwalScreen from '../screens/jadwal/KategoriJadwalScreen';
 import { CardStyleInterpolators, createStackNavigator, TransitionPresets } from '@react-navigation/stack';
 import { HomeScreen, JadwalScreen } from '../screens';
 import HomeScreenV2 from '../screens/content/HomeScreenV2';
+import XenterScreen from '../screens/home/eXenter/xenterScreen';
+import XenterNavigator from '../screens/home/eXenter/XenterNavigator';
 
 
 // TRANSITIONS =======================
@@ -55,23 +57,24 @@ const HomeNavigator = () => {
     >
       {/* <RootStack.Group > */}
       <RootStack.Screen name="Home" component={HomeScreenV2} options={{ headerShown: false }} />
+      <RootStack.Screen name={ROUTES.XENTER_NAV} component={XenterNavigator} />
       {/* </RootStack.Group> */}
 
       {/* GROUP MODAL SLIDE  */}
       {/* <RootStack.Group screenOptions={{
-          presentation: 'modal',
-          headerShown: false,
-          gestureDirection: 'vertical',
-          transitionSpec: {
-              open: openSring,
-              close: closeSring
+        tabBarStyle: { display: "none" },
+        presentation: 'modal',
+        headerShown: false,
+        gestureDirection: 'vertical',
+        transitionSpec: {
+          open: openSring,
+          close: closeSring
         },
-          cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS
-          
-        }} >
-          <RootStack.Screen name={ROUTES.SET_JADWAL_AWAL} component={SetJadwalAwalScreen} />
-          <RootStack.Screen name={ROUTES.PILIH_KATEGORI_JADWAL_AWAL} component={PilihKategoriJadwal} />
-        </RootStack.Group> */}
+        cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS
+
+      }} >
+        <RootStack.Screen name={ROUTES.XENTER} component={XenterScreen} />
+      </RootStack.Group> */}
     </RootStack.Navigator>
   )
 }

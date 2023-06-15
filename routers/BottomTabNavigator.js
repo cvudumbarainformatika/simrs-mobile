@@ -54,7 +54,8 @@ const BottomTabNavigator = () => {
       ROUTES.LOGOUT,
       ROUTES.SCREEN_ABSEN_AWAL,
       ROUTES.ABSEN,
-      ROUTES.ABSEN_TAB
+      ROUTES.ABSEN_TAB,
+      ROUTES.XENTER_NAV
     ]
 
     let hideBottomTab = arr.some(obj => obj === focusedRoute)

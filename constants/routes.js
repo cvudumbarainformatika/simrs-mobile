@@ -2,10 +2,10 @@ export default {
   LOGIN: 'Login',
   REGISTER: 'Register',
   REGISTRASIPASSWORD: 'RegistrasiPassword',
-  
+
   LOGOUT: 'Logout',
-  ERROR_TIMEOUT : 'Error Timeout',
-  LOADING_SPECIAL : 'Loading Special',
+  ERROR_TIMEOUT: 'Error Timeout',
+  LOADING_SPECIAL: 'Loading Special',
 
 
   HOME: 'screens/content/HomeScreen',
@@ -13,6 +13,8 @@ export default {
   HOME_DRAWER: 'Home Drawer',
   SET_JADWAL_AWAL: 'screens/home/SetJadwalAwalScreen',
   PILIH_KATEGORI_JADWAL_AWAL: 'screens/home/PilihKategoriJadwal',
+  XENTER_NAV: 'screens/home/eXenter/XenterNavigator',
+  XENTER: 'screens/home/eXenter/XenterScreen',
 
   ABSEN: 'Absen Tab',
   ABSEN_TAB: 'routes/AbsenNavigator',
@@ -27,10 +29,10 @@ export default {
   JADWAL_TAB: 'routes/JadwalNavigator',
   JADWAL_DRAWER: 'Jadwal Drawer',
   JADWAL_SET: 'Jadwal Set',
-  
 
-  JADWAL_SET_TAB:'Jadwal Set tab',
-  JADWAL_SET_PILIH:'Jadwal Set pilih',
+
+  JADWAL_SET_TAB: 'Jadwal Set tab',
+  JADWAL_SET_PILIH: 'Jadwal Set pilih',
   KATEGORY_JADWAL: 'Kategory Jadwal',
   KATEGORY_JADWAL_SCREEN: 'Kategory Jadwal Screen',
 

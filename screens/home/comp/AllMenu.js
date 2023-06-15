@@ -2,7 +2,7 @@ import { View, Text, Image, ScrollView, BackHandler, ImageBackground, Pressable,
 import React, { useContext } from 'react'
 import Icon from 'react-native-vector-icons/Entypo'
 
-import { tw } from '../../../constants'
+import { ROUTES, tw } from '../../../constants'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 
 const AllMenu = (props) => {
@@ -13,7 +13,8 @@ const AllMenu = (props) => {
             name: 'e-Xenter',
             image: '',
             icon: 'flashlight',
-            color: 'primary'
+            color: 'primary',
+            route: ROUTES.XENTER_NAV
         },
         {
             id: 2,
@@ -52,7 +53,7 @@ const AllMenu = (props) => {
                 return (
                     <TouchableOpacity
                         key={i}
-                        onPress={props.clicked}>
+                        onPress={() => props.clicked(item)}>
                         <View className="bg-white m-2 py-2 w-20 rounded-lg justify-center items-center" >
                             <Icon name={item.icon} size={38} color={tw.color(item.color)} />
                             <Text className="font-poppins text-xs mt-1">{item.name}</Text>

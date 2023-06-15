@@ -50,7 +50,7 @@ export default function App() {
   // const notificationListener = useRef();
   // const responseListener = useRef();
 
-    
+
   NativeWindStyleSheet.setOutput({
     default: "native",
   });
@@ -59,7 +59,7 @@ export default function App() {
   SplashScreen.preventAutoHideAsync();
   setTimeout(SplashScreen.hideAsync, 500)
 
-  
+
 
   useEffect(() => {
     // registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
@@ -85,12 +85,12 @@ export default function App() {
   }
 
   return (
-      <AuthProvider>
-        <SafeAreaProvider>
-          <AppNav />
-          <StatusBar translucent={true} backgroundColor="transparent" />
-        </SafeAreaProvider>
-      </AuthProvider>
+    <AuthProvider>
+      <SafeAreaProvider>
+        <StatusBar translucent={true} backgroundColor="transparent" barStyle="light-content" />
+        <AppNav />
+      </SafeAreaProvider>
+    </AuthProvider>
   );
 }
 

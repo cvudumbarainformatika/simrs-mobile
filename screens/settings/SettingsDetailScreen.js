@@ -59,7 +59,7 @@ const SettingsDetailScreen = ({ navigation }) => {
       <ScrollView>
         <SafeAreaView className="flex-1">
           <View className="flex-row items-center m-4">
-            <AppBtn icon="chevron-left" color="dark" round clicked={() => navigation.navigate(ROUTES.SETTINGS_TAB)} />
+            <AppBtn icon="chevron-left" color="dark" round clicked={() => navigation.navigate(ROUTES.SETTINGS)} />
             <Text className="ml-2 font-poppins">Back to Profile</Text>
           </View>
           <View className="m-4">
