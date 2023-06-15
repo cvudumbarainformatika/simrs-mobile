@@ -9,6 +9,35 @@ import { HomeScreen, JadwalScreen } from '../screens';
 import HomeScreenV2 from '../screens/content/HomeScreenV2';
 
 
+// TRANSITIONS =======================
+const config = {
+  animation: 'spring',
+  config: {
+    stiffness: 200,
+    damping: 80,
+    mass: 1,
+    overshootClamping: false,
+    restDisplacementThreshold: 0.01,
+    restSpeedThreshold: 0.01,
+  },
+};
+
+const closeConfig = {
+  animation: 'timing',
+  config: {
+    duration: 300,
+    easing: Easing.back(),
+  }
+}
+
+const transition = {
+  gestureDirection: 'horizontal',
+  transitionSpec: {
+    open: config,
+    close: closeConfig
+  },
+  cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+}
 
 
 const HomeNavigator = () => {
@@ -16,7 +45,14 @@ const HomeNavigator = () => {
   const RootStack = createStackNavigator();
 
   return (
-    <RootStack.Navigator>
+    <RootStack.Navigator
+      screenOptions={{
+        gestureEnabled: true,
+        headerShown: false,
+        gestureDirection: 'horizontal',
+      }}
+      initialRouteName="Home"
+    >
       {/* <RootStack.Group > */}
       <RootStack.Screen name="Home" component={HomeScreenV2} options={{ headerShown: false }} />
       {/* </RootStack.Group> */}

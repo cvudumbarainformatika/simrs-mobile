@@ -67,6 +67,11 @@ const HomeScreenV2 = () => {
     }, [navigation])
 
 
+    function clickedMenu() {
+        console.log('menu ok')
+    }
+
+
     const componentRekap = (x, txt, icn) => {
         return (
             <View className="w-full border-2 border-gray-light rounded-md p-4">
@@ -187,9 +192,9 @@ const HomeScreenV2 = () => {
                 </View>
 
                 {/* KUMPULAN MENU */}
-                <View className="pt-2">
+                <View className="pt-2 w-full">
                     <Text className="font-poppinsBold" style={tw`px-4 py-2 text-gray-dark`}>Aplikasi 📇</Text>
-                    <AllMenu />
+                    <AllMenu clicked={() => clickedMenu()} />
                 </View>
 
 

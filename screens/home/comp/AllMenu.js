@@ -3,13 +3,14 @@ import React, { useContext } from 'react'
 import Icon from 'react-native-vector-icons/Entypo'
 
 import { tw } from '../../../constants'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 
 const AllMenu = (props) => {
 
     const menus = [
         {
             id: 1,
-            name: 'e-Simrs',
+            name: 'e-Xenter',
             image: '',
             icon: 'flashlight',
             color: 'primary'
@@ -44,27 +45,23 @@ const AllMenu = (props) => {
         },
     ]
 
-
-    const Item = ({ name, icon, clr }) => (
-        <View className="bg-white m-2 rounded-lg">
-            <View className="p-1 flex-1 justify-center items-center w-24">
-                <Icon name={icon} size={32} className="px-1 py-3" color={tw.color(clr)} />
-                <Text >{name}</Text>
-            </View>
-        </View>
-    );
-
     return (
-        <>
-            <View>
-                <FlatList
-                    data={menus}
-                    horizontal
-                    renderItem={({ item }) => <Item name={item.name} icon={item.icon} clr={item.color} />}
-                    keyExtractor={item => item.id}
-                />
-            </View>
-        </>
+        // <View>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            {menus.map((item, i) => {
+                return (
+                    <TouchableOpacity
+                        key={i}
+                        onPress={props.clicked}>
+                        <View className="bg-white m-2 py-2 w-20 rounded-lg justify-center items-center" >
+                            <Icon name={item.icon} size={38} color={tw.color(item.color)} />
+                            <Text className="font-poppins text-xs mt-1">{item.name}</Text>
+                        </View>
+                    </TouchableOpacity>
+                )
+            })}
+        </ScrollView>
+        // </View>
 
     )
 }
