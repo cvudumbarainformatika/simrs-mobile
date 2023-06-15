@@ -229,7 +229,7 @@ export const getRekapAsync = createAsyncThunk(
     async (bulan) => {
         try {
             const response = await api.get(`/v2/absensi/history/data?bulan=${bulan}`);
-            console.log('getRekapv2Async :', response.data.jadwal)
+            // console.log('getRekapv2Async :', response.data.jadwal)
             return response.data;
         } catch (error) {
             // console.error(error);

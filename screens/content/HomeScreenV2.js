@@ -13,8 +13,8 @@ import { getKategoriesAscync } from '../../redux/features/jadwal/kategoryJadwalR
 import { LinearGradient } from 'expo-linear-gradient'
 import { AuthContext } from '../../context/AuthContext'
 import { getAbsenTodayAsync } from '../../redux/features/jadwal/absenReducer'
-import { getRekapAsync } from '../../redux/features/jadwal/rekapjadwalv2Reducer'
-import AppLoaderAnim from '../../components/~global/AppLoaderAnim'
+import { getRekapAsync, setDate } from '../../redux/features/jadwal/rekapjadwalv2Reducer'
+// import AppLoaderAnim from '../../components/~global/AppLoaderAnim
 
 
 import dayjs from 'dayjs'
@@ -32,13 +32,14 @@ const HomeScreenV2 = () => {
     const { kategories } = useSelector(state => state.kategory)
     const { CUTI, IJIN, SAKIT, DL, DISPEN, A, TERLAMBAT, HADIR } = useSelector(state => state.rekapv2)
 
-    const [date, setDate] = useState(dayjs().locale("id"))
+    const [date, setDatex] = useState(dayjs().locale("id"))
 
     const callFirst = () => {
+        dispatch(setDate())
         dispatch(getJadwalsAsync());
         dispatch(getKategoriesAscync());
         dispatch(getAbsenTodayAsync());
-        dispatch(getRekapAsync(date.format("MM")))
+        dispatch(getRekapAsync(dayjs().locale('id').format("MM")))
     }
 
     const currentJadwal = useSelector((state) => getCurrentJadwal(state, date.format("dddd")))
@@ -46,20 +47,18 @@ const HomeScreenV2 = () => {
     const { hari, masuk, pulang, status } = currentJadwal
 
 
-
     useEffect(() => {
         const subscribe = navigation.addListener("focus", (e) => {
-            // console.log('subscribe:', e)
             callFirst()
             currentJadwal
+            console.log('date :', date)
         })
-        // console.log('jadwal dari home effect :', jadwals.length)
-        // console.log('kategori dari home effect :', kategories.length)
-        // console.log('jadwal use selector :', jadwals.length)
 
         const interval = setInterval(() => {
-            setDate(dayjs().locale("id"))
+            setDatex(dayjs().locale("id"))
         }, 1000 * 60)
+
+
         return () => {
             subscribe
             clearInterval(interval)
