@@ -3,7 +3,7 @@ import React, { useEffect } from 'react'
 
 import { CardStyleInterpolators, createStackNavigator, TransitionPresets } from '@react-navigation/stack';
 import { ROUTES } from '../../../constants';
-import XenterScreen from './xenterScreen';
+import XenterScreen from './XenterScreen';
 
 
 // TRANSITIONS =======================

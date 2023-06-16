@@ -5,9 +5,9 @@ import { ROUTES } from '../constants';
 import { closeSring, openSring, TRANSITION_HORIZONTAL, TRANSITION_VERTICAL } from '../constants/transitions';
 import KategoriJadwalScreen from '../screens/jadwal/KategoriJadwalScreen';
 import { CardStyleInterpolators, createStackNavigator, TransitionPresets } from '@react-navigation/stack';
-import { HomeScreen, JadwalScreen } from '../screens';
+// import { HomeScreen, JadwalScreen } from '../screens';
 import HomeScreenV2 from '../screens/content/HomeScreenV2';
-import XenterScreen from '../screens/home/eXenter/xenterScreen';
+// import XenterScreen from '../screens/home/eXenter/xenterScreen';
 import XenterNavigator from '../screens/home/eXenter/XenterNavigator';
 
 

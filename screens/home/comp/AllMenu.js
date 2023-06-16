@@ -44,6 +44,13 @@ const AllMenu = (props) => {
             icon: 'lab-flask',
             color: 'warning'
         },
+        {
+            id: 6,
+            name: 'e-Logbook',
+            image: '',
+            icon: 'lab-flask',
+            color: 'warning'
+        },
     ]
 
     return (

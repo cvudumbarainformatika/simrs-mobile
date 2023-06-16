@@ -1,29 +1,35 @@
-import { View, Text, StyleSheet } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { useNavigation } from '@react-navigation/native'
-import { Camera } from 'expo-camera'
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
+import React, { useState } from 'react'
 import { BarCodeScanner } from 'expo-barcode-scanner'
-import { AppAlert, AppLoader } from '../../../components'
-import { ROUTES, tw } from '../../../constants'
+import { Camera } from 'expo-camera';
+import { AppAlert, AppLoader } from '../../components'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import { ROUTES, tw } from '../../constants';
 
-const XenterScreen = ({ navigation }) => {
+const QrScanV3 = ({ navigation, route }) => {
+    // console.log('route params ... ',route.params)
+    const { status, kategory_id, tanggal, jam } = route.params
+
     const [hasPermission, setHasPermission] = useState(null)
     const [scanned, setScanned] = useState(false);
+    // const [type, setType] = useState(Camera.Constants.Type.back)
     const [flash, setFlash] = useState(Camera.Constants.FlashMode.off)
     const [X, setX] = useState(0)
     const [Y, setY] = useState(0)
     const [width, setWidth] = useState(0)
     const [height, setHeight] = useState(0)
 
-    const [load, setLoad] = useState(false)
-    // const navigation = useNavigation()
 
     React.useEffect(() => {
         (async () => {
             const { status } = await BarCodeScanner.requestPermissionsAsync();
+            // const { status } = await Camera.requestCameraPermissionsAsync();
             setHasPermission(status === 'granted');
         })();
     }, []);
+
+
     if (hasPermission === null || hasPermission === false) {
         return <AppAlert visible={hasPermission === null || hasPermission === false} msg="Maaf, Kamu tidak mengizinkan Camera untuk Aplikasi ini."
             onOk={() => navigation.goBack()}
@@ -54,20 +60,15 @@ const XenterScreen = ({ navigation }) => {
 
             if (size.width === width || size.height === height || X === origin.x) {
                 setScanned(true);
-                console.log('kotak', data);
-                // navigation.navigate(ROUTES.ABSEN_LOADING, { data, status, kategory_id, tanggal, jam })
-                setLoad(true);
-                setTimeout(() => {
-                    setLoad(false)
-                    navigation.navigate("Home")
-                }, 1000)
+                console.log('kotak bisa ', data)
+                navigation.navigate(ROUTES.ABSEN_LOADING, { data, status, kategory_id, tanggal, jam })
 
             }
         } else {
             if (data) {
                 setScanned(true);
                 console.log('kotak gakbisa ', data)
-                // navigation.navigate(ROUTES.ABSEN_LOADING, { data, status, kategory_id, tanggal, jam })
+                navigation.navigate(ROUTES.ABSEN_LOADING, { data, status, kategory_id, tanggal, jam })
             }
         }
 
@@ -80,12 +81,20 @@ const XenterScreen = ({ navigation }) => {
         )
         console.log('type:', type)
     }
+    // const handleFlash = () => {
+    //     setFlash(
+    //         flash === Camera.Constants.FlashMode.off? Camera.Constants.FlashMode.torch : Camera.Constants.FlashMode.off
+    //     )
+    //     console.log('type:', type)
+    // }
+
+
+
     return (
         <View className="flex-1">
-
-            < AppLoader visible={load} />
             <View className="flex-1 relative">
-                <Text className="font-poppinsBold z-10 bg-white text-center pt-10 pb-2">Qrcode Scann Aplikasi  Xenter Sim</Text>
+                <Text className="font-poppinsBold z-10 bg-white text-center pt-10 pb-2">Qrcode Scann Absensi {status}</Text>
+
                 <BarCodeScanner
                     flashMode={flash}
                     onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
@@ -110,9 +119,24 @@ const XenterScreen = ({ navigation }) => {
                         )}
                     </View>
                 </BarCodeScanner>
+                <View className="h-32 absolute bottom-0 left-0 right-0 px-8 justify-center">
+                    <View className="flex-row items-center justify-between">
+                        {/* <TouchableOpacity className="bg-dark p-4 rounded-full"
+                            onPress={()=> handleFlash()}
+                        >
+                            <Icon name={flash=== Camera.Constants.FlashMode.off? "flashlight-off" : "flashlight"} size={30} color="white" />
+                        </TouchableOpacity> */}
+                        <View></View>
+                        <TouchableOpacity className="bg-dark p-4 rounded-full self-end"
+                            onPress={() => navigation.goBack()}
+                        >
+                            <Icon name="close" size={30} color="white" />
+                        </TouchableOpacity>
+                    </View>
+                </View>
             </View>
         </View>
     )
 }
 
-export default XenterScreen
+export default QrScanV3

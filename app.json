@@ -27,7 +27,10 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon/adaptive-icon-android.png",
         "backgroundColor": "#0D5A86"
-      }
+      },
+      "permissions": [
+        "ACCESS_BACKGROUND_LOCATION"
+      ]
     },
     "androidStatusBar": {
       "translucent": true

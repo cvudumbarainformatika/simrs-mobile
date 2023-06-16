@@ -1,4 +1,4 @@
-import React, {createContext, useState} from 'react'
+import React, { createContext, useState } from 'react'
 
 import { ROUTES } from '../constants';
 import { closeSring, openSring, TRANSITION_HORIZONTAL } from '../constants/transitions';
@@ -11,6 +11,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import QrScanV2 from '../screens/absen/QrScanV2';
 import FaceScan from '../screens/absen/FaceScan';
 import AbsenMap from '../screens/absen/AbsenMap';
+import QrScanV3 from '../screens/absen/QrScanV3';
 
 
 const Stack = createStackNavigator();
@@ -18,28 +19,28 @@ const Stack = createStackNavigator();
 const NavigationAbsen = () => {
   return (
     <Stack.Navigator
-        screenOptions={{
-          presentation: 'modal',
-          headerShown: false,
-          gestureDirection: 'horizontal',
-          transitionSpec: {
-            open: openSring,
-            close: closeSring
-          },
-          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-        }}
-        initialRouteName={ROUTES.SCREEN_ABSEN_AWAL}
-      >
-        <Stack.Screen name={ROUTES.SCREEN_ABSEN_AWAL} component={ScreenAbsenV4} />
-        <Stack.Screen name={ROUTES.QR_SCAN} component={QrScanV2} options={{
-          unmountOnBlur: true,
+      screenOptions={{
+        presentation: 'modal',
+        headerShown: false,
+        gestureDirection: 'horizontal',
+        transitionSpec: {
+          open: openSring,
+          close: closeSring
+        },
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+      }}
+      initialRouteName={ROUTES.SCREEN_ABSEN_AWAL}
+    >
+      <Stack.Screen name={ROUTES.SCREEN_ABSEN_AWAL} component={ScreenAbsenV4} />
+      <Stack.Screen name={ROUTES.QR_SCAN} component={QrScanV3} options={{
+        unmountOnBlur: true,
       }} />
       <Stack.Screen name={ROUTES.ABSEN_MAP} component={AbsenMap} />
-        <Stack.Screen name={ROUTES.FACE_SCAN} component={FaceScan} options={{
-          unmountOnBlur: true,
-      }}/>
-        <Stack.Screen name={ROUTES.ABSEN_LOADING} component={LoadingAbsen} />
-      </Stack.Navigator>
+      <Stack.Screen name={ROUTES.FACE_SCAN} component={FaceScan} options={{
+        unmountOnBlur: true,
+      }} />
+      <Stack.Screen name={ROUTES.ABSEN_LOADING} component={LoadingAbsen} />
+    </Stack.Navigator>
   )
 }
 
@@ -47,7 +48,7 @@ const AbsenNavigator = () => {
   return (
     <AbsenProvider>
       {/* <NavigationContainer> */}
-        <NavigationAbsen />
+      <NavigationAbsen />
       {/* </NavigationContainer> */}
     </AbsenProvider>
   )
