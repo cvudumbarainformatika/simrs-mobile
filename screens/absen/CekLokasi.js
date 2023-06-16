@@ -102,7 +102,7 @@ const CekLokasi = ({ navigation, route }) => {
             {faker ? (
                 <>
                     <Icon name="alert-octagram-outline" color={tw.color('negative')} size={80} />
-                    <Text className="font-poppins">{errorMsg}</Text>
+                    <Text className="font-poppins">Maaf ... Kamu Terdeteksi Memakai Aplikasi FAKE GPS </Text>
                 </>
             ) : (
                 <>
