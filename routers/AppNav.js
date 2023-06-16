@@ -8,7 +8,7 @@ import AppStack from './AppStack'
 import AuthStack from './AuthStack'
 import { Provider } from 'react-redux'
 import { navigationRef } from './RootNavigation'
-import store  from '../redux/store'
+import store from '../redux/store'
 import AppLoaderAnim from '../components/~global/AppLoaderAnim'
 import { createStackNavigator } from '@react-navigation/stack'
 import SplashScreen_ from './SplashScreen_'
@@ -33,25 +33,25 @@ const AppNav = () => {
 
 
   if (isLoading) {
-      return (<AppLoaderAnim />)
+    return (<AppLoaderAnim />)
   }
 
-  
+
 
   if (alerts) {
     if (msgOk !== null) {
-      return (<AppAlert visible={alerts} status="Success" msg={msgOk} onOk={resetDevice}  /> )
+      return (<AppAlert visible={alerts} status="Success" msg={msgOk} onOk={resetDevice} />)
     }
-    return (<AppAlert visible={alerts} status="Error" msg={msgError} onOk={closeAlerts}  /> )
+    return (<AppAlert visible={alerts} status="Error" msg={msgError} onOk={closeAlerts} />)
   }
 
   // const Stack = createStackNavigator();
   return (
     <Provider store={store}>
       <NavigationContainer ref={navigationRef} >
-          {
-           userToken !== null ? <AppStack />: <AuthStack />
-          }
+        {
+          userToken !== null ? <AppStack /> : <AuthStack />
+        }
       </NavigationContainer>
     </Provider>
   )

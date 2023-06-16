@@ -35,6 +35,7 @@ const HomeScreenV2 = () => {
     const [date, setDatex] = useState(dayjs().locale("id"))
 
     const callFirst = () => {
+        // getMe()
         dispatch(setDate())
         dispatch(getJadwalsAsync());
         dispatch(getKategoriesAscync());

@@ -33,7 +33,8 @@ const LoadingAbsen = ({ navigation, route }) => {
       tanggal: tanggal,
       jam: jam,
       status: status,
-      kategory_id: kategory_id
+      kategory_id: kategory_id,
+      lokasi: 'ok',
     }
 
     console.log('form ... ', form)
@@ -52,7 +53,8 @@ const LoadingAbsen = ({ navigation, route }) => {
         waktuTutup()
       })
     } else {
-      await api.post('/v2/absensi/qr/scan2', form).then((response) => {
+      // await api.post('/v2/absensi/qr/scan2', form).then((response) => { //INI YANG LAMA
+      await api.post('/v2/absensi/scan/qr', form).then((response) => {
         status === 'masuk' ? saveStore('checkIn') : saveStore('checkOut')
         setMsg('Absensi Telah Success terkirim, Terimakasih ...')
         setWaiting(false)
