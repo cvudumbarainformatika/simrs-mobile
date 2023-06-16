@@ -20,7 +20,7 @@ const AllMenu = (props) => {
             id: 2,
             name: 'Siteman',
             image: '',
-            icon: 'add-user',
+            icon: 'creative-cloud',
             color: 'negative'
         },
         {
@@ -34,7 +34,7 @@ const AllMenu = (props) => {
             id: 4,
             name: 'e-Resep',
             image: '',
-            icon: 'creative-cloud',
+            icon: 'bowl',
             color: 'positive'
         },
         {
@@ -48,8 +48,8 @@ const AllMenu = (props) => {
             id: 6,
             name: 'e-Logbook',
             image: '',
-            icon: 'lab-flask',
-            color: 'warning'
+            icon: 'install',
+            color: 'info'
         },
     ]
 

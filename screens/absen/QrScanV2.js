@@ -2,15 +2,14 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 import React, { useState } from 'react'
 import { BarCodeScanner } from 'expo-barcode-scanner'
 import { Camera } from 'expo-camera';
-import { AppLoader } from '../../components'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { AppAlert, AppLoader } from '../../components'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { ROUTES, tw } from '../../constants';
 
 const QrScanV2 = ({ navigation, route }) => {
     // console.log('route params ... ',route.params)
     const { status, kategory_id, tanggal, jam } = route.params
-    
+
     const [hasPermission, setHasPermission] = useState(null)
     const [scanned, setScanned] = useState(false);
     // const [type, setType] = useState(Camera.Constants.Type.back)
@@ -20,18 +19,26 @@ const QrScanV2 = ({ navigation, route }) => {
     const [width, setWidth] = useState(0)
     const [height, setHeight] = useState(0)
 
+    const [wait, setWait] = useState(false)
+
 
     React.useEffect(() => {
         (async () => {
+            setWait(true);
             const { status } = await BarCodeScanner.requestPermissionsAsync();
             // const { status } = await Camera.requestCameraPermissionsAsync();
             setHasPermission(status === 'granted');
+            setWait(false)
         })();
     }, []);
 
-
+    if (wait) {
+        return <AppLoader visible={wait} />
+    }
     if (hasPermission === null || hasPermission === false) {
-        return <AppLoader visible={hasPermission === null || hasPermission === false}  />
+        return <AppAlert visible={hasPermission === null || hasPermission === false} msg="Harap Izinkan Kamera terlebih dahulu.... "
+            onOk={() => navigation.goBack()}
+        />
     }
 
     function renderHeader() {
@@ -44,8 +51,8 @@ const QrScanV2 = ({ navigation, route }) => {
         )
     }
 
-    const handleBarCodeScanned = ({bounds, data}) => {
-        let kotak = (bounds === undefined || bounds === 'undefined' || bounds=== null || bounds === false)
+    const handleBarCodeScanned = ({ bounds, data }) => {
+        let kotak = (bounds === undefined || bounds === 'undefined' || bounds === null || bounds === false)
         // setScanned(true);
         // console.log('handleBarcodeScanned', kotak)
         // console.log('handleBarcodeScanned data ..', data)
@@ -56,11 +63,11 @@ const QrScanV2 = ({ navigation, route }) => {
             setHeight(size.height)
             setWidth(size.width)
 
-            if (size.width === width || size.height === height || X=== origin.x) {
+            if (size.width === width || size.height === height || X === origin.x) {
                 setScanned(true);
                 console.log(data)
                 navigation.navigate(ROUTES.ABSEN_LOADING, { data, status, kategory_id, tanggal, jam })
-                
+
             }
         } else {
             if (data) {
@@ -70,12 +77,12 @@ const QrScanV2 = ({ navigation, route }) => {
             }
         }
 
-        
+
     };
 
     const handleCamera = () => {
         setType(
-            type === BarCodeScanner.Constants.Type.back? BarCodeScanner.Constants.Type.front : BarCodeScanner.Constants.Type.back
+            type === BarCodeScanner.Constants.Type.back ? BarCodeScanner.Constants.Type.front : BarCodeScanner.Constants.Type.back
         )
         console.log('type:', type)
     }
@@ -85,14 +92,14 @@ const QrScanV2 = ({ navigation, route }) => {
     //     )
     //     console.log('type:', type)
     // }
-    
+
 
 
     return (
-      <View className="flex-1">
+        <View className="flex-1">
             <View className="flex-1 relative">
-                <Text className="font-poppinsBold z-10 bg-white text-center pt-10 pb-2">Qrcode Scann Absensi { status }</Text>
-                
+                <Text className="font-poppinsBold z-10 bg-white text-center pt-10 pb-2">Qrcode Scann Absensi {status}</Text>
+
                 <BarCodeScanner
                     flashMode={flash}
                     onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
@@ -105,11 +112,11 @@ const QrScanV2 = ({ navigation, route }) => {
                         left: X,
                         width: width,
                         height: height,
-                        borderColor: scanned? tw.color('secondary'):tw.color('negative'),
+                        borderColor: scanned ? tw.color('secondary') : tw.color('negative'),
                         borderWidth: 3,
                         alignContent: 'center',
                         alignItems: 'center',
-                        justifyContent:'center'
+                        justifyContent: 'center'
 
                     }}>
                         {scanned && (
@@ -126,7 +133,7 @@ const QrScanV2 = ({ navigation, route }) => {
                         </TouchableOpacity> */}
                         <View></View>
                         <TouchableOpacity className="bg-dark p-4 rounded-full self-end"
-                            onPress={()=> navigation.goBack()}
+                            onPress={() => navigation.goBack()}
                         >
                             <Icon name="close" size={30} color="white" />
                         </TouchableOpacity>
@@ -134,7 +141,7 @@ const QrScanV2 = ({ navigation, route }) => {
                 </View>
             </View>
         </View>
-  )
+    )
 }
 
 export default QrScanV2

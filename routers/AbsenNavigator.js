@@ -12,6 +12,7 @@ import QrScanV2 from '../screens/absen/QrScanV2';
 import FaceScan from '../screens/absen/FaceScan';
 import AbsenMap from '../screens/absen/AbsenMap';
 import QrScanV3 from '../screens/absen/QrScanV3';
+import CekLokasi from '../screens/absen/CekLokasi';
 
 
 const Stack = createStackNavigator();
@@ -32,7 +33,8 @@ const NavigationAbsen = () => {
       initialRouteName={ROUTES.SCREEN_ABSEN_AWAL}
     >
       <Stack.Screen name={ROUTES.SCREEN_ABSEN_AWAL} component={ScreenAbsenV4} />
-      <Stack.Screen name={ROUTES.QR_SCAN} component={QrScanV3} options={{
+      <Stack.Screen name={ROUTES.CEK_LOKASI} component={CekLokasi} />
+      <Stack.Screen name={ROUTES.QR_SCAN} component={QrScanV2} options={{
         unmountOnBlur: true,
       }} />
       <Stack.Screen name={ROUTES.ABSEN_MAP} component={AbsenMap} />

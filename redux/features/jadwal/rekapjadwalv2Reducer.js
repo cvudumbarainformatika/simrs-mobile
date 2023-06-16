@@ -86,7 +86,7 @@ export const rekapjadwalv2Reducer = createSlice({
                 state.libur = ijins
                 state.alphas = alphas
 
-                let bukanShift = hadirs[0].kategory_id < 3 //INI UNTUK KATEGORY BUKAN SHIft
+                let bukanShift = hadirs.length ? hadirs[0].kategory_id < 3 : false //INI UNTUK KATEGORY BUKAN SHIft
 
                 // let colTerakhirHadir = hadirs.length ? hadirs[hadirs.length - 1].tanggal : false
 
