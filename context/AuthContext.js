@@ -38,7 +38,7 @@ export const AuthProvider = ({ children }) => {
                 setAlerts(true)
                 return
             }
-            console.log('login', resp)
+            // console.log('login', resp)
             let token = resp.data ? resp.data.token : null
             let userInfo = resp.data ? resp.data.user : null
             let simpeg = userInfo ? userInfo.pegawai : null

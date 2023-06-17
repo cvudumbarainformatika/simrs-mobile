@@ -26,6 +26,7 @@ export const AbsenProvider = ({ children }) => {
     // we need to wait for the async storage to return its value 
     // before rendering anything
     const [cond, setCond] = useState('idle');
+    const [isStart, setIsStart] = useState(false)
     const [schedule, setSchedule] = useState()
     const [date, setDate] = useState(dayjs().locale("id"))
     const [isWait, setIsWait] = useState(false)
@@ -65,6 +66,7 @@ export const AbsenProvider = ({ children }) => {
             kategoryStorrage = null;
         } else { // jika masuk
             saveStore('start')
+            setIsStart(true)
             mulaiWaktuMasuk = dayjs(hariIni + " " + masuk).subtract(30, 'minute').locale('id')
             statusStorrage = status;
             kategoryStorrage = kategory_id;
@@ -82,14 +84,14 @@ export const AbsenProvider = ({ children }) => {
             mulaiWaktuPulang: mulaiWaktuPulang,
             stopWaktuAbsen: stopWaktuAbsen,
             statusStorrage: statusStorrage,
-            kategoryStorrage:kategoryStorrage
+            kategoryStorrage: kategoryStorrage
         }
 
         saveSchedule(newJadwals)
 
-        
+
         console.log('searchJadwalAndSet', newJadwals)
-        return 
+        return
     }
 
     // useFocusEffect(
@@ -101,24 +103,25 @@ export const AbsenProvider = ({ children }) => {
     // const navigation = useNavigation()
 
     const appContextValue = React.useMemo(
-    () => ({
+        () => ({
             currentJadwal
-    }),[currentJadwal])
-    
+        }), [currentJadwal])
+
     // console.log('appContextValue :', appContextValue)
 
     React.useEffect(() => {
         setDate(dayjs().locale("id"))
         const init = async () => {
             setIsWait(true)
-            
+
             try {
                 const condition = await AsyncStorage.getItem('condAbsen');
                 const nJadwal = await AsyncStorage.getItem('newSchedule');
                 setSchedule(nJadwal !== null ? JSON.parse(nJadwal) : false)
-                
+
                 if (condition === null || condition === 'idle') {
                     searchJadwalAndSet()
+                    setIsStart(false)
                     setTimeout(() => setIsWait(false), 1000)
                 } else {
                     setCond(condition)
@@ -127,22 +130,34 @@ export const AbsenProvider = ({ children }) => {
             } catch (e) {
                 console.log(`storrage Error : ${e}`)
                 setTimeout(() => setIsWait(false), 1000)
+                setIsStart(false)
             }
-            
+
         };
         init();
-    },[appContextValue])  
+    }, [appContextValue])
+
+    React.useEffect(() => {
+        const interval = setInterval(() => {
+            setDate(dayjs().locale("id"))
+        }, 3000)
+
+
+        return () => {
+            clearInterval(interval)
+        }
+    }, [isStart])
 
     if (schedule === null || !schedule || cond === null) {
         return null
     }
 
-  return (
-      <AbsenContext.Provider value={{
-          cond, schedule, isWait, currentJadwal, 
-          setCond, setSchedule, searchJadwalAndSet, saveStore, 
-      }}>
-          {children}
-    </AbsenContext.Provider>
-  )
+    return (
+        <AbsenContext.Provider value={{
+            cond, schedule, isWait, currentJadwal,
+            setCond, setSchedule, searchJadwalAndSet, saveStore,
+        }}>
+            {children}
+        </AbsenContext.Provider>
+    )
 }

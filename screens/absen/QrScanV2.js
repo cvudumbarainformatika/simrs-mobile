@@ -133,7 +133,7 @@ const QrScanV2 = ({ navigation, route }) => {
                         </TouchableOpacity> */}
                         <View></View>
                         <TouchableOpacity className="bg-dark p-4 rounded-full self-end"
-                            onPress={() => navigation.goBack()}
+                            onPress={() => navigation.navigate(ROUTES.SCREEN_ABSEN_AWAL)}
                         >
                             <Icon name="close" size={30} color="white" />
                         </TouchableOpacity>

@@ -106,7 +106,7 @@ const LoadingAbsen = ({ navigation, route }) => {
     return (
       <AppAlert visible={errorMsg !== null} msg={errorMsg} onOk={() => {
         setErrorMsg(null);
-        navigation.goBack()
+        scanAgain()
       }} />
     )
   }

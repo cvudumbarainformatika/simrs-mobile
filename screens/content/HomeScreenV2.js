@@ -15,6 +15,7 @@ import { AuthContext } from '../../context/AuthContext'
 import { getAbsenTodayAsync } from '../../redux/features/jadwal/absenReducer'
 import { getRekapAsync, setDate } from '../../redux/features/jadwal/rekapjadwalv2Reducer'
 // import AppLoaderAnim from '../../components/~global/AppLoaderAnim
+import * as Notifications from 'expo-notifications';
 
 
 import dayjs from 'dayjs'
@@ -67,11 +68,30 @@ const HomeScreenV2 = () => {
 
     }, [navigation])
 
+    // const handleNotificationMasuk = async () => {
+    //     await Notifications.scheduleNotificationAsync({
+    //         content: {
+    //             title: "Absen Masuk! 🔔",
+    //             body: 'Anda Sudah Bisa Absen Masuk',
+    //             data: { data: 'Absensi Masuk' },
+    //         },
+    //         trigger: {
+    //             seconds: 1,
+    //             channelId: 'absensi',
+    //         },
+    //     });
+
+    //     return handleNotificationMasuk
+    // }
 
     function clickedMenu(val) {
-        console.log('menu ok', val)
+        // console.log('menu ok', val)
         if (val.route) {
             navigation.navigate(val.route)
+        }
+
+        if (val.id === 2) {
+            console.log('siteman')
         }
     }
 

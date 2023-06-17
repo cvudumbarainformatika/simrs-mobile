@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity} from 'react-native'
+import { View, Text, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
@@ -15,14 +15,14 @@ import { getAbsenTodayAsync, setIsAbsen, stateAbsenToday, stateAbsenTodayMasuk }
 
 import * as Location from 'expo-location';
 import { SafeAreaView } from 'react-native-safe-area-context'
-import * as Notifications from 'expo-notifications';
+// import * as Notifications from 'expo-notifications';
 
 import dayjs from 'dayjs'
 require('dayjs/locale/id')
 
 
 
-// const handleNotification = async () => {
+// const handleNotificationMasuk = async () => {
 //     await Notifications.scheduleNotificationAsync({
 //         content: {
 //             title: "Absen Masuk! 🔔",
@@ -35,7 +35,7 @@ require('dayjs/locale/id')
 //         },
 //     });
 
-//     return handleNotification
+//     return handleNotificationMasuk
 // }
 
 const ScreenAbsenAwal = ({ navigation }) => {
@@ -50,7 +50,7 @@ const ScreenAbsenAwal = ({ navigation }) => {
     const [absenMasuk, setAbsenMasuk] = useState(false)
     const [absenPulang, setAbsenPulang] = useState(false)
     const [statusAbsen, setStatusAbsen] = useState("")
-    
+
     // console.log(absenTodayPulang)
 
     let bukaAbsenMasuk = date.format("HH:mm") >= kurangiJam(masuk, 1) || date.format("HH:mm") <= kurangiMenit(pulang, 30)
@@ -59,7 +59,7 @@ const ScreenAbsenAwal = ({ navigation }) => {
     if (pulang >= "21:00:00") {
         bukaAbsenPulang = date.format("HH:mm") >= "23:30"
     }
-    
+
     const configAbsen = ((msk, plg) => {
         let sta = ""
 
@@ -68,6 +68,7 @@ const ScreenAbsenAwal = ({ navigation }) => {
             setAbsenMasuk(true)
             setAbsenPulang(false)
             sta = "WAM" // waktu absen masuk
+            // handleNotificationMasuk()
             // setStatusAbsen("WAM")
         } else if (msk && absenTodayMasuk !== null) {
             // dispatch(setIsAbsen(true))
@@ -125,19 +126,19 @@ const ScreenAbsenAwal = ({ navigation }) => {
             icn = "check-decagram"
             clr = "negative"
         }
-    } else if(!bukaAbsenMasuk && !bukaAbsenPulang) {
+    } else if (!bukaAbsenMasuk && !bukaAbsenPulang) {
         sts = "Belum Saatnya Absen"
         icn = "calendar-clock"
         clr = "gray-dark"
     } else {
         sts = "tidak ada jadwal"
-        icn = "calendar-clock" 
+        icn = "calendar-clock"
         clr = "gray-dark"
     }
 
     // console.log(sts)
 
-     // locaion -7.745561337439556, 113.2106703321762
+    // locaion -7.745561337439556, 113.2106703321762
     const [location, setLocation] = useState(null);
     const [errorMsg, setErrorMsg] = useState(null);
     const lokasiKantor = {
@@ -145,8 +146,8 @@ const ScreenAbsenAwal = ({ navigation }) => {
         longitude: 113.21066274574322
     }
     // const lokasi kantor -7.745484285962737, 113.21066274574322
-    const getLocation = async() => {
-         let { status } = await Location.requestForegroundPermissionsAsync();
+    const getLocation = async () => {
+        let { status } = await Location.requestForegroundPermissionsAsync();
         if (status !== 'granted') {
             setErrorMsg('Permission to access location was denied');
             return;
@@ -172,12 +173,12 @@ const ScreenAbsenAwal = ({ navigation }) => {
         }
     }
 
-    
+
     // console.log('absens Today :', absenTodayMasuk)
     // console.log('text :', text)
 
     useEffect(() => {
-        
+
         dispatch(getAbsenTodayAsync());
         const subscribe = navigation.addListener("focus", () => {
             dispatch(getAbsenTodayAsync());
@@ -193,7 +194,7 @@ const ScreenAbsenAwal = ({ navigation }) => {
         // if (absenTodayMasuk === null) {
         //     handleNotification()
         // }
-        
+
         console.log('absens Today :')
         return () => {
             subscribe
@@ -201,42 +202,42 @@ const ScreenAbsenAwal = ({ navigation }) => {
         }
     }, [navigation, bukaAbsenMasuk, bukaAbsenPulang])
 
-  return (
-      <SafeAreaView className="flex-1 justify-center items-center">
-          <AppLoader visible={waiting} />
-         <TouchableOpacity className="absolute top-10 right-4" onPress={()=> navigation.navigate(ROUTES.HOME_TAB)}>
-            <Icon name="close" color="black" size={42} />
-          </TouchableOpacity> 
+    return (
+        <SafeAreaView className="flex-1 justify-center items-center">
+            <AppLoader visible={waiting} />
+            <TouchableOpacity className="absolute top-10 right-4" onPress={() => navigation.navigate(ROUTES.HOME_TAB)}>
+                <Icon name="close" color="black" size={42} />
+            </TouchableOpacity>
 
-          <View className="absolute top-20 items-center">
-              <Icon name="lock" color={tw.color('gray')} size={24} />
-            <Text className="text-gray text-3xl pt-2 font-poppins">{date.format("HH:mm:ss")}</Text>
-        </View>
+            <View className="absolute top-20 items-center">
+                <Icon name="lock" color={tw.color('gray')} size={24} />
+                <Text className="text-gray text-3xl pt-2 font-poppins">{date.format("HH:mm:ss")}</Text>
+            </View>
 
-          {/* CONTENT */}
-          {/* {isAbsen ? (
+            {/* CONTENT */}
+            {/* {isAbsen ? (
              <View className="self-center justify-center items-center">
                   <Icon name="check-decagram" color={tw.color("primary")} size={80} />
               <Text className={`pt-1 text-primary`}>Absen Success</Text>
             </View> 
           ): ( */}
-          {status === '2' && (
-              <>
-                <Icon name={icn} color={tw.color(clr)} size={80} />
-                  <Text className={`pt-1 text-${clr} font-poppins`}>{sts}</Text>
-                  
+            {status === '2' && (
+                <>
+                    <Icon name={icn} color={tw.color(clr)} size={80} />
+                    <Text className={`pt-1 text-${clr} font-poppins`}>{sts}</Text>
 
-                  {(sts === "Absen Masuk" || sts === "Absen Pulang") && (
-                      <TouchableOpacity
-                          className="w-18 h-18 bg-dark overflow-hidden absolute bottom-8 rounded-full"
-                          onPress={() => navigation.navigate(ROUTES.QR_SCAN, { kategory_id })}
-                      >
-                          <View className="justify-center items-center self-center h-18 p-4">
-                              <Icon name="qrcode-scan" color={'white'} size={32} />
-                          </View>
-                      </TouchableOpacity>
-                  )}
-              {/* {
+
+                    {(sts === "Absen Masuk" || sts === "Absen Pulang") && (
+                        <TouchableOpacity
+                            className="w-18 h-18 bg-dark overflow-hidden absolute bottom-8 rounded-full"
+                            onPress={() => navigation.navigate(ROUTES.QR_SCAN, { kategory_id })}
+                        >
+                            <View className="justify-center items-center self-center h-18 p-4">
+                                <Icon name="qrcode-scan" color={'white'} size={32} />
+                            </View>
+                        </TouchableOpacity>
+                    )}
+                    {/* {
                 //   (absenMasuk && absenTodayMasuk === null) && (
                   (statusAbsen === "WAM") && (
                       <>
@@ -298,19 +299,19 @@ const ScreenAbsenAwal = ({ navigation }) => {
                   </View>
                   )
               } */}
-              
-          </>)}   
-            
-          {/* <View className="self-center justify-center items-center">
+
+                </>)}
+
+            {/* <View className="self-center justify-center items-center">
             <Text className="pt-1 text-negative">Text Untuk Geo</Text>
         </View>    */}
-          {status === '1' &&(<View className="self-center justify-center items-center">
-              <Icon name="calendar" color={tw.color("negative")} size={80} />
-              <Text className={`pt-1 text-negative font-poppins`}>Tidak Ada Jadwal</Text>
-              {/* <Text>{text}</Text> */}
-          </View>)}
-    </SafeAreaView>
-  )
+            {status === '1' && (<View className="self-center justify-center items-center">
+                <Icon name="calendar" color={tw.color("negative")} size={80} />
+                <Text className={`pt-1 text-negative font-poppins`}>Tidak Ada Jadwal</Text>
+                {/* <Text>{text}</Text> */}
+            </View>)}
+        </SafeAreaView>
+    )
 }
 
 export default ScreenAbsenAwal
@@ -319,21 +320,21 @@ export default ScreenAbsenAwal
 
 
 const kurangiJam = (
-    jam , //jam default
+    jam, //jam default
     num = 1, // default jam kurang 
-)=> {
-    let str = jam === null? "07:00:00": jam
-    let h = parseInt(str.slice(0, 2)) 
-    let hh = (h < 1? 24 : h) - num
-    let h_str = hh < 10 ? "0"+ hh : hh
-    let m = str.slice(3,-3)
-    return h_str+':'+m+':00'
+) => {
+    let str = jam === null ? "07:00:00" : jam
+    let h = parseInt(str.slice(0, 2))
+    let hh = (h < 1 ? 24 : h) - num
+    let h_str = hh < 10 ? "0" + hh : hh
+    let m = str.slice(3, -3)
+    return h_str + ':' + m + ':00'
 }
 const kurangiMenit = (
     jam, //menit default
     num = 1, // default jam kurang 
-)=> {
-    let str = jam === null? "07:00:00": jam
+) => {
+    let str = jam === null ? "07:00:00" : jam
     let h = parseInt(str.slice(0, 2)) //parse jam
     let m = parseInt(str.slice(3, -3)) //parse menit
     let min_jam = 0;
@@ -344,39 +345,39 @@ const kurangiMenit = (
     } else {
         min_menit = m - num
     }
-    let hh = (h < 1? 24 : h) - min_jam
+    let hh = (h < 1 ? 24 : h) - min_jam
     let mm = min_menit
     let h_str = hh < 10 ? "0" + hh : hh
     let m_str = mm < 10 ? "0" + mm : mm
-    return h_str+':'+m_str+':00'
+    return h_str + ':' + m_str + ':00'
 }
 const tambahiJam = (
-    jam , //jam default
+    jam, //jam default
     num = 1, // default jam kurang 
-)=> {
-    let str = jam === null? "07:00:00": jam
-    let h = parseInt(str.slice(0, 2)) 
-    let hh = (h > 23? 0 : h) + num
-    let h_str = hh < 10 ? "0"+ hh : hh
-    let m = str.slice(3,-3)
-    return h_str+':'+m+':00'
+) => {
+    let str = jam === null ? "07:00:00" : jam
+    let h = parseInt(str.slice(0, 2))
+    let hh = (h > 23 ? 0 : h) + num
+    let h_str = hh < 10 ? "0" + hh : hh
+    let m = str.slice(3, -3)
+    return h_str + ':' + m + ':00'
 }
 
 
 
-function hitungJarak(lokasiku, lokasiKantor)  {
-        // console.log(lokasiku)
-let distance = null      
-let R = 6371; // Radius of the earth in km
-let dLat = (lokasiku.latitude - lokasiKantor.latitude) * Math.PI / 180;  // Javascript functions in radians
-let dLon = (lokasiku.longitude - lokasiKantor.longitude) * Math.PI / 180;  // Javascript functions in radians
-let a = 
-    0.5 - Math.cos(dLat)/2 + 
-    Math.cos(lokasiKantor.latitude * Math.PI / 180) * Math.cos(lokasiku.latitude * Math.PI / 180) * 
-    (1 - Math.cos(dLon))/2;
+function hitungJarak(lokasiku, lokasiKantor) {
+    // console.log(lokasiku)
+    let distance = null
+    let R = 6371; // Radius of the earth in km
+    let dLat = (lokasiku.latitude - lokasiKantor.latitude) * Math.PI / 180;  // Javascript functions in radians
+    let dLon = (lokasiku.longitude - lokasiKantor.longitude) * Math.PI / 180;  // Javascript functions in radians
+    let a =
+        0.5 - Math.cos(dLat) / 2 +
+        Math.cos(lokasiKantor.latitude * Math.PI / 180) * Math.cos(lokasiku.latitude * Math.PI / 180) *
+        (1 - Math.cos(dLon)) / 2;
 
-let dist = R * 2 * Math.asin(Math.sqrt(a)); //in Km
-let mtr = dist * 1000;
-distance = mtr
-return distance
+    let dist = R * 2 * Math.asin(Math.sqrt(a)); //in Km
+    let mtr = dist * 1000;
+    distance = mtr
+    return distance
 }
