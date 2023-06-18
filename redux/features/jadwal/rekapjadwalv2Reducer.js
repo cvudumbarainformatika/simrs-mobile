@@ -119,6 +119,7 @@ export const rekapjadwalv2Reducer = createSlice({
                     if (state.tanggalSekarang >= tanggal) {
                         if (dataijin) {
                             status = 'IJIN'
+                            terlambat = 0
                         } else {
                             if (msk) {
                                 status = 'MSK'
@@ -126,9 +127,11 @@ export const rekapjadwalv2Reducer = createSlice({
                             } else {
                                 if (dataprota) {
                                     status = 'CB'
+                                    terlambat = 0
                                 } else {
                                     status = dataalpha ? 'A' :
                                         state.tanggalSekarang === tanggal ? 'WAIT' : 'LIBUR'
+                                    terlambat = 0
                                 }
                             }
                         }
@@ -189,13 +192,13 @@ export const rekapjadwalv2Reducer = createSlice({
 })
 
 const hitungTelat = (x) => {
-    const kategoryMasuk = x.kategory ? x.kategory.masuk : '00:00:00'
+    const jamMasukKategory = x.kategory ? x.kategory.masuk : '00:00:00'
     const jamMasukServer = dayjs(x.created_at).format('HH:mm:ss')
-    const tglMasukServer = dayjs(x.created_at).format('YYYY-MM-DD')
+    const tglMasukServer = dayjs(x.tanggal).format('YYYY-MM-DD')
 
 
     const date1 = dayjs(tglMasukServer + ' ' + jamMasukServer)
-    const date2 = dayjs(tglMasukServer + ' ' + kategoryMasuk)
+    const date2 = dayjs(tglMasukServer + ' ' + jamMasukKategory)
 
     const terlambat = date1 > date2
     let hitung = 0

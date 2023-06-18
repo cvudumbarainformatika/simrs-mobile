@@ -90,8 +90,8 @@ const HomeScreenV2 = () => {
             navigation.navigate(val.route)
         }
 
-        if (val.id === 2) {
-            console.log('siteman')
+        if (val.id > 1) {
+            alert(`Aplikasi ${val.name} akan Release pada Update an selanjutnya`)
         }
     }
 
@@ -164,28 +164,31 @@ const HomeScreenV2 = () => {
         return (
             <View style={tw`bg-white p-4 pb-5 rounded`}>
                 {status === '2' ? (
-                    <View className="flex-row items-center space-x-4">
-                        <View style={tw`flex-1 items-center`}>
-                            <View style={tw`rounded-lg p-3 w-full items-center border-gray-light border-2`}>
-                                <Text className="font-poppins text-gray-dark" >🕒  {masuk.slice(0, -3)}</Text>
-                                <Text className="font-poppins" style={tw`text-primary`}>Waktu Masuk</Text>
+                    <>
+                        <View className="flex-row items-center space-x-4">
+                            <View style={tw`flex-1 items-center`}>
+                                <View style={tw`rounded-lg p-3 w-full items-center border-gray-light border-2`}>
+                                    <Text className="font-poppins text-gray-dark" >🕒  {masuk.slice(0, -3)}</Text>
+                                    <Text className="font-poppins" style={tw`text-primary`}>Waktu Masuk</Text>
+                                </View>
+                            </View>
+                            <View className="flex-1 items-center">
+                                <View style={tw`rounded-lg p-3 w-full items-center border-gray-light border-2`}>
+                                    <Text className="font-poppins text-gray-dark">🕒  {pulang.slice(0, -3)}</Text>
+                                    <Text className="font-poppins" style={tw`text-dark`}>Waktu Pulang</Text>
+                                </View>
                             </View>
                         </View>
-                        <View className="flex-1 items-center">
-                            <View style={tw`rounded-lg p-3 w-full items-center border-gray-light border-2`}>
-                                <Text className="font-poppins text-gray-dark">🕒  {pulang.slice(0, -3)}</Text>
-                                <Text className="font-poppins" style={tw`text-dark`}>Waktu Pulang</Text>
-                            </View>
-                        </View>
-                    </View>
-
+                    </>
                 ) : (
-                    <View className="flex-1 items-center">
-                        <View style={tw`rounded-lg p-3 w-full items-center border-gray-light border-2`}>
-                            <Text className="font-poppins text-gray-dark"> Libur </Text>
-                            <Text className="font-poppins" style={tw`text-negative`}>Tidak Ada Jadwal</Text>
+                    <>
+                        <View className="flex-1 items-center justify-center">
+                            <View style={tw`rounded-lg p-3 w-full items-center border-gray-light border-2`}>
+                                <Text className="font-poppins text-gray-dark"> Libur </Text>
+                                <Text className="font-poppins" style={tw`text-negative`}>Tidak Ada Jadwal</Text>
+                            </View>
                         </View>
-                    </View>
+                    </>
                 )
                 }
             </View>

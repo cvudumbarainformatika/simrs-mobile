@@ -4,7 +4,8 @@ import { useEffect, useState } from 'react';
 import * as Location from 'expo-location';
 import { IMGS, ROUTES, tw } from '../../constants';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-import { AppBtn, AppLoader } from '../../components';
+import { AppAlert, AppBtn, AppLoader } from '../../components';
+import NetInfo from '@react-native-community/netinfo';
 // import * as Permissions from 'expo-permissions'
 
 const CekLokasi = ({ navigation, route }) => {
@@ -31,11 +32,19 @@ const CekLokasi = ({ navigation, route }) => {
     const [radius, setRadius] = useState(1500) //default 30 kesepakatan
     const [distance, setDistance] = useState(0) // jarak
 
+    const [inet, setInet] = useState(false)
+
+    NetInfo.fetch().then(state => {
+        console.log('Connection type', state.type);
+        console.log('Is connected?', state.isConnected);
+        setInet(state.isConnected)
+    });
+
     // console.log(route)
 
     const handleLocation = async () => {
 
-        // NetInfo
+
 
 
         let { status } = await Location.requestForegroundPermissionsAsync();
@@ -89,7 +98,14 @@ const CekLokasi = ({ navigation, route }) => {
     if (faker) {
         return (
             <AppAlert visible={faker} msg="Maaf ... Kamu Terdeteksi Memakai Aplikasi FAKE GPS " onOk={() => {
-                navigation.goBack()
+                navigation.navigate(ROUTES.SCREEN_ABSEN_AWAL)
+            }} />
+        )
+    }
+    if (!inet) {
+        return (
+            <AppAlert visible={!inet} msg="Maaf ... Internet Kamu Tidak Aktif" onOk={() => {
+                navigation.navigate(ROUTES.SCREEN_ABSEN_AWAL)
             }} />
         )
     }

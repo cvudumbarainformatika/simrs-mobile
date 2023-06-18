@@ -38,6 +38,11 @@ export const AbsenProvider = ({ children }) => {
     const saveStore = async (txt) => {
         await AsyncStorage.setItem('condAbsen', txt)
         setCond(txt)
+        if (txt === 'idle') {
+            setIsStart(false)
+        } else {
+            setIsStart(true)
+        }
     }
 
     const saveSchedule = async (nJadwal) => {
