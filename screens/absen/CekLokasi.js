@@ -29,7 +29,7 @@ const CekLokasi = ({ navigation, route }) => {
     const [waiting, setWaiting] = useState(true)
     const [errorMsg, setErrorMsg] = useState(null)
     // const [isFar, setIsFar] = useState(true)
-    const [radius, setRadius] = useState(1500) //default 30 kesepakatan
+    const [radius, setRadius] = useState(100) //default 100 kesepakatan
     const [distance, setDistance] = useState(0) // jarak
 
     const [inet, setInet] = useState(false)
