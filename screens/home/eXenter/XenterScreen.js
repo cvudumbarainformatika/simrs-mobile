@@ -1,10 +1,11 @@
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, Alert, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { useNavigation } from '@react-navigation/native'
+import { StackActions, useNavigation } from '@react-navigation/native'
 import { Camera } from 'expo-camera'
 import { BarCodeScanner } from 'expo-barcode-scanner'
 import { AppAlert, AppLoader } from '../../../components'
 import { ROUTES, tw } from '../../../constants'
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 const XenterScreen = ({ navigation }) => {
     const [hasPermission, setHasPermission] = useState(null)
@@ -20,24 +21,17 @@ const XenterScreen = ({ navigation }) => {
 
     React.useEffect(() => {
         (async () => {
+            setLoad(true);
             const { status } = await BarCodeScanner.requestPermissionsAsync();
             setHasPermission(status === 'granted');
+            setLoad(false)
         })();
-    }, []);
+    }, [hasPermission]);
+
     if (hasPermission === null || hasPermission === false) {
         return <AppAlert visible={hasPermission === null || hasPermission === false} msg="Maaf, Kamu tidak mengizinkan Camera untuk Aplikasi ini."
-            onOk={() => navigation.goBack()}
+            onOk={() => navigation.pop(1)}
         />
-    }
-
-    function renderHeader() {
-        return (
-            <View className="absolute top-0 z-10 bg-white left-0 right-0">
-                <View className="">
-                    <Text className="font-poppinsBold">Qrcode Scanner</Text>
-                </View>
-            </View>
-        )
     }
 
     const handleBarCodeScanned = ({ bounds, data }) => {
@@ -55,19 +49,16 @@ const XenterScreen = ({ navigation }) => {
             if (size.width === width || size.height === height || X === origin.x) {
                 setScanned(true);
                 console.log('kotak', data);
-                // navigation.navigate(ROUTES.ABSEN_LOADING, { data, status, kategory_id, tanggal, jam })
-                setLoad(true);
-                setTimeout(() => {
-                    setLoad(false)
-                    navigation.navigate("Home")
-                }, 1000)
+                // navigation.navigate(ROUTES.KirimQr, { data })
+                navigation.dispatch(StackActions.push(ROUTES.KirimQr, { data }))
 
             }
         } else {
             if (data) {
                 setScanned(true);
                 console.log('kotak gakbisa ', data)
-                // navigation.navigate(ROUTES.ABSEN_LOADING, { data, status, kategory_id, tanggal, jam })
+                // navigation.navigate(ROUTES.KirimQr, { data })
+                navigation.dispatch(StackActions.push(ROUTES.KirimQr, { data }))
             }
         }
 
@@ -80,10 +71,15 @@ const XenterScreen = ({ navigation }) => {
         )
         console.log('type:', type)
     }
+
+    if (load) {
+        return (
+            < AppLoader visible={load} />
+        )
+    }
     return (
         <View className="flex-1">
 
-            < AppLoader visible={load} />
             <View className="flex-1 relative">
                 <Text className="font-poppinsBold z-10 bg-white text-center pt-10 pb-2">Qrcode Scann Aplikasi  Xenter Sim</Text>
                 <BarCodeScanner
@@ -110,6 +106,16 @@ const XenterScreen = ({ navigation }) => {
                         )}
                     </View>
                 </BarCodeScanner>
+                <View className="h-32 absolute bottom-0 left-0 right-0 px-8 justify-center">
+                    <View className="flex-row items-center justify-between">
+                        <View></View>
+                        <TouchableOpacity className="bg-dark p-4 rounded-full self-end"
+                            onPress={() => navigation.pop(1)}
+                        >
+                            <Icon name="close" size={30} color="white" />
+                        </TouchableOpacity>
+                    </View>
+                </View>
             </View>
         </View>
     )

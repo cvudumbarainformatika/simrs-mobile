@@ -50,6 +50,9 @@ const HomeScreenV2 = () => {
 
 
     useEffect(() => {
+        if (pegawai === null) {
+            navigation.navigate(ROUTES.LOGOUT)
+        }
         const subscribe = navigation.addListener("focus", (e) => {
             callFirst()
             currentJadwal
@@ -87,7 +90,7 @@ const HomeScreenV2 = () => {
     function clickedMenu(val) {
         // console.log('menu ok', val)
         if (val.route) {
-            navigation.navigate(val.route)
+            navigation.dispatch(StackActions.push(val.route))
         }
 
         if (val.id > 1) {

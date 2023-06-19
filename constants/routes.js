@@ -14,7 +14,8 @@ export default {
   SET_JADWAL_AWAL: 'screens/home/SetJadwalAwalScreen',
   PILIH_KATEGORI_JADWAL_AWAL: 'screens/home/PilihKategoriJadwal',
   XENTER_NAV: 'screens/home/eXenter/XenterNavigator',
-  XENTER: 'screens/home/eXenter/XenterScreen',
+  XENTER: 'screensXenterScreen',
+  KirimQr: 'screens/home/eXenter/KirimQr',
 
   ABSEN: 'Absen Tab',
   ABSEN_TAB: 'routes/AbsenNavigator',

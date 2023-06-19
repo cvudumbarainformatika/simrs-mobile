@@ -177,7 +177,7 @@ const ScreenAbsenV4 = ({ navigation }) => {
     }
 
     function renderContent() {
-        console.log('render content...', schedule)
+        // console.log('render content...', schedule)
         let rangeMasuk = false;
         let rangePulang = false;
         let stopped = false;
@@ -191,10 +191,10 @@ const ScreenAbsenV4 = ({ navigation }) => {
         // stopped = dayjs().isSameOrAfter(dayjs(stopWaktuAbsen)) 
         stopped = dayjs().isBetween(dayjs(stopWaktuAbsen), dayjs(stopWaktuAbsen).add(5, 'minute'));
 
-        console.log('range masuk', rangeMasuk)
-        console.log('range pulang', rangePulang)
-        console.log('stop', stopped)
-        console.log('libur', libur)
+        // console.log('range masuk', rangeMasuk)
+        // console.log('range pulang', rangePulang)
+        // console.log('stop', stopped)
+        // console.log('libur', libur)
 
         let sts = ""
         let icn = "bell-ring"

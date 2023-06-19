@@ -9,6 +9,7 @@ import { CardStyleInterpolators, createStackNavigator, TransitionPresets } from 
 import HomeScreenV2 from '../screens/content/HomeScreenV2';
 // import XenterScreen from '../screens/home/eXenter/xenterScreen';
 import XenterNavigator from '../screens/home/eXenter/XenterNavigator';
+import Logout from '../screens/Logout';
 
 
 // TRANSITIONS =======================
@@ -53,11 +54,13 @@ const HomeNavigator = () => {
         headerShown: false,
         gestureDirection: 'horizontal',
       }}
-      initialRouteName="Home"
+      initialRouteName={ROUTES.HOME}
     >
       {/* <RootStack.Group > */}
-      <RootStack.Screen name="Home" component={HomeScreenV2} options={{ headerShown: false }} />
+      <RootStack.Screen name={ROUTES.HOME} component={HomeScreenV2} />
       <RootStack.Screen name={ROUTES.XENTER_NAV} component={XenterNavigator} />
+
+      <RootStack.Screen name={ROUTES.LOGOUT} component={Logout} />
       {/* </RootStack.Group> */}
 
       {/* GROUP MODAL SLIDE  */}

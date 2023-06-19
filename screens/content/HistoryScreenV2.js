@@ -16,7 +16,7 @@ function HistoryScreenV2({ navigation }) {
     const { rekaps, hadir, waiting, currentmonth, date, days, details,
         CUTI, IJIN, SAKIT, DL, DISPEN, A, TERLAMBAT, HADIR
     } = useSelector(state => state.rekapv2)
-    // console.log('rekap', details)
+    console.log('rekap', details)
     // const [date, setDate] = useState(dayjs().month(currentmonth).locale('id'))
 
     useEffect(() => {

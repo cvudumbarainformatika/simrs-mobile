@@ -144,6 +144,7 @@ export const rekapjadwalv2Reducer = createSlice({
                     let obj = {
                         tgl: tgl,
                         tanggal: tanggal,
+                        tanggalMasuk: masuk ? data.tanggal : false,
                         masuk: masuk,
                         pulang: pulang,
                         hari: hari,
@@ -194,11 +195,13 @@ export const rekapjadwalv2Reducer = createSlice({
 const hitungTelat = (x) => {
     const jamMasukKategory = x.kategory ? x.kategory.masuk : '00:00:00'
     const jamMasukServer = dayjs(x.created_at).format('HH:mm:ss')
-    const tglMasukServer = dayjs(x.tanggal).format('YYYY-MM-DD')
+
+    const tglKategory = dayjs(x.tanggal).format('YYYY-MM-DD')
+    const tglMasukServer = dayjs(x.created_at).format('YYYY-MM-DD')
 
 
-    const date1 = dayjs(tglMasukServer + ' ' + jamMasukServer)
-    const date2 = dayjs(tglMasukServer + ' ' + jamMasukKategory)
+    const date1 = dayjs(tglMasukServer + ' ' + jamMasukServer) //masuk
+    const date2 = dayjs(tglKategory + ' ' + jamMasukKategory) //kategory
 
     const terlambat = date1 > date2
     let hitung = 0
