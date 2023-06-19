@@ -2,7 +2,7 @@
   "expo": {
     "name": "Xenter Rsud MSaleh",
     "slug": "XenterRsudMSaleh",
-    "version": "1.0.8",
+    "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/icon/icon.png",
     "userInterfaceStyle": "light",
@@ -22,15 +22,13 @@
     },
     "android": {
       "package": "com.xenter.rsudmsaleh",
-      "versionCode": 9,
+      "versionCode": 11,
       "softwareKeyboardLayoutMode": "pan",
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon/adaptive-icon-android.png",
         "backgroundColor": "#0D5A86"
       },
-      "permissions": [
-        "ACCESS_BACKGROUND_LOCATION"
-      ]
+      "permissions": []
     },
     "androidStatusBar": {
       "translucent": true
