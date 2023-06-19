@@ -29,7 +29,7 @@ const ScreenAbsenV4 = ({ navigation }) => {
     } = useContext(AbsenContext)
 
     const { pegawai } = useContext(AuthContext)
-    // console.log('screenAbsen4 :',pegawai)
+    console.log('screenAbsenV4')
     const { mulaiWaktuMasuk, mulaiWaktuPulang, statusStorrage, kategoryStorrage, stopWaktuAbsen } = schedule
 
 

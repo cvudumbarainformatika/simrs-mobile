@@ -6,18 +6,21 @@ import { CardStyleInterpolators, createStackNavigator, TransitionPresets } from 
 import QrScan from '../screens/absen/QrScan';
 import LoadingAbsen from '../screens/absen/LoadingAbsen';
 import ScreenAbsenV4 from '../screens/absen/ScreenAbsenV4';
-import { AbsenProvider } from '../context/AbsenContext';
 import { NavigationContainer } from '@react-navigation/native';
 import QrScanV2 from '../screens/absen/QrScanV2';
 import FaceScan from '../screens/absen/FaceScan';
 import AbsenMap from '../screens/absen/AbsenMap';
-import QrScanV3 from '../screens/absen/QrScanV3';
 import CekLokasi from '../screens/absen/CekLokasi';
+import store from '../redux/store'
+import { Text } from 'react-native';
+import { AbsenProvider } from '../context/AbsenContext';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-
+// console.log('oooi')
 const Stack = createStackNavigator();
 
 const NavigationAbsen = () => {
+  console.log('navigation absen')
   return (
     <Stack.Navigator
       screenOptions={{
@@ -47,11 +50,10 @@ const NavigationAbsen = () => {
 }
 
 const AbsenNavigator = () => {
+  console.log('absenNavigator')
   return (
     <AbsenProvider>
-      {/* <NavigationContainer> */}
       <NavigationAbsen />
-      {/* </NavigationContainer> */}
     </AbsenProvider>
   )
 };

@@ -112,7 +112,7 @@ export const AbsenProvider = ({ children }) => {
             currentJadwal
         }), [currentJadwal])
 
-    // console.log('appContextValue :', appContextValue)
+    // console.log('absenContext')
 
     React.useEffect(() => {
         setDate(dayjs().locale("id"))
@@ -140,7 +140,7 @@ export const AbsenProvider = ({ children }) => {
 
         };
         init();
-    }, [appContextValue])
+    }, [])
 
     React.useEffect(() => {
         const interval = setInterval(() => {

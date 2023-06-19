@@ -45,22 +45,22 @@ const transition = {
 const Stack = createStackNavigator();
 
 const LoginNavigator = () => {
-  // console.log(Stack)
+  console.log('login navigator  ')
   return (
-      <Stack.Navigator
-          screenOptions={{
-            gestureEnabled: true,
-            headerShown: false,
-            gestureDirection: 'horizontal',
+    <Stack.Navigator
+      screenOptions={{
+        gestureEnabled: true,
+        headerShown: false,
+        gestureDirection: 'horizontal',
       }}
       initialRouteName={ROUTES.LOGIN}
-      >
+    >
       <Stack.Screen name={ROUTES.LOGIN} component={LoginScreen} options={transition} />
       <Stack.Screen name={ROUTES.REGISTER} component={RegisterScreen} options={transition} />
       <Stack.Screen name={ROUTES.REGISTRASIPASSWORD} component={RegistrasiPasswordScreen}
         options={[
           transition,
-          ({route}) => ({
+          ({ route }) => ({
             title: route.params.userId
           })
         ]}
@@ -77,12 +77,13 @@ const LoginNavigator = () => {
 // +++++++++++++++++++++++===================END ROUTE
 
 const AuthNavigator = () => {
+  console.log('auth navigator  ')
   return (
     <AuthProvider>
 
       <NavigationContainer>
-          {/* {isAuthenticated? LoginNavigator : BottomTabNavigator} */}
-          <LoginNavigator />
+        {/* {isAuthenticated? LoginNavigator : BottomTabNavigator} */}
+        <LoginNavigator />
       </NavigationContainer>
     </AuthProvider>
   )
