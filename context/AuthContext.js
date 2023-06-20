@@ -71,7 +71,7 @@ export const AuthProvider = ({ children }) => {
                 if (err.response.status === 410) {
                     // console.log(e.response)
                     setMsgOk('Klik OK untuk ganti device')
-                    setUserId(e.response.data.id)
+                    setUserId(err.response.data.id)
                     setAlerts(true)
                     return
                 }
