@@ -131,7 +131,7 @@ const ScreenAbsenV4 = ({ navigation }) => {
         let libur = false;
         libur = statusStorrage === "1" || statusStorrage === 1 || statusStorrage === null
 
-        console.log('renderHeader...', libur)
+        // console.log('renderHeader...', libur)
 
         return (
             <View className="px-3 pt-8 pb-2 bg-white">
@@ -268,7 +268,7 @@ const ScreenAbsenV4 = ({ navigation }) => {
 
     function renderFooter(sts) {
         const active = sts === "Absen Masuk" || sts === "Absen Pulang"
-        console.log('render footer ... ', active)
+        // console.log('render footer ... ', active)
         if (active) {
             return (
                 <View>
@@ -333,14 +333,14 @@ const ScreenAbsenV4 = ({ navigation }) => {
 
     useFocusEffect(
         React.useCallback(() => {
-            console.log('focus effect :', currentJadwal);
+            // console.log('focus effect :', currentJadwal);
         }, [currentJadwal]),
     );
 
 
     React.useEffect(() => {
         setDate(dayjs().locale("id"))
-        console.log('useEffect ...', currentJadwal)
+        // console.log('useEffect ...', currentJadwal)
 
     }, [navigation])
 

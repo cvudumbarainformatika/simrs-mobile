@@ -50,7 +50,7 @@ const HomeScreenV2 = () => {
 
 
     useEffect(() => {
-        if (pegawai === null) {
+        if (pegawai === null || !pegawai) {
             navigation.navigate(ROUTES.LOGOUT)
         }
         const subscribe = navigation.addListener("focus", (e) => {

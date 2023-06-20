@@ -29,12 +29,12 @@ const XenterNavigator = () => {
             }}
             initialRouteName={ROUTES.XENTER}
         >
+
+            <Stack.Screen name={ROUTES.HOME} component={HomeScreenV2} />
             <Stack.Screen name={ROUTES.XENTER} component={XenterScreen} options={{
                 unmountOnBlur: true,
             }} />
             <Stack.Screen name={ROUTES.KirimQr} component={KirimQr} />
-
-            <Stack.Screen name={ROUTES.HOME} component={HomeScreenV2} />
 
         </Stack.Navigator>
     )

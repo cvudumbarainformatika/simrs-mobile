@@ -50,7 +50,7 @@ const XenterScreen = ({ navigation }) => {
                 setScanned(true);
                 console.log('kotak', data);
                 // navigation.navigate(ROUTES.KirimQr, { data })
-                navigation.dispatch(StackActions.push(ROUTES.KirimQr, { data }))
+                navigation.dispatch(StackActions.replace(ROUTES.KirimQr, { data }))
 
             }
         } else {
@@ -58,7 +58,7 @@ const XenterScreen = ({ navigation }) => {
                 setScanned(true);
                 console.log('kotak gakbisa ', data)
                 // navigation.navigate(ROUTES.KirimQr, { data })
-                navigation.dispatch(StackActions.push(ROUTES.KirimQr, { data }))
+                navigation.dispatch(StackActions.replace(ROUTES.KirimQr, { data }))
             }
         }
 

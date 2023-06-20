@@ -46,9 +46,14 @@ const KirimQr = ({ navigation, route }) => {
             <AppLoader visible={wait} />
             <AppAlert visible={!wait && err !== null} msg={err} onOk={() => {
                 setErr(null)
-                navigation.dispatch(StackActions.replace(ROUTES.HOME))
+                // navigation.dispatch(StackActions.replace(ROUTES.HOME))
+                navigation.pop(3)
             }} />
-            <AppAlert visible={!wait && err === null} msg="Kamu Berhasil Login" status='success' onOk={() => navigation.dispatch(StackActions.replace(ROUTES.HOME))} />
+            <AppAlert visible={!wait && err === null} msg="Kamu Berhasil Login" status='success' onOk={() => {
+                setErr(null)
+                // navigation.dispatch(StackActions(StackActions.popToTop()))
+                navigation.pop(3)
+            }} />
             {/* <Text>KirimQr</Text> */}
         </View>
     )

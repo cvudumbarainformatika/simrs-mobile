@@ -44,7 +44,7 @@ const CekLokasi = ({ navigation, route }) => {
 
     const handleLocation = async () => {
 
-
+        setErrorMsg(null)
 
 
         let { status } = await Location.requestForegroundPermissionsAsync();
@@ -54,54 +54,56 @@ const CekLokasi = ({ navigation, route }) => {
             setLocation(null)
             setWaiting(false)
             setStart(false)
-            return;
-        }
-
-        let location = await Location.getCurrentPositionAsync({ enableHighAccuracy: 6, accuracy: Location.Accuracy.High });
-        setLocation(location.coords);
-        setFaker(location.mocked)
-        setWaiting(false)
-        setStart(false)
-
-        // console.log(location)
-
-        // setTimeout(() => {
-        //     navigation.navigate(ROUTES.SCREEN_ABSEN_AWAL)
-        // }, 6000)
-
-        // handleRouting()
-
-    }
-
-
-    function handleRouting() {
-        let jarakDariKantor = 0;
-        jarakDariKantor = hitungJarak(location, mapRegion)
-        if (jarakDariKantor > radius) {
-            navigation.navigate(ROUTES.SCREEN_ABSEN_AWAL)
         } else {
-            navigation.navigate(ROUTES.QR_SCAN, { status, kategory_id, tanggal, jam })
+            let location = await Location.getCurrentPositionAsync({ enableHighAccuracy: 6, accuracy: Location.Accuracy.High });
+            setLocation(location.coords);
+            setFaker(location.mocked)
+            setWaiting(false)
+            setStart(false)
         }
+
+
+
     }
 
 
+    // function handleRouting() {
+    //     let jarakDariKantor = 0;
+    //     jarakDariKantor = hitungJarak(location, mapRegion)
+    //     if (jarakDariKantor > radius) {
+    //         navigation.navigate(ROUTES.SCREEN_ABSEN_AWAL)
+    //     } else {
+    //         navigation.navigate(ROUTES.QR_SCAN, { status, kategory_id, tanggal, jam })
+    //     }
+    // }
 
+
+    // const [intervalID, setIntervalID] = useState(null)
+    console.log('apakah palsu?', faker)
+    console.log('apakah mulai?', start)
 
     useEffect(() => {
-        let interval = setInterval(() => {
-            handleLocation()
-        }, 1000)
+        let intervalID;
+        if (!faker) {
+            intervalID = setInterval(() => {
+                handleLocation()
+            }, 1000)
+            return () => clearInterval(intervalID)
+        } else {
+            return () => clearInterval(intervalID)
+        }
 
-        return () => clearInterval(interval)
-    }, [start]);
+    }, [navigation, faker]);
 
-    if (faker) {
-        return (
-            <AppAlert visible={faker} msg="Maaf ... Kamu Terdeteksi Memakai Aplikasi FAKE GPS " onOk={() => {
-                navigation.navigate(ROUTES.SCREEN_ABSEN_AWAL)
-            }} />
-        )
-    }
+
+
+    // if (faker) {
+    //     return (
+    //         <AppAlert visible={faker} msg="Maaf ... Kamu Terdeteksi Memakai Aplikasi FAKE GPS " onOk={() => {
+    //             navigation.navigate(ROUTES.SCREEN_ABSEN_AWAL)
+    //         }} />
+    //     )
+    // }
     if (!inet) {
         return (
             <AppAlert visible={!inet} msg="Maaf ... Internet Kamu Tidak Aktif" onOk={() => {
@@ -121,27 +123,21 @@ const CekLokasi = ({ navigation, route }) => {
         jarakDariKantor = hitungJarak(location, mapRegion)
         if (faker) {
             text = 'Maaf ... Kamu Terdeteksi Memakai Aplikasi FAKE GPS'
-        }
-        if (jarakDariKantor > radius) {
-            isFar = true
-            // setTimeout(() => {
-            //     // navigation.goBack()
-            //     navigation.navigate(ROUTES.SCREEN_ABSEN_AWAL)
-            // }, 3000)
-            text = 'Maaf Kamu Belum Bisa Absen Karena'
-            // return navigation.navigate(ROUTES.SCREEN_ABSEN_AWAL)
         } else {
-            // INI BERADA DIKANTR
-            isFar = false
-            text = 'Lanjutkan Absen'
+            if (jarakDariKantor > radius) {
+                isFar = true
+                text = 'Maaf Kamu Belum Bisa Absen Karena'
+                // return navigation.navigate(ROUTES.SCREEN_ABSEN_AWAL)
+            } else {
+                // INI BERADA DIKANTR
+                isFar = false
+                text = 'Lanjutkan Absen'
+            }
         }
-        console.log('ssss', jarakDariKantor)
-        console.log('aaa', isFar)
-    }
 
-    // return (
-    //     <AppLoader visible={waiting} />
-    // )
+        console.log('jarak', jarakDariKantor)
+        console.log('apakah jauh?', isFar)
+    }
 
     return (
         <View className="flex-1 justify-center items-center">
@@ -162,8 +158,16 @@ const CekLokasi = ({ navigation, route }) => {
                 <>
                     {faker ? (
                         <>
-                            <Icon name="alert-octagram-outline" color={tw.color('negative')} size={80} />
-                            <Text className="font-poppins">Maaf ... Kamu Terdeteksi Memakai Aplikasi FAKE GPS </Text>
+                            <View className="p-4 justify-center items-center">
+                                <Icon name="alert-octagram-outline" color={tw.color('negative')} size={80} />
+                                <Text className="font-poppins p-4 text-center text-negative">Maaf ... Kamu Terdeteksi Memakai Aplikasi FAKE GPS ... Harap Fake GPS Anda dimatikan dahulu </Text>
+                                <AppBtn label="Terimakasih" rounded color="negative"
+                                    clicked={() => {
+                                        text = 'wait'
+                                        navigation.navigate(ROUTES.SCREEN_ABSEN_AWAL)
+                                    }}
+                                />
+                            </View>
                         </>
                     ) : (
                         <>
