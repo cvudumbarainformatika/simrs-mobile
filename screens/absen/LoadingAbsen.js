@@ -78,7 +78,7 @@ const LoadingAbsen = ({ navigation, route }) => {
   function waktuTutup() {
     setTimeout(() => {
       navigation.navigate(ROUTES.SCREEN_ABSEN_AWAL)
-    }, 2000)
+    }, 3000)
   }
 
 
@@ -102,14 +102,14 @@ const LoadingAbsen = ({ navigation, route }) => {
   }, [])
 
 
-  if (errorMsg !== null || errorMsg !== '') {
-    return (
-      <AppAlert visible={errorMsg !== null} msg={errorMsg} onOk={() => {
-        setErrorMsg(null);
-        scanAgain()
-      }} />
-    )
-  }
+  // if (errorMsg !== null || errorMsg !== '') {
+  //   return (
+  //     <AppAlert visible={errorMsg !== null} msg={errorMsg} onOk={() => {
+  //       setErrorMsg(null);
+  //       scanAgain()
+  //     }} />
+  //   )
+  // }
 
 
   return (
