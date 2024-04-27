@@ -34,8 +34,9 @@ const SettingsScreen = ({ navigation }) => {
       <Image 
           source={pegawai
                           ? pegawai.foto === '' || pegawai.foto === null
-                            ? IMGS.avatarMale :{uri:`${PATH_IMG100}/${pegawai.nip}/${pegawai.foto}`}
-                          : IMGS.avatarMale}
+                            // ? IMGS.avatarMale :{uri:`${PATH_IMG100}/${pegawai.nip}/${pegawai.foto}`}
+                            ? IMGS.avatarMale :{uri:`${pegawai.foto_pegawai}`}
+                            : IMGS.avatarMale}
           style={[tw`h-100 w-full bg-gray`, {resizeMode:'contain'}]}
       />
 

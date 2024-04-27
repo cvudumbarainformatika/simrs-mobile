@@ -4,7 +4,6 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { IMGS, tw } from '../../../constants'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { AuthContext } from '../../../context/AuthContext'
-import { PATH_IMG100 } from '../../../config'
 
 const HeaderUser = (props) => {
 
@@ -19,7 +18,8 @@ const HeaderUser = (props) => {
               <Image
                 source={pegawai
                   ? pegawai.foto === '' || pegawai.foto === null
-                    ? IMGS.avatarMale : { uri: `${PATH_IMG100}/${pegawai.nip}/${pegawai.foto}` }
+                    // ? IMGS.avatarMale : { uri: `${PATH_IMG100}/${pegawai.nip}/${pegawai.foto}` }
+                    ? IMGS.avatarMale :{uri:`${pegawai.foto_pegawai}`}
                   : IMGS.avatarMale}
                 style={[tw`h-10 w-10`, { resizeMode: 'contain' }]}
               />

@@ -5,6 +5,7 @@ import { CardStyleInterpolators, createStackNavigator, TransitionPresets } from 
 import { ROUTES } from '../../../constants';
 import XenterScreen from './XenterScreen';
 import KirimQr from './KirimQr';
+import UploadDokumenPoli from '../eUpload/UploadDokumenPoli';
 import HomeScreenV2 from '../../content/HomeScreenV2';
 import { closeSring, openSring, TRANSITION_HORIZONTAL } from '../../../constants/transitions';
 
@@ -35,6 +36,7 @@ const XenterNavigator = () => {
                 unmountOnBlur: true,
             }} />
             <Stack.Screen name={ROUTES.KirimQr} component={KirimQr} />
+            {/* <Stack.Screen name={ROUTES.UPLOAD_DOK_POLI} component={UploadDokumenPoli} /> */}
 
         </Stack.Navigator>
     )

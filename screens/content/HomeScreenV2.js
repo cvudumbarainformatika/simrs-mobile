@@ -88,14 +88,16 @@ const HomeScreenV2 = () => {
     // }
 
     function clickedMenu(val) {
-        // console.log('menu ok', val)
+        console.log('menu ok', val)
         if (val.route) {
             navigation.dispatch(StackActions.push(val.route))
-        }
-
-        if (val.id > 1) {
+        } else {
             alert(`Aplikasi ${val.name} akan Release pada Update an selanjutnya`)
         }
+
+        // if (val.id > 1) {
+        //     alert(`Aplikasi ${val.name} akan Release pada Update an selanjutnya`)
+        // }
     }
 
 

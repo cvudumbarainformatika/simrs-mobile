@@ -21,7 +21,8 @@ const AllMenu = (props) => {
             name: 'Siteman',
             image: '',
             icon: 'creative-cloud',
-            color: 'negative'
+            color: 'negative',
+            route: ROUTES.UPLOAD_DOK_NAV
         },
         {
             id: 3,

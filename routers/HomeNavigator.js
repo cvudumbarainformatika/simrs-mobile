@@ -10,6 +10,7 @@ import HomeScreenV2 from '../screens/content/HomeScreenV2';
 // import XenterScreen from '../screens/home/eXenter/xenterScreen';
 import XenterNavigator from '../screens/home/eXenter/XenterNavigator';
 import Logout from '../screens/Logout';
+import UploadNavigator from '../screens/home/eUpload/UploadNavigator';
 
 
 // TRANSITIONS =======================
@@ -59,25 +60,11 @@ const HomeNavigator = () => {
       {/* <RootStack.Group > */}
       <RootStack.Screen name={ROUTES.HOME} component={HomeScreenV2} />
       <RootStack.Screen name={ROUTES.XENTER_NAV} component={XenterNavigator} />
+      <RootStack.Screen name={ROUTES.UPLOAD_DOK_NAV} component={UploadNavigator} options={transition}
+        
+      />
 
       <RootStack.Screen name={ROUTES.LOGOUT} component={Logout} />
-      {/* </RootStack.Group> */}
-
-      {/* GROUP MODAL SLIDE  */}
-      {/* <RootStack.Group screenOptions={{
-        tabBarStyle: { display: "none" },
-        presentation: 'modal',
-        headerShown: false,
-        gestureDirection: 'vertical',
-        transitionSpec: {
-          open: openSring,
-          close: closeSring
-        },
-        cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS
-
-      }} >
-        <RootStack.Screen name={ROUTES.XENTER} component={XenterScreen} />
-      </RootStack.Group> */}
     </RootStack.Navigator>
   )
 }

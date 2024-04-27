@@ -13,9 +13,16 @@ export default {
   HOME_DRAWER: 'Home Drawer',
   SET_JADWAL_AWAL: 'screens/home/SetJadwalAwalScreen',
   PILIH_KATEGORI_JADWAL_AWAL: 'screens/home/PilihKategoriJadwal',
+  // ==================
   XENTER_NAV: 'screens/home/eXenter/XenterNavigator',
   XENTER: 'screensXenterScreen',
   KirimQr: 'screens/home/eXenter/KirimQr',
+   // ==================
+  UPLOAD_DOK: 'screensUploadsScreen',
+  UPLOAD_DOK_NAV: 'screens/home/eUpload/UploadNavigator',
+  UPLOAD_DOK_POLI: 'screens/home/eUpload/UploadDokumenPoli',
+
+
 
   ABSEN: 'Absen Tab',
   ABSEN_TAB: 'routes/AbsenNavigator',
