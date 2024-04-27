@@ -1,13 +1,13 @@
-import { View, Text, Image, ScrollView, Keyboard} from 'react-native'
+import { View, Text, Image, ScrollView, Keyboard } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 
-import { tw,IMGS,ROUTES } from '../../constants'
+import { tw, IMGS, ROUTES } from '../../constants'
 import { AppInput, AppLoader, AppAlert, BottomTwoBtn } from '../../components'
 import ModalConfirmKaryawan from '../../components/authentifikasi/ModalConfirmKaryawan'
-import { api } from '../../helpers/axiosInterceptor'
+import { api, sendXmlHttpRequest } from '../../helpers/axiosInterceptor'
 
 const RegisterScreen = () => {
     // STATE
@@ -18,14 +18,14 @@ const RegisterScreen = () => {
     const [errors, setErrors] = useState({});
     const [inputs, setInputs] = useState({
         nik: '',
-        tgllahir:'sa'
+        tgllahir: 'sa'
     })
     const [details, setDetails] = useState({
-        id : '',
-        nik : '',
-        nama : '',
+        id: '',
+        nik: '',
+        nama: '',
         foto: '',
-        user:null
+        user: null
     });
 
     const [alerts, setAlerts] = useState(false);
@@ -58,14 +58,14 @@ const RegisterScreen = () => {
         if (valid) {
             let form = {
                 nik: inputs.nik,
-                tgllahir:inputs.tgllahir
+                tgllahir: inputs.tgllahir
             }
             await api.post(`/v2/data/cari-pegawai`, form)
                 .then(resp => {
                     console.log(resp.data)
                     let det = resp.data
-                    
-                    
+
+
                     if (det) {
 
                         if (det.message) {
@@ -77,24 +77,62 @@ const RegisterScreen = () => {
 
                         setDetails({
                             id: det.id,
-                            nip:det.nip,
+                            nip: det.nip,
                             nik: det.nik,
                             nama: det.nama,
                             foto: det.foto,
-                            user:det.user
+                            user: det.user
                         })
                         setLoading(false)
                         setModal(true)
-                        
-                    } 
-                    
+
+                    }
+
                     // setLoading(false)
                 }).catch(err => {
                     console.log(err)
                     msg.msg = 'Error, Ada Kesalahan mungkin dikarenakan Jaringan... Harap ulangi'
                     setAlerts(true)
                     setLoading(false)
-            })
+                })
+
+            // const formData = new FormData();
+            // formData.append("nik", inputs.nik)
+            // formData.append("tgllahir", inputs.tgllahir)
+
+            // try {
+            //     const resp = await sendXmlHttpRequest(formData, '/v2/data/cari-pegawai');
+            //     console.log('coba', resp)
+            //     let det = resp.data
+            //     if (det) {
+
+            //         if (det.message) {
+            //             msg.msg = det.message
+            //             setLoading(false)
+            //             setAlerts(true)
+            //             return
+            //         }
+
+            //         setDetails({
+            //             id: det.id,
+            //             nip: det.nip,
+            //             nik: det.nik,
+            //             nama: det.nama,
+            //             foto: det.foto,
+            //             user: det.user
+            //         })
+            //         setLoading(false)
+            //         setModal(true)
+
+            //     }
+            // } catch (error) {
+            //     console.log(error)
+            //     msg.msg = 'Error, Ada Kesalahan mungkin dikarenakan Jaringan... Harap ulangi'
+            //     setAlerts(true)
+            //     setLoading(false)
+            // }
+
+
         }
         setLoading(false)
     }
@@ -118,9 +156,9 @@ const RegisterScreen = () => {
         setModal(false)
         navigation.navigate(ROUTES.REGISTRASIPASSWORD, {
             pegawai_id: details.id,
-            nip:details.nip,
+            nip: details.nip,
             nik: nik,
-            nama:details.nama
+            nama: details.nama
         });
     }
 
@@ -144,23 +182,23 @@ const RegisterScreen = () => {
             />)}
 
             {/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++========================ALERT */}
-            {alerts && (<AppAlert visible={alerts} status={msg.status} msg={msg.msg} onOk={ ()=> setAlerts(false) } />)}
-            
+            {alerts && (<AppAlert visible={alerts} status={msg.status} msg={msg.msg} onOk={() => setAlerts(false)} />)}
+
             <ScrollView >
                 <View style={tw.style('flex-row p-4')}>
                     <Text className="font-poppinsBold">Cari Data Kepegawaian </Text>
                 </View>
                 <View style={tw.style('flex-row items-center py-2 px-8')}>
                     <View style={tw.style('flex-1')}>
-                        <View  style={tw.style('border-2 p-4 rounded-4 ')}>
+                        <View style={tw.style('border-2 p-4 rounded-4 ')}>
                             <Text className="font-poppinsBold text-xs">
-                                Masukkan Nik Anda, 
+                                Masukkan Nik Anda,
                             </Text>
                             <Text className="font-poppins text-xs">lalu Klik Cari data dan ikuti
                                 langkah selanjutnya</Text>
                             <Text className="font-poppinsItalic text-xs pt-2">
-                                
-                                Data anda tidak ditemukan? Harap lapor kepada 
+
+                                Data anda tidak ditemukan? Harap lapor kepada
                                 petugas yang berwenang...
                             </Text>
                             <Text className="font-poppinsBold pt-2">
@@ -181,7 +219,7 @@ const RegisterScreen = () => {
                         changed={(val) => handleOnChanged(val, 'nik')}
                         error={errors.nik}
                         onFocus={() => {
-                            handleError(null,'nik')
+                            handleError(null, 'nik')
                         }}
                         keyboardType="number-pad"
                     />
@@ -196,14 +234,14 @@ const RegisterScreen = () => {
                 </View>
                 <View className="pb-96" />
             </ScrollView>
-            
+
             <BottomTwoBtn labelBtnOk="Cari Data"
-                onOk={()=> submitClicked()}
+                onOk={() => submitClicked()}
                 onDismiss={() => navigation.navigate(ROUTES.LOGIN)}
             />
         </SafeAreaView>
 
-        
+
     )
 }
 

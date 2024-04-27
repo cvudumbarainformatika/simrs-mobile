@@ -2,7 +2,7 @@
 import React, { createContext, useEffect, useState } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Device from 'expo-device';
-import { api } from '../helpers/axiosInterceptor';
+import { api, sendXmlHttpRequest } from '../helpers/axiosInterceptor';
 import * as RootNavigation from '../routers/RootNavigation.js';
 
 export const AuthContext = createContext();
@@ -31,7 +31,9 @@ export const AuthProvider = ({ children }) => {
         }
         setIsLoading(true);
         try {
-            const resp = await api.post(`/v2/login`, form)
+            // const resp = await api.post(`/v2/login`, form)
+            const resp = await sendXmlHttpRequest(form, '/v2/login');
+            console.log('login', resp)
             if (!resp) {
                 setIsLoading(false)
                 setMsgError('Maaf Ada yang slah ... harap ulangi!')
@@ -214,6 +216,8 @@ export const AuthProvider = ({ children }) => {
                     setAlerts(true)
                     // setUserId(e.response.data.id)
                     return
+                } else {
+                    logout()
                 }
             } else if (err.request) {
                 // The request was made but no response was received
