@@ -31,8 +31,8 @@ export const AuthProvider = ({ children }) => {
         }
         setIsLoading(true);
         try {
-            // const resp = await api.post(`/v2/login`, form)
-            const resp = await sendXmlHttpRequest(form, '/v2/login');
+            const resp = await api.post(`/v2/login`, form)
+            // const resp = await sendXmlHttpRequest(form, '/v2/login');
             console.log('login', resp)
             if (!resp) {
                 setIsLoading(false)
