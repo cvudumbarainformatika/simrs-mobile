@@ -9,9 +9,9 @@ import { useFonts } from 'expo-font';
 // import NetInfo from '@react-native-community/netinfo';
 // import * as Font from 'expo-font';
 
-import * as Device from 'expo-device';
-import * as Notifications from 'expo-notifications';
-import { AppAlert } from './components';
+// import * as Device from 'expo-device';
+// import * as Notifications from 'expo-notifications';
+// import { AppAlert } from './components';
 
 
 
@@ -40,11 +40,11 @@ import { AppAlert } from './components';
 
 export default function App() {
 
-  const [expoPushToken, setExpoPushToken] = useState('');
-  const [notification, setNotification] = useState(false);
-  const notificationListener = useRef();
-  const responseListener = useRef();
-  const [inet, setInet] = useState(false)
+  // const [expoPushToken, setExpoPushToken] = useState('');
+  // const [notification, setNotification] = useState(false);
+  // const notificationListener = useRef();
+  // const responseListener = useRef();
+  // const [inet, setInet] = useState(false)
 
 
 

@@ -140,7 +140,7 @@ export const AbsenProvider = ({ children }) => {
 
         };
         init();
-    }, [])
+    }, [appContextValue])
 
     React.useEffect(() => {
         const interval = setInterval(() => {
