@@ -27,10 +27,10 @@ const HomeScreenV2 = () => {
     const navigation = useNavigation();
 
     const dispatch = useDispatch()
-    const { pegawai, getMe } = useContext(AuthContext);
+    const { pegawai } = useContext(AuthContext);
 
-    const { jadwals, loading, error } = useSelector(state => state.jadwal)
-    const { kategories } = useSelector(state => state.kategory)
+    // const { jadwals, loading, error } = useSelector(state => state.jadwal)
+    // const { kategories } = useSelector(state => state.kategory)
     const { CUTI, IJIN, SAKIT, DL, DISPEN, A, TERLAMBAT, HADIR } = useSelector(state => state.rekapv2)
 
     const [date, setDatex] = useState(dayjs().locale("id"))
@@ -205,7 +205,7 @@ const HomeScreenV2 = () => {
             {/* <ModalPengaturanJadwal visible={config} /> */}
 
             {/* <GradientTop  /> */}
-            <HeaderUser bellClick={() => alert(`ini alert percobaan`)} />
+            <HeaderUser bellClick={() => alert(`Tidak Ada Notifikasi`)} />
             {/* <AppBtn label="MM" clicked={()=> navigation.navigate(ROUTES.SET_JADWAL_AWAL, {jadwals})} /> */}
             <ScrollView>
 

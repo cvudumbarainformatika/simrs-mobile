@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import { BASE } from '../config';
+import { BASE, BASE_LOCAL } from '../config';
 // import { BASE_LOCAL } from '../config';
 import { ROUTES } from '../constants';
 import * as RootNavigation from '../routers/RootNavigation.js';

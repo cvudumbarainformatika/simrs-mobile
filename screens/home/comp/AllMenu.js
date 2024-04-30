@@ -18,7 +18,7 @@ const AllMenu = (props) => {
         },
         {
             id: 2,
-            name: 'Siteman',
+            name: 'Poliklinik',
             image: '',
             icon: 'creative-cloud',
             color: 'negative',

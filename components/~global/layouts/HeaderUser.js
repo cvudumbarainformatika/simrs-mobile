@@ -11,7 +11,7 @@ const HeaderUser = (props) => {
 
   return (
     <>
-      <SafeAreaView style={tw`pt-1 bg-primary shadow`}>
+      <SafeAreaView style={tw`pt-1 bg-${props.bg ? props.bg : 'primary'} shadow`}>
         <View style={tw`flex-row items-center mx-4 mb-2`}>
           <View style={tw`mr-2`}>
             <View style={tw`h-10 w-10 bg-gray-light border-2 border-gray-light rounded-full overflow-hidden items-center justify-center`}>

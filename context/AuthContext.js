@@ -288,8 +288,8 @@ export const AuthProvider = ({ children }) => {
             // setIsLoading(false)
 
             // getMe()
-            console.log('setUser:', userInfo)
-            console.log('pegawai:', simpeg)
+            // console.log('setUser:', userInfo)
+            // console.log('pegawai:', simpeg)
         } catch (e) {
             console.log(`isLoggedIn Error : ${e}`)
         }

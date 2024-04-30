@@ -21,13 +21,17 @@ import jadwalsReducer from './features/jadwal/jadwalsReducer'
 import kategoryJadwalReducer from './features/jadwal/kategoryJadwalReducer'
 import rekapJadwalReducer from './features/jadwal/rekapJadwalReducer'
 import rekapjadwalv2Reducer from './features/jadwal/rekapjadwalv2Reducer'
+import pasienReducer from './features/pasien/pasienReducer'
+import poliReducer from './features/master/poliReducer'
 
 const rootReducer = combineReducers({
   jadwal: jadwalsReducer,
   kategory: kategoryJadwalReducer,
   rekap: rekapJadwalReducer,
   rekapv2: rekapjadwalv2Reducer,
-  absen: absenReducer
+  absen: absenReducer,
+  pasien: pasienReducer,
+  masterPoli: poliReducer
 })
 
 

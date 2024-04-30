@@ -21,6 +21,7 @@ export default {
   UPLOAD_DOK: 'screensUploadsScreen',
   UPLOAD_DOK_NAV: 'screens/home/eUpload/UploadNavigator',
   UPLOAD_DOK_POLI: 'screens/home/eUpload/UploadDokumenPoli',
+  UPLOAD_DET_PASIEN: 'screens/home/eUpload/DetailPasienUpload',
 
 
 

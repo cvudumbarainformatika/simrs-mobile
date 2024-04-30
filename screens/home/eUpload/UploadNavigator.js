@@ -6,6 +6,7 @@ import { ROUTES } from '../../../constants';
 import UploadDokumenPoli from '../eUpload/UploadDokumenPoli';
 import HomeScreenV2 from '../../content/HomeScreenV2';
 import { closeSring, openSring, TRANSITION_HORIZONTAL } from '../../../constants/transitions';
+import DetailPasienUpload from './DetailPasienUpload';
 
 
 // TRANSITIONS =======================
@@ -53,6 +54,7 @@ const UploadNavigator = () => {
 
             {/* <Stack.Screen name={ROUTES.HOME} component={HomeScreenV2} options={transition}/> */}
             <Stack.Screen name={ROUTES.UPLOAD_DOK_POLI} component={UploadDokumenPoli} options={transition} />
+            <Stack.Screen name={ROUTES.UPLOAD_DET_PASIEN} component={DetailPasienUpload} options={transition} />
 
         </Stack.Navigator>
     )

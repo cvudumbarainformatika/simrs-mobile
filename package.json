@@ -53,7 +53,8 @@
     "redux": "^4.2.0",
     "redux-thunk": "^2.4.2",
     "twrnc": "^3.4.1",
-    "expo-build-properties": "~0.8.3"
+    "expo-build-properties": "~0.8.3",
+    "expo-image-picker": "~14.3.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
