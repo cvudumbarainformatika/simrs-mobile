@@ -62,8 +62,12 @@ const ListingComp = (props) => {
                           size={28} 
                         />
                     </View>
-                  </View>
-
+                </View>
+                {/* <View>
+                  <TouchableOpacity>
+                    
+                  </TouchableOpacity>
+                </View> */}
                   
                 </View>
               </View>

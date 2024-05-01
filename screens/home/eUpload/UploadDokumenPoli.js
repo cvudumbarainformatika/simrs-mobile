@@ -158,10 +158,10 @@ const UploadDokumenPoli = ({ navigation }) => {
       <View className="flex-1">
       {waiting && (
         <View style={[styles.container]} className="flex-1 justify-center items-center p-4 bg-gray-200 ">
-          <Text>Loading</Text>
           <View style={tw`bg-negative w-14 h-14 rounded-full items-center justify-center border-4 border-white`}>
             <ActivityIndicator size={'large'} color={tw.color('white')} />
           </View>
+          <Text className="font-poppins mt-2 text-white">Loading...</Text>
         </View>
       )}
 
