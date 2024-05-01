@@ -26,7 +26,7 @@ const ListingComp = (props) => {
   }
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false} className="bg-gray-200 flex-1">
+    <ScrollView horizontal={false} showsVerticalScrollIndicator={false} className="bg-gray-200 flex-1">
       {props.pasien?.map((item, i) => {
         return (
           <TouchableOpacity 

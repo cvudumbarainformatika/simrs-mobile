@@ -7,16 +7,22 @@ import AvatarPasien from './comp/AvatarPasien'
 import * as ImagePicker from 'expo-image-picker'
 import { ImageType } from 'expo-camera'
 import { api } from '../../../helpers/axiosHttp'
+import { PATH_IMG } from '../../../config'
+import AppBtn from '../../../components/~global/AppBtn'
+import PreviewDokumen from './comp/PreviewDokumen'
 
 const DetailPasienUpload = ({ navigation, route }) => {
 
   const {pasien } = route?.params
   const [modalOpen, setModalOpen] = useState(false)
   const [visibleModalMasterUpload, setVisibleModalMasterUpload] = useState(false)
+  const [visibleModalPreview, setVisibleModalPreview] = useState(false)
   const [image, setImage] = useState()
+  const [imageViewing, setImageViewing] = useState(null)
 
   const [masterUpload, setMasterUpload] = useState([])
   const [uploadCategory, setUploadCategory] = useState(null)
+  const [dokumenFromBackend, setDokumenFromBackend] = useState([])
   // console.log('route', pasien)
 
   const onModalClose = ()=> {
@@ -24,6 +30,7 @@ const DetailPasienUpload = ({ navigation, route }) => {
     setVisibleModalMasterUpload(false)
   }
   const onModalOpen = ()=> {setModalOpen(true)}
+
   const onModalMasterSelected = (val)=> {
     console.log(val);
     setUploadCategory(val)
@@ -94,7 +101,8 @@ const DetailPasienUpload = ({ navigation, route }) => {
 
       // Save image if not cancelled
       if (!result?.canceled) {
-        await saveImage(result.assets[0].uri)
+        await saveImage(result.assets[0])
+        // saveImage(result.assets[0].uri);
       }
     } catch (error) {
       // throw error
@@ -108,16 +116,75 @@ const DetailPasienUpload = ({ navigation, route }) => {
       setImage(image)
       setModalOpen(false)
       setVisibleModalMasterUpload(false)
+      uploadImage(image)
     } catch (error) {
       throw error
     }
   }
 
+  const uploadImage = async (img) => {
+    // setUploading(true);
+    // console.log('img', img);
+    const uri =
+      Platform.OS === "android"
+        ? img.uri
+        : img.uri.replace("file://", "");
+        const filename = img.uri.split("/").pop();
+        const match = /\.(\w+)$/.exec(filename);
+        const ext = match?.[1];
+        const type = match ? `image/${match[1]}` : `image`;
+    const form = new FormData()
+    form.append('dokumen', {
+      uri,
+      name: `dokumen.${ext}`,
+      type,
+    })
+    form.append('noreg', pasien?.noreg)
+    form.append('norm', pasien?.norm)
+    form.append('nama', uploadCategory)
+      
+    await api.post(`/v2/simrs/layananpoli/upload/dokumen`, form, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    }).then(resp => {
+      console.log('resp upload', resp);
+      if (resp.status===200) {
+        alert("Image Uploaded");
+        updateDokumenFromBackend(resp?.data?.result)
+        setImage(null)
+      } else {
+        alert("Image upload failed!");
+        setImage(null)
+      }
+    }).catch(err => {
+        console.log(err)
+        setImage(null)
+    })
+  };
+
+  const updateDokumenFromBackend = (data)=>{
+    data.length ? setDokumenFromBackend(data) : []
+  }
+
 
   const getMasterUploadFromApi = async () => {
+
     await api.get(`/v2/simrs/layananpoli/upload/master`).then(resp => {
-      console.log('resp', resp);
+      // console.log('resp', resp);
       setMasterUpload(resp.data)
+    }).catch(err => {
+        console.log(err)
+    })
+  }
+
+  const getDokumen = async ()=> {
+    const params={params:{noreg:pasien?.noreg}}
+    await api.get(`/v2/simrs/layananpoli/upload/dokumenBy`,params).then(resp => {
+      // console.log('resp', resp);
+      if (resp.status === 200) {
+        updateDokumenFromBackend(resp.data.result)
+      }
     }).catch(err => {
         console.log(err)
     })
@@ -127,6 +194,7 @@ const DetailPasienUpload = ({ navigation, route }) => {
   useEffect(() => {
     const subscribe = navigation.addListener("focus", () => {
       getMasterUploadFromApi()
+      getDokumen()
     })
     return () => {
         subscribe
@@ -170,7 +238,7 @@ const DetailPasienUpload = ({ navigation, route }) => {
 
   const ModalMasterUpload=({isVisible, onClose, onSelectItem})=> {
     return (
-      <Modal animationType="slide" transparent={true} visible={isVisible}>
+      <Modal animationType="fade" transparent={true} visible={isVisible}>
         <View className="flex-1 items-center justify-center bg-black/50">
           <View className="absolute m-auto left-0 right-0 justify-center items-center">
             <View className="bg-gray-200 rounded-t-md w-11/12 overflow-hidden">
@@ -201,13 +269,74 @@ const DetailPasienUpload = ({ navigation, route }) => {
     )
   }
 
+  const PreviewImageUpload = () => {
+    return (
+      <View className="py-2 bg-white items-center">
+        <Image 
+          source={{uri: image?.uri}}
+          style={[tw`w-full h-40`, { resizeMode: 'contain' }]}
+        />
+        <Text className="font-poppins">Harap Tunggu ... Uploading</Text>
+      </View>
+    )
+  }
+
+  const PreviewImageFromApi = ()=> {
+    return (
+      <>
+        {dokumenFromBackend.length > 0 ? (
+          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{
+              gap:15,
+              paddingVertical:5,
+            }}
+          >
+            {dokumenFromBackend?.map((item, i) => {
+              return (
+                <View key={i} className="bg-white w-40 rounded-md relative p-2 shadow-md">
+                  <TouchableOpacity onPress={()=> {
+                    setImageViewing(`${PATH_IMG+item.url}`)
+                    setVisibleModalPreview(true)
+                  }}>
+                    <Image source={{uri:`${PATH_IMG+item.url}`}} className="w-full h-40 rounded-md flex-1"
+                      resizeMode='cover'
+                    />
+                  </TouchableOpacity>
+                  
+                  <Text className="font-poppinsBold text-xs py-1">{item.nama}</Text>
+                  <View className="flex-row justify-end items-center mt-2">
+                    {/* <TouchableOpacity>
+                      <Icon name='file-eye' size={20} color={'gray'} />
+                    </TouchableOpacity> */}
+                    <TouchableOpacity>
+                      <Icon name='delete-sweep' size={28} color={'gray'} />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              )
+            })}
+          </ScrollView>
+        ):(
+          <View className="px-4 py-2 items-center bg-white">
+            <Text className="font-poppins text-gray mr-4">Tidak ada data</Text>
+          </View>
+        )}
+      </>
+      
+    )
+  }
+
   return (
     <View className="flex-1">
-      <HeaderComp title="Detail Pasien Poli" bg="white" txtColor="gray-dark" close={ ()=> navigation.goBack() }/>
+      <HeaderComp title="Detail Pasien Poli" bg={`${visibleModalPreview?'black':'white'}`} txtColor="gray-dark" close={ ()=> navigation.goBack() }/>
 
       {visibleModalMasterUpload && (<ModalMasterUpload isVisible={visibleModalMasterUpload} 
       onClose={()=> setVisibleModalMasterUpload(false)} onSelectItem={(val)=> onModalMasterSelected(val)}/>)}
+
       <ModalUploadImage title={uploadCategory} isVisible={modalOpen} onClose={()=> setModalOpen(false)} onUpload={onUploadImage} />
+
+      {visibleModalPreview && (<PreviewDokumen isVisible={visibleModalPreview} 
+      onClose={()=> setVisibleModalPreview(false)} img={imageViewing}/>)}
 
       <View>
         <View className="flex flex-center items-center p-4">
@@ -228,24 +357,11 @@ const DetailPasienUpload = ({ navigation, route }) => {
               <Text className="font-poppinsBold text-gray">Dokument</Text>
             </View>
 
-            <View className="py-2">
-              {image ? (
-                <View className="py-2 bg-white items-center">
-                <Image 
-                  source={{uri: image}}
-                  style={[tw`w-full h-40`, { resizeMode: 'contain' }]}
-                />
-                <Text className="font-poppins">Harap Tunggu ... Uploading</Text>
-              </View>
-              ):(
-                <View className="px-4 py-2 items-center bg-white">
-                <Text className="font-poppins text-gray mr-4">Tempat Dokument</Text>
-              </View>
-              )}
-              
-              
-              
+            <View className={`${image?'py-2':''}`}>
+              {image ? PreviewImageUpload(image): PreviewImageFromApi()}
             </View>
+
+            <View style={{paddingBottom:100}} />
           </View>
           
         </ScrollView>
