@@ -55,13 +55,15 @@ const UploadDokumenPoli = ({ navigation }) => {
       kodepoli: 'SEMUA POLI',
       nama: 'SEMUA POLI'
     })
-    // console.log('set', arr)
+    // console.log('set', category)
+    // console.log('category', arr)
     setAkses(arr)
 
     const sendt = arr.length? arr.map(x => x?.kodepoli) : []
     const filt = sendt.filter(x=> x !== 'SEMUA POLI')
 
-    dispatch(setKodepoli(filt))
+    onCatChange(filt.length? filt[0]: '')
+    // dispatch(setKodepoli(filt))
     // console.log('awalKodepoli', filt)
   }
 
@@ -119,7 +121,7 @@ const UploadDokumenPoli = ({ navigation }) => {
 
   useEffect(() => {
     getPasien()
-  }, [kodepoli]); // Only re-run the effect if pegawai changes
+  }, [category]); // Only re-run the effect if pegawai changes
 
 
   function onItemClick (val) {

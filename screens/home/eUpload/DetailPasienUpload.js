@@ -81,17 +81,20 @@ const DetailPasienUpload = ({ navigation, route }) => {
       if( mode==='camera'){
         console.log('camera');
         await ImagePicker.requestCameraPermissionsAsync();
-        // let result = await ImagePicker.launchCameraAsync({
-        //   cameraType: 'back',
-        //   allowsEditing:true,
-        //   quality:0.75
-        // })
-        result = await ImagePicker.launchCameraAsync(options);
-        if (!result?.canceled) {
-          await saveImage(result.assets[0].uri)
-        }
+        result = await ImagePicker.launchCameraAsync({
+          cameraType: 'back',
+          allowsEditing:true,
+          quality:0.75
+        })
+        // result = await ImagePicker.launchCameraAsync(options);
       } else {
-        console.log('gallery');
+        // console.log('gallery');
+        result = await ImagePicker.launchImageLibraryAsync(options);
+      }
+
+      // Save image if not cancelled
+      if (!result?.canceled) {
+        await saveImage(result.assets[0].uri)
       }
     } catch (error) {
       // throw error

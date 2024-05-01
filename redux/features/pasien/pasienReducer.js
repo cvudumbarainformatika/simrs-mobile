@@ -48,8 +48,9 @@ export const pasienReducer = createSlice({
       state.isError = false
     })
     .addCase(getPasienAsync.fulfilled, (state, action) => {
-      let resp = action.payload
-      state.pasiens = resp?.data
+      state.pasiens = []
+      const resp = action.payload
+      state.pasiens = resp.data
       state.meta = resp
       state.waiting = false
       state.isError = false
