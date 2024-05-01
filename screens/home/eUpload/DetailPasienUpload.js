@@ -68,16 +68,25 @@ const DetailPasienUpload = ({ navigation, route }) => {
 
 
   const onUploadImage = async (mode)=> {
-    // console.log('mode :', mode);
+    
     try {
+      let result;
+      const options = ImagePicker.ImagePickerOptions = {
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        // aspect: [4, 3],
+        quality: 0.75
+      };
+
       if( mode==='camera'){
         console.log('camera');
         await ImagePicker.requestCameraPermissionsAsync();
-        let result = await ImagePicker.launchCameraAsync({
-          cameraType: 'back',
-          allowsEditing:true,
-          quality:0.75
-        })
+        // let result = await ImagePicker.launchCameraAsync({
+        //   cameraType: 'back',
+        //   allowsEditing:true,
+        //   quality:0.75
+        // })
+        result = await ImagePicker.launchCameraAsync(options);
         if (!result?.canceled) {
           await saveImage(result.assets[0].uri)
         }
