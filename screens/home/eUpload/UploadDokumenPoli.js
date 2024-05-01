@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import CategoryButton from './comp/CategoryButton';
 import ListingComp from './comp/ListingComp';
 import { useDispatch, useSelector } from 'react-redux';
-import { getPasienAsync, setCategory, setKodepoli } from '../../../redux/features/pasien/pasienReducer';
+import { getPasienAsync, setCategory, setKodepoli, setTglAwal, setTglakhir } from '../../../redux/features/pasien/pasienReducer';
 import { getPoliAsync } from '../../../redux/features/master/poliReducer';
 import { AuthContext } from '../../../context/AuthContext';
 
@@ -86,7 +86,7 @@ const UploadDokumenPoli = ({ navigation }) => {
   }
 
   
-  // console.log('poli', akses);
+  console.log('tgl', tglAwal);
 
   
 
@@ -108,6 +108,8 @@ const UploadDokumenPoli = ({ navigation }) => {
 
   useEffect(() => {
     const subscribe = navigation.addListener("focus", () => {
+      dispatch(setTglAwal(dayjs().locale('id').format('YYYY-MM-DD')))
+      dispatch(setTglakhir(dayjs().locale('id').format('YYYY-MM-DD')))
       dispatch(getPoliAsync())
     })
     return () => {
