@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Image, Modal, Pressable, TouchableOpacity } from 'react-native'
+import { View, Text, ScrollView, Image, Modal, Pressable, TouchableOpacity, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import HeaderComp from './comp/HeaderComp'
 import { IMGS, tw } from '../../../constants'
@@ -19,6 +19,7 @@ const DetailPasienUpload = ({ navigation, route }) => {
   const [visibleModalPreview, setVisibleModalPreview] = useState(false)
   const [image, setImage] = useState()
   const [imageViewing, setImageViewing] = useState(null)
+  const [hapusDok, setHapusDok] = useState(null)
 
   const [masterUpload, setMasterUpload] = useState([])
   const [uploadCategory, setUploadCategory] = useState(null)
@@ -164,7 +165,7 @@ const DetailPasienUpload = ({ navigation, route }) => {
   };
 
   const updateDokumenFromBackend = (data)=>{
-    data.length ? setDokumenFromBackend(data) : []
+    data.length ? setDokumenFromBackend(data) : setDokumenFromBackend([])
   }
 
 
@@ -308,7 +309,9 @@ const DetailPasienUpload = ({ navigation, route }) => {
                     {/* <TouchableOpacity>
                       <Icon name='file-eye' size={20} color={'gray'} />
                     </TouchableOpacity> */}
-                    <TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={()=> konfirmasiHapus(item)}
+                    >
                       <Icon name='delete-sweep' size={28} color={'gray'} />
                     </TouchableOpacity>
                   </View>
@@ -324,6 +327,32 @@ const DetailPasienUpload = ({ navigation, route }) => {
       </>
       
     )
+  }
+
+  const konfirmasiHapus = (val) => {
+    Alert.alert("Konfirmasi!", "Apakah Kamu ingin Menghapus dokumen ini?", [
+      {
+        text: "Cancel",
+        onPress: () => setHapusDok(null),
+        style: "cancel"
+      },
+      { text: "IYA", onPress: () => hapusDokumen(val) }
+    ]);
+    return true;
+  };
+
+  const hapusDokumen = async (val)=> {
+    // console.log('hapus', val);
+    const payload = {id:val?.id}
+    await api.post(`/v2/simrs/layananpoli/upload/deletedata`,payload).then(resp => {
+      // console.log('resp', resp);
+      if (resp.status===200) {
+        setDokumenFromBackend([])
+        getDokumen()
+      }
+    }).catch(err => {
+      console.log(err)
+    })
   }
 
   return (
