@@ -1,18 +1,20 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { View, Text, StyleSheet, Alert, TouchableOpacity, TextInput, ScrollView, ActivityIndicator } from 'react-native'
+import { View, Text, StyleSheet, Alert, TouchableOpacity, TextInput, ScrollView, ActivityIndicator, Modal } from 'react-native'
 import { ROUTES, tw } from '../../../constants';
 import { AppBtn, HeaderUser } from '../../../components';
 import Icon from 'react-native-vector-icons/Ionicons'
 import CategoryButton from './comp/CategoryButton';
 import ListingComp from './comp/ListingComp';
 import { useDispatch, useSelector } from 'react-redux';
-import { getPasienAsync, setCategory, setKodepoli, setTglAwal, setTglakhir } from '../../../redux/features/pasien/pasienReducer';
+import { getPasienAsync, setCategory, setKodepoli, setQ, setTglAwal, setTglakhir } from '../../../redux/features/pasien/pasienReducer';
 import { getPoliAsync } from '../../../redux/features/master/poliReducer';
 import { AuthContext } from '../../../context/AuthContext';
 
 import dayjs from 'dayjs'
 import 'dayjs/locale/id'
 import HeaderComp from './comp/HeaderComp';
+
+const menuFilter = ['Hari ini', 'Kemarin', 'Bulan ini', 'Bulan lalu']
 
 const UploadDokumenPoli = ({ navigation }) => {
 
@@ -26,6 +28,9 @@ const UploadDokumenPoli = ({ navigation }) => {
 
   // console.log('pegawai', pegawai);
   const [akses, setAkses] = useState([])
+  const [visibleFilter, setVisibleFilter] = useState(false)
+  const [filterDay, setFilterDay] = useState('Hari ini')
+  const [inputQ, setInputQ] = useState('')
   // const [pasien, setPasien] = useState(null)
 
   const { items, loading } = useSelector(state => state.masterPoli)
@@ -55,8 +60,7 @@ const UploadDokumenPoli = ({ navigation }) => {
       kodepoli: 'SEMUA POLI',
       nama: 'SEMUA POLI'
     })
-    // console.log('set', category)
-    // console.log('category', arr)
+
     setAkses(arr)
 
     const sendt = arr.length? arr.map(x => x?.kodepoli) : []
@@ -85,8 +89,40 @@ const UploadDokumenPoli = ({ navigation }) => {
     console.log('onCatChange', filt)
   }
 
+  const handleSelectFilterDay = (val) => {
+    // console.log(val);
+    setFilterDay(val)
+    const currentDate = dayjs().locale('id').format('YYYY-MM-DD')
+    if (val==='Hari ini') {
+      dispatch(setTglAwal(currentDate))
+      dispatch(setTglakhir(currentDate))
+    } else if(val==='Kemarin'){
+      const res = dayjs().subtract(1, 'day').locale('id').format('YYYY-MM-DD')
+      dispatch(setTglAwal(res))
+      dispatch(setTglakhir(res))
+    } else if(val==='Bulan ini'){
+      const awal = dayjs().locale('id').format('YYYY-MM-')+'01'
+      const akhir = dayjs().locale('id').format('YYYY-MM-')+'31'
+      dispatch(setTglAwal(awal))
+      dispatch(setTglakhir(akhir))
+    } else {
+      const awal = dayjs().subtract(1, 'month').locale('id').format('YYYY-MM-')+'01'
+      const akhir = dayjs().subtract(1, 'month').locale('id').format('YYYY-MM-')+'31'
+      dispatch(setTglAwal(awal))
+      dispatch(setTglakhir(akhir))
+    }
+    setVisibleFilter(false)
+  }
+
   
-  console.log('tgl', tglAwal);
+
+  const handleSearch = (val) => {
+    // console.log('input on enter',val);
+    setInputQ(val=== null? '':val)
+    dispatch(setQ(val=== null? '':val))
+  }
+  console.log('search', q);
+  console.log('category', category);
 
   
 
@@ -111,6 +147,8 @@ const UploadDokumenPoli = ({ navigation }) => {
       dispatch(setTglAwal(dayjs().locale('id').format('YYYY-MM-DD')))
       dispatch(setTglakhir(dayjs().locale('id').format('YYYY-MM-DD')))
       dispatch(getPoliAsync())
+      // onCatChange(category)
+      // setCategory(category)
     })
     return () => {
         subscribe
@@ -123,7 +161,7 @@ const UploadDokumenPoli = ({ navigation }) => {
 
   useEffect(() => {
     getPasien()
-  }, [category]); // Only re-run the effect if pegawai changes
+  }, [category, filterDay, q]); // Only re-run the effect if pegawai changes
 
 
   function onItemClick (val) {
@@ -152,12 +190,33 @@ const UploadDokumenPoli = ({ navigation }) => {
     )
   }
 
+  
+
+  const ModalMenuFilter=({isVisible, onClose, menus, aktif})=> {
+    return (
+      <Modal animationType="slide" transparent={true} visible={isVisible} className="shadow-md">
+        <View className="w-2/6 bg-gray absolute bottom-10 right-4 rounded-lg overflow-hidden shadow-md">
+          {menus.map((item, i)=> {
+            return (
+              <TouchableOpacity key={i} className={`bg-${aktif === item? 'negative': 'white'} p-2`} style={{marginBottom:1}} onPress={()=> handleSelectFilterDay(item)}>
+                <Text className={`text-${aktif === item? 'white': 'black'} font-poppins text-xs`}>{item}</Text>
+              </TouchableOpacity>
+            )
+          })}
+        </View>
+      </Modal>
+    )
+  }
 
 
   return (
     <View style={tw`flex-1 bg-gray-300`}>
 
       <HeaderComp title="Kunjungan Poliklinik" close={ ()=> navigation.goBack() }/>
+      
+
+      {visibleFilter && (<ModalMenuFilter aktif={filterDay} visible={visibleFilter} menus={menuFilter} onClose={()=> setVisibleFilter(false)} />)}
+
       {/* ===================== */}
       <View className="flex-1">
       {waiting && (
@@ -172,14 +231,29 @@ const UploadDokumenPoli = ({ navigation }) => {
       {pasiens.length > 0  ? viewHistory() : emptyHistory()}
       </View>
       {/* ===================== */}
-      <CategoryButton poli={akses} onCategoryChanged={onCatChange} />
+      <View className="w-full px-4 pt-2">
+        <CategoryButton poli={akses} onCategoryChanged={onCatChange} ctg={category} />
+      </View>
       <View className="p-3">
         <View className="flex-row items-center">
             <View className="flex-1 flex-row items-center bg-white p-2 mr-3 rounded-md">
               <Icon name={'search'} size={20} color={tw.color('gray-dark')} className="mr-1"/>
-              <TextInput placeholder='Cari Pasien ...' />
+              <TextInput 
+                className="flex-1" 
+                placeholder='Cari Pasien ...' 
+                autoCorrect={false} 
+                onChangeText={(val)=> setInputQ(val)}
+                defaultValue={inputQ}
+                blurOnSubmit={true}
+                onSubmitEditing={({nativeEvent: {text, eventCount, target}})=>handleSearch(text)}
+                style={{fontFamily:"Poppins-Regular"}}
+              />
+              <TouchableOpacity onPress={()=>handleSearch('')} >
+                <Icon name={'close'} size={20} color={tw.color('gray-dark')} className="ml-1"/>
+              </TouchableOpacity>
+              
             </View>
-            <TouchableOpacity onPress={()=>{}} className="bg-dark p-3 rounded-lg">
+            <TouchableOpacity onPress={()=>{setVisibleFilter(true)}} className="bg-dark p-3 rounded-lg">
               <Icon name={'options'} size={18} color={'white'}/>
             </TouchableOpacity>
         </View>
@@ -193,13 +267,13 @@ const UploadDokumenPoli = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-        zIndex: 10,
-        position: "absolute",
-        top: 0,
-        bottom: 0,
-        left: 0,
-        right:0,
-        backgroundColor: 'rgba(0,0,0,0.8)',
+      zIndex: 10,
+      position: "absolute",
+      top: 0,
+      bottom: 0,
+      left: 0,
+      right:0,
+      backgroundColor: 'rgba(0,0,0,0.8)',
     },
   });
 

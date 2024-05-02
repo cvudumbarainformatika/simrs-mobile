@@ -17,6 +17,7 @@ const DetailPasienUpload = ({ navigation, route }) => {
   const [modalOpen, setModalOpen] = useState(false)
   const [visibleModalMasterUpload, setVisibleModalMasterUpload] = useState(false)
   const [visibleModalPreview, setVisibleModalPreview] = useState(false)
+
   const [image, setImage] = useState()
   const [imageViewing, setImageViewing] = useState(null)
   const [hapusDok, setHapusDok] = useState(null)
@@ -355,46 +356,63 @@ const DetailPasienUpload = ({ navigation, route }) => {
     })
   }
 
+
+
+
   return (
-    <View className="flex-1">
-      <HeaderComp title="Detail Pasien Poli" bg={`${visibleModalPreview?'black':'white'}`} txtColor="gray-dark" close={ ()=> navigation.goBack() }/>
-
-      {visibleModalMasterUpload && (<ModalMasterUpload isVisible={visibleModalMasterUpload} 
-      onClose={()=> setVisibleModalMasterUpload(false)} onSelectItem={(val)=> onModalMasterSelected(val)}/>)}
-
-      <ModalUploadImage title={uploadCategory} isVisible={modalOpen} onClose={()=> setModalOpen(false)} onUpload={onUploadImage} />
-
-      {visibleModalPreview && (<PreviewDokumen isVisible={visibleModalPreview} 
-      onClose={()=> setVisibleModalPreview(false)} img={imageViewing}/>)}
-
-      <View>
-        <View className="flex flex-center items-center p-4">
-          <AvatarPasien pasien={pasien} width="35" height="35" border="4" borderColor="gray-300" />
-          <Text className="font-poppinsBold mt-4">{pasien?.nama}</Text>
-          <Text className="font-poppins">{pasien?.kelamin}, usia : {pasien?.usia}</Text>
+    <>
+      {(pasien.dokter === '' || pasien.dokter===null) ? (
+        <View className="flex-1 bg-gray-800 justify-center items-center">
+          <Image source={IMGS.madSalehMinum} style={[tw`h-40 w-40`, { resizeMode: 'contain' }]} />
+          <Text className="font-poppins text-white mt-4">Maaf ... Dokter DPJP Belum Ada</Text>
+          <Text className="font-poppins text-white mt-4 w-80 text-center mb-4" style={{fontSize:10}}>
+            Harap Petugas yang berwenang untuk memasukkan DPJP pada Pasien ini
+          </Text>
+          <AppBtn label="Kembali" clicked={()=> navigation.goBack()} />
         </View>
-      </View>
-        <ScrollView className="px-4">
-          
-          <CardInfo />
+      ):(
+        <View className="flex-1">
+          <HeaderComp title="Detail Pasien Poli" bg={`${visibleModalPreview?'black':'white'}`} txtColor="gray-dark" close={ ()=> navigation.goBack() }/>
+
+          {visibleModalMasterUpload && (<ModalMasterUpload isVisible={visibleModalMasterUpload} 
+          onClose={()=> setVisibleModalMasterUpload(false)} onSelectItem={(val)=> onModalMasterSelected(val)}/>)}
+
+          <ModalUploadImage title={uploadCategory} isVisible={modalOpen} onClose={()=> setModalOpen(false)} onUpload={onUploadImage} />
+
+          {visibleModalPreview && (<PreviewDokumen isVisible={visibleModalPreview} 
+          onClose={()=> setVisibleModalPreview(false)} img={imageViewing}/>)}
 
           <View>
-            <View className="flex-row justify-between items-center py-4">
-              <TouchableOpacity className="" onPress={()=> setVisibleModalMasterUpload(true)}>
-                <Text className="font-poppins text-primary">Upload 📤</Text>
-              </TouchableOpacity>
-              <Text className="font-poppinsBold text-gray">Dokument</Text>
+            <View className="flex flex-center items-center p-4">
+              <AvatarPasien pasien={pasien} width="35" height="35" border="4" borderColor="gray-300" />
+              <Text className="font-poppinsBold mt-4">{pasien?.nama}</Text>
+              <Text className="font-poppins">{pasien?.kelamin}, usia : {pasien?.usia}</Text>
             </View>
-
-            <View className={`${image?'py-2':''}`}>
-              {image ? PreviewImageUpload(image): PreviewImageFromApi()}
-            </View>
-
-            <View style={{paddingBottom:100}} />
           </View>
-          
-        </ScrollView>
-    </View>
+            <ScrollView className="px-4">
+              
+              <CardInfo />
+
+              <View>
+                <View className="flex-row justify-between items-center py-4">
+                  <TouchableOpacity className="" onPress={()=> setVisibleModalMasterUpload(true)}>
+                    <Text className="font-poppins text-primary">Upload 📤</Text>
+                  </TouchableOpacity>
+                  <Text className="font-poppinsBold text-gray">Dokument</Text>
+                </View>
+
+                <View className={`${image?'py-2':''}`}>
+                  {image ? PreviewImageUpload(image): PreviewImageFromApi()}
+                </View>
+
+                <View style={{marginBottom:100}} />
+              </View>
+              
+            </ScrollView>
+        </View>
+      )}
+    </>
+    
   )
 }
 

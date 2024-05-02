@@ -2,7 +2,7 @@ import { Text, TouchableOpacity, View } from "react-native"
 import { tw } from "../../../../constants";
 import { ScrollView } from "react-native";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useState } from "react";
 
 
@@ -15,7 +15,7 @@ const CategoryButton = (props)=> {
   // J00223
 
   const handleSelectCategory = (index)=> {
-    const selected = itemRef.current[index]
+    // const selected = itemRef.current[index]
     setActiveIndex(index)
     // console.log('selected',selected)
 
@@ -28,33 +28,48 @@ const CategoryButton = (props)=> {
   }
 
 
+  console.log('coba di category button',props.ctg);
 
 
 
-  return (
-    <View className="px-4 w-full">
-      {/* <Text className="font-poppinsBold my-1" style={tw`text-gray-dark`}>Kategori Pelayanan 📇</Text> */}
-      <ScrollView horizontal ref={scrollViewRef}
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{
-          gap:15,
-          paddingVertical:10,
-          marginTop:5
-        }}>
-        {props.poli.map((item, index)=> (
-          <TouchableOpacity 
+
+  function renderItem(item, index){
+    return (
+      <TouchableOpacity 
             key={index}
-            ref={(el) => itemRef.current[index] = el}
             onPress={()=> handleSelectCategory(index)} 
             className="flex-row items-center rounded-md px-4 py-2"
             style={tw`${activeIndex=== index? 'bg-dark': 'bg-white'}`}
           >
             {/* <Icon name={item.icon} size={20} color={activeIndex=== index? 'white': 'black'} /> */}
-            <Text className="ml-2 " style={tw`${activeIndex=== index? 'text-white': 'text-dark'}`}>{item.nama}</Text>
+            <Text className="ml-2 font-poppins" style={tw`${activeIndex=== index? 'text-white': 'text-dark'}`}>{item.nama}</Text>
           </TouchableOpacity>
-        ))}
+    )
+  }
+
+
+  return (
+      <ScrollView horizontal={true} 
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={{
+          gap:10,
+          paddingVertical:5,
+          marginVertical:10
+        }}>
+        {/* {props.poli.map((item, index)=> (
+          <TouchableOpacity 
+            key={index}
+            onPress={()=> handleSelectCategory(index)} 
+            className="flex-row items-center rounded-md px-4 py-2"
+            style={tw`${activeIndex=== index? 'bg-dark': 'bg-white'}`}
+          >
+            <Text className="ml-2 font-poppins" style={tw`${activeIndex=== index? 'text-white': 'text-dark'}`}>{item.nama}</Text>
+          </TouchableOpacity>
+        ))} */}
+        {props.poli.map((item, index)=> {
+          return renderItem(item, index)
+        })}
       </ScrollView>
-    </View>
   )
 }
 
