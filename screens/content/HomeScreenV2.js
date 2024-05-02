@@ -88,9 +88,21 @@ const HomeScreenV2 = () => {
     // }
 
     function clickedMenu(val) {
-        console.log('menu ok', val)
+        // console.log('pegawai', pegawai)
+        // console.log('menu', val)
         if (val.route) {
-            navigation.dispatch(StackActions.push(val.route))
+            if (val.id === 2) { // Poliklinik
+                if (pegawai?.jabatan === 'J00223') {
+                    navigation.dispatch(StackActions.push(val.route)) 
+                } else if (pegawai.kdgroupnakes === "" || pegawai.kdgroupnakes === null) {
+                    alert(`Maaf Aplikasi ${val.name} Hanya Bisa diakses Oleh PERAWAT, BIDAN, atau DOKTER saja`)
+                } else {
+                    navigation.dispatch(StackActions.push(val.route))
+                }
+            } else {
+                navigation.dispatch(StackActions.push(val.route))
+            }
+            
         } else {
             alert(`Aplikasi ${val.name} akan Release pada Update an selanjutnya`)
         }
