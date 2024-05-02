@@ -7,6 +7,7 @@ import UploadDokumenPoli from '../eUpload/UploadDokumenPoli';
 import HomeScreenV2 from '../../content/HomeScreenV2';
 import { closeSring, openSring, TRANSITION_HORIZONTAL } from '../../../constants/transitions';
 import DetailPasienUpload from './DetailPasienUpload';
+import { useSelector } from 'react-redux';
 
 
 // TRANSITIONS =======================
@@ -39,9 +40,15 @@ const transition = {
   cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
 }
 
+
+// console.log('upload nav',)
+
 const Stack = createStackNavigator();
 const UploadNavigator = () => {
-    // console.log(Stack)
+
+  // const { date, tglAwal, tglAkhir, page, q, category, kodepoli, pasiens, waiting } = useSelector(state => state.pasien)
+
+    // console.log('from navigator', category)
     return (
         <Stack.Navigator
           screenOptions={{

@@ -18,7 +18,7 @@ const initialState = {
   tglAkhir: dayjs().locale('id').format('YYYY-MM-DD'),
   // tglAwal: '2024-04-22',
   // tglAkhir: '2024-04-22',
-  category:'SEMUA POLI',
+  category:null,
   kodepoli:[],
   page:1,
   q:'',

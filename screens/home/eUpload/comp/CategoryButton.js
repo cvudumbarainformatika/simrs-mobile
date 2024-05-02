@@ -11,6 +11,7 @@ const CategoryButton = (props)=> {
   const scrollViewRef = useRef(null)
 
   const [activeIndex, setActiveIndex] = useState(0)
+  // const { category } = useSelector(state => state.pasien)
 
   // J00223
 
@@ -28,7 +29,8 @@ const CategoryButton = (props)=> {
   }
 
 
-  console.log('coba di category button',props.ctg);
+  // console.log('coba di category button',props.ctg);
+
 
 
 

@@ -13,12 +13,16 @@ import { AuthContext } from '../../../context/AuthContext';
 import dayjs from 'dayjs'
 import 'dayjs/locale/id'
 import HeaderComp from './comp/HeaderComp';
+import { useRoute } from '@react-navigation/native';
 
 const menuFilter = ['Hari ini', 'Kemarin', 'Bulan ini', 'Bulan lalu']
 
 const UploadDokumenPoli = ({ navigation }) => {
 
   const dispatch = useDispatch()
+
+  const route = useRoute()
+  // console.log('route', route)
 
   
   const { pegawai } = useContext(AuthContext);
@@ -66,7 +70,15 @@ const UploadDokumenPoli = ({ navigation }) => {
     const sendt = arr.length? arr.map(x => x?.kodepoli) : []
     const filt = sendt.filter(x=> x !== 'SEMUA POLI')
 
-    onCatChange(filt.length? filt[0]: '')
+    
+    const fromRoute = route.params?.category
+    // console.log('category from setting akses from route', fromRoute)
+    if (fromRoute === undefined || fromRoute === 'undefined' || fromRoute === null) {
+      onCatChange(filt.length? filt[0]: '')
+    } else {
+      onCatChange(fromRoute)
+    }
+    
     // dispatch(setKodepoli(filt))
     // console.log('awalKodepoli', filt)
   }
@@ -86,7 +98,7 @@ const UploadDokumenPoli = ({ navigation }) => {
     const filt = sendt.filter(x=> x !== 'SEMUA POLI')
 
     dispatch(setKodepoli(filt))
-    console.log('onCatChange', filt)
+    // console.log('onCatChange', cat)
   }
 
   const handleSelectFilterDay = (val) => {
@@ -121,8 +133,8 @@ const UploadDokumenPoli = ({ navigation }) => {
     setInputQ(val=== null? '':val)
     dispatch(setQ(val=== null? '':val))
   }
-  console.log('search', q);
-  console.log('category', category);
+  // console.log('search', q);
+  // console.log('category', category);
 
   
 
@@ -137,18 +149,18 @@ const UploadDokumenPoli = ({ navigation }) => {
       q
     }
     const params ={params:payload}
-    console.log('params :', params);
+    // console.log('params :', params);
     dispatch(getPasienAsync(params))
   }
 
 
   useEffect(() => {
+    // console.log('navigation', navigation)
     const subscribe = navigation.addListener("focus", () => {
       dispatch(setTglAwal(dayjs().locale('id').format('YYYY-MM-DD')))
       dispatch(setTglakhir(dayjs().locale('id').format('YYYY-MM-DD')))
       dispatch(getPoliAsync())
-      // onCatChange(category)
-      // setCategory(category)
+      onCatChange(category)
     })
     return () => {
         subscribe
@@ -165,8 +177,8 @@ const UploadDokumenPoli = ({ navigation }) => {
 
 
   function onItemClick (val) {
-    console.log('item click',val);
-    navigation.navigate(ROUTES.UPLOAD_DET_PASIEN, {pasien:val})
+    // console.log('item click',val);
+    navigation.navigate(ROUTES.UPLOAD_DET_PASIEN, {pasien:val, category})
   }
 
   const viewHistory = ()=> {

@@ -1,7 +1,7 @@
-import { View, Text, ScrollView, Image, Modal, Pressable, TouchableOpacity, Alert } from 'react-native'
+import { View, Text, ScrollView, Image, Modal, Pressable, TouchableOpacity, Alert, BackHandler } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import HeaderComp from './comp/HeaderComp'
-import { IMGS, tw } from '../../../constants'
+import { IMGS, ROUTES, tw } from '../../../constants'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import AvatarPasien from './comp/AvatarPasien'
 import * as ImagePicker from 'expo-image-picker'
@@ -10,10 +10,15 @@ import { api } from '../../../helpers/axiosHttp'
 import { PATH_IMG } from '../../../config'
 import AppBtn from '../../../components/~global/AppBtn'
 import PreviewDokumen from './comp/PreviewDokumen'
+import { useDispatch } from 'react-redux'
+import { setCategory } from '../../../redux/features/pasien/pasienReducer'
+import { useBackHandler } from '@react-native-community/hooks'
 
 const DetailPasienUpload = ({ navigation, route }) => {
 
-  const {pasien } = route?.params
+  const {pasien, category } = route?.params
+
+  const dispatch = useDispatch()
   const [modalOpen, setModalOpen] = useState(false)
   const [visibleModalMasterUpload, setVisibleModalMasterUpload] = useState(false)
   const [visibleModalPreview, setVisibleModalPreview] = useState(false)
@@ -25,7 +30,8 @@ const DetailPasienUpload = ({ navigation, route }) => {
   const [masterUpload, setMasterUpload] = useState([])
   const [uploadCategory, setUploadCategory] = useState(null)
   const [dokumenFromBackend, setDokumenFromBackend] = useState([])
-  // console.log('route', pasien)
+
+  // console.log('route', category)
 
   const onModalClose = ()=> {
     setModalOpen(false)
@@ -357,7 +363,31 @@ const DetailPasienUpload = ({ navigation, route }) => {
   }
 
 
+  const handleGoBack = ()=> {
+    // dispatch(setCategory(category))
+    console.log('back', category)
+    navigation.navigate(ROUTES.UPLOAD_DOK_POLI, {category})
+  }
 
+  // useEffect(()=> {
+  //   const backHandler = BackHandler.addEventListener(
+  //     'hardwareBackPress',
+  //     handleGoBack,
+  //   );
+  //   return () => backHandler.remove();
+  // },[])
+  useBackHandler(() => {
+    if (category !== undefined || category !== null) {
+      BackHandler.addEventListener(
+        "hardwareBackPress",
+        handleGoBack
+      );
+      // console.log('backHandler')
+      return true
+    }
+    BackHandler.removeEventListener("hardwareBackPress", handleGoBack);
+    return false
+  })
 
   return (
     <>
@@ -368,11 +398,11 @@ const DetailPasienUpload = ({ navigation, route }) => {
           <Text className="font-poppins text-white mt-4 w-80 text-center mb-4" style={{fontSize:10}}>
             Harap Petugas yang berwenang untuk memasukkan DPJP pada Pasien ini
           </Text>
-          <AppBtn label="Kembali" clicked={()=> navigation.goBack()} />
+          <AppBtn label="Kembali" clicked={handleGoBack} />
         </View>
       ):(
         <View className="flex-1">
-          <HeaderComp title="Detail Pasien Poli" bg={`${visibleModalPreview?'black':'white'}`} txtColor="gray-dark" close={ ()=> navigation.goBack() }/>
+          <HeaderComp title="Detail Pasien Poli" bg={`${visibleModalPreview?'black':'white'}`} txtColor="gray-dark" close={ handleGoBack }/>
 
           {visibleModalMasterUpload && (<ModalMasterUpload isVisible={visibleModalMasterUpload} 
           onClose={()=> setVisibleModalMasterUpload(false)} onSelectItem={(val)=> onModalMasterSelected(val)}/>)}
