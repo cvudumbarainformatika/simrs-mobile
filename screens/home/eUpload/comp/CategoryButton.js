@@ -56,7 +56,10 @@ const CategoryButton = (props)=> {
         contentContainerStyle={{
           gap:10,
           paddingVertical:5,
-          marginVertical:10
+          marginVertical:10,
+          paddingStart:10,
+          paddingEnd:10
+          
         }}>
         {/* {props.poli.map((item, index)=> (
           <TouchableOpacity 

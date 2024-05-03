@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { View, Text, StyleSheet, Alert, TouchableOpacity, TextInput, ScrollView, ActivityIndicator, Modal } from 'react-native'
-import { ROUTES, tw } from '../../../constants';
+import { View, Text, StyleSheet, Alert, TouchableOpacity, TextInput, ScrollView, ActivityIndicator, Modal, Image } from 'react-native'
+import { IMGS, ROUTES, tw } from '../../../constants';
 import { AppBtn, HeaderUser } from '../../../components';
 import Icon from 'react-native-vector-icons/Ionicons'
 import CategoryButton from './comp/CategoryButton';
@@ -40,31 +40,41 @@ const UploadDokumenPoli = ({ navigation }) => {
   const { items, loading } = useSelector(state => state.masterPoli)
 
   function settingAkses(val,poli){
-    const jabatan = val?.jabatan
+    const ruang = val?.ruang
     let arr = [...poli]
-    if (jabatan==='J00223') {
+    if (ruang ==='R00003') {
       arr = mappingAkses(items)
     } else {
       if (val.kdgroupnakes==='2' || val.kdgroupnakes==='3') {
         const aksesruangan = val.kdruangansim
         const split = aksesruangan.split('|')
-        const res=[]
-        for (let i = 0; i < split.length; i++) {
-          const kd = split[i]
-          res.push(poli.filter(x => x.kodepoli === kd)[0])
+        // console.log('pegawai',val);
+        console.log('spilt',split);
+        let res=[]
+        if (split.length > 0) {
+          let thumb = []
+          for (let i = 0; i < split.length; i++) {
+            const kd = split[i]
+            thumb.push(poli.filter(x => x?.kodepoli === kd)[0])
+          }
+          res = thumb
         }
-        arr = mappingAkses(res) ?? []
+        arr = mappingAkses(res)
       } else if (val.kdgroupnakes==='1'){
         arr = mappingAkses(items)
       } else {
         arr = []
       }
     }
-    arr?.push({
-      kodepoli: 'SEMUA POLI',
-      nama: 'SEMUA POLI'
-    })
+    if (arr.length>1) {
+      arr?.push({
+        kodepoli: 'SEMUA POLI',
+        nama: 'SEMUA POLI'
+      })
+    }
+    
 
+    console.log('arr', arr);
     setAkses(arr)
 
     const sendt = arr.length? arr.map(x => x?.kodepoli) : []
@@ -86,19 +96,19 @@ const UploadDokumenPoli = ({ navigation }) => {
   function mappingAkses(arr){
     return arr.length? arr?.map(x=> {
       return {
-        kodepoli:x.kodepoli,
-        nama:x.polirs
+        kodepoli:x?.kodepoli,
+        nama:x?.polirs
       }
     }):[]
   }
 
   const onCatChange = (cat)=> {
+    // console.log('onCatChange', cat)
     dispatch(setCategory(cat))
     const sendt = cat === 'SEMUA POLI' ? akses.map(x => x?.kodepoli) : [cat ?? '']
     const filt = sendt.filter(x=> x !== 'SEMUA POLI')
 
     dispatch(setKodepoli(filt))
-    // console.log('onCatChange', cat)
   }
 
   const handleSelectFilterDay = (val) => {
@@ -207,11 +217,11 @@ const UploadDokumenPoli = ({ navigation }) => {
   const ModalMenuFilter=({isVisible, onClose, menus, aktif})=> {
     return (
       <Modal animationType="slide" transparent={true} visible={isVisible} className="shadow-md">
-        <View className="w-2/6 bg-gray absolute bottom-10 right-4 rounded-lg overflow-hidden shadow-md">
+        <View className="w-2/5 bg-gray absolute bottom-10 right-4 rounded-lg overflow-hidden shadow-md">
           {menus.map((item, i)=> {
             return (
               <TouchableOpacity key={i} className={`bg-${aktif === item? 'negative': 'white'} p-2`} style={{marginBottom:1}} onPress={()=> handleSelectFilterDay(item)}>
-                <Text className={`text-${aktif === item? 'white': 'black'} font-poppins text-xs`}>{item}</Text>
+                <Text className={`text-${aktif === item? 'white': 'black'} font-poppins`}>{item}</Text>
               </TouchableOpacity>
             )
           })}
@@ -222,7 +232,18 @@ const UploadDokumenPoli = ({ navigation }) => {
 
 
   return (
-    <View style={tw`flex-1 bg-gray-300`}>
+    <>
+    {/* {(kodepoli[0]?.kodepoli === undefined) ? (
+      <View className="flex-1 bg-gray-800 justify-center items-center absolute-top z-10">
+          <Image source={IMGS.madSalehMinum} style={[tw`h-40 w-40`, { resizeMode: 'contain' }]} />
+          <Text className="font-poppins text-white mt-4">Maaf ... Tidak Ada Akses Poli</Text>
+          <Text className="font-poppins text-white mt-4 w-80 text-center mb-4" style={{fontSize:10}}>
+            Harap Petugas yang berwenang untuk memasukkan Akses Poli
+          </Text>
+          <AppBtn label="Kembali" clicked={()=> navigation.goBack()} />
+        </View>
+    ): ( */}
+      <View style={tw`flex-1 bg-gray-300`}>
 
       <HeaderComp title="Kunjungan Poliklinik" close={ ()=> navigation.goBack() }/>
       
@@ -243,9 +264,11 @@ const UploadDokumenPoli = ({ navigation }) => {
       {pasiens.length > 0  ? viewHistory() : emptyHistory()}
       </View>
       {/* ===================== */}
-      <View className="w-full px-4 pt-2">
+      {/* {kodepoli?.length > 1 && ( */}
+      <View className="w-full pt-2">
         <CategoryButton poli={akses} onCategoryChanged={onCatChange} ctg={category} />
       </View>
+      {/* )} */}
       <View className="p-3">
         <View className="flex-row items-center">
             <View className="flex-1 flex-row items-center bg-white p-2 mr-3 rounded-md">
@@ -272,6 +295,13 @@ const UploadDokumenPoli = ({ navigation }) => {
       </View>
       {/* ======================= */}
     </View>
+    {/* )} */}
+    
+    </>
+
+    
+
+    
   );
 
   

@@ -92,7 +92,7 @@ const HomeScreenV2 = () => {
         // console.log('menu', val)
         if (val.route) {
             if (val.id === 2) { // Poliklinik
-                if (pegawai?.jabatan === 'J00223') {
+                if (pegawai?.ruang === 'R00003') {
                     navigation.dispatch(StackActions.push(val.route)) 
                 } else if (pegawai.kdgroupnakes === "" || pegawai.kdgroupnakes === null) {
                     alert(`Maaf Aplikasi ${val.name} Hanya Bisa diakses Oleh PERAWAT, BIDAN, atau DOKTER saja`)
