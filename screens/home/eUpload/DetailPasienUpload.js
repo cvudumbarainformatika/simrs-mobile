@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Image, Modal, Pressable, TouchableOpacity, Alert, BackHandler, Platform } from 'react-native'
+import { View, Text, ScrollView, Image, Modal, Pressable, TouchableOpacity, Alert, BackHandler, Platform, FlatList } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import HeaderComp from './comp/HeaderComp'
 import { IMGS, ROUTES, tw } from '../../../constants'
@@ -293,39 +293,55 @@ const DetailPasienUpload = ({ navigation, route }) => {
     return (
       <>
         {dokumenFromBackend.length > 0 ? (
-          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{
-              gap:15,
-              paddingVertical:5,
-            }}
-          >
-            {dokumenFromBackend?.map((item, i) => {
-              return (
-                <View key={i} className="bg-white w-40 rounded-md relative p-2 shadow-md">
-                  <TouchableOpacity onPress={()=> {
-                    setImageViewing(`${PATH_IMG+item.url}`)
-                    setVisibleModalPreview(true)
-                  }}>
-                    <Image source={{uri:`${PATH_IMG+item.url}`}} className="w-full h-40 rounded-md flex-1"
-                      resizeMode='cover'
-                    />
-                  </TouchableOpacity>
+          // <ScrollView nestedScrollEnabled horizontal={true} showsHorizontalScrollIndicator={false}
+          //   contentContainerStyle={{
+          //     gap:15,
+          //     paddingVertical:15,
+          //     paddingStart:15,
+          //     paddingEnd:15
+          //   }}
+          // >
+          //   {dokumenFromBackend?.map((item, i) => {
+          //     return (
+          //       <View key={i} className="bg-white w-40 rounded-md relative p-2 shadow-md">
+          //         <TouchableOpacity onPress={()=> {
+          //           setImageViewing(`${PATH_IMG+item.url}`)
+          //           setVisibleModalPreview(true)
+          //         }}>
+          //           <Image source={{uri:`${PATH_IMG+item.url}`}} className="w-full h-40 rounded-md flex-1"
+          //             resizeMode='cover'
+          //           />
+          //         </TouchableOpacity>
                   
-                  <Text className="font-poppinsBold text-xs py-1">{item.nama}</Text>
-                  <View className="flex-row justify-end items-center mt-2">
-                    {/* <TouchableOpacity>
-                      <Icon name='file-eye' size={20} color={'gray'} />
-                    </TouchableOpacity> */}
-                    <TouchableOpacity
-                      onPress={()=> konfirmasiHapus(item)}
-                    >
-                      <Icon name='delete-sweep' size={28} color={'gray'} />
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              )
-            })}
-          </ScrollView>
+          //         <Text className="font-poppinsBold text-xs py-1">{item.nama}</Text>
+          //         <View className="flex-row justify-end items-center mt-2">
+          //           {/* <TouchableOpacity>
+          //             <Icon name='file-eye' size={20} color={'gray'} />
+          //           </TouchableOpacity> */}
+          //           <TouchableOpacity
+          //             onPress={()=> konfirmasiHapus(item)}
+          //           >
+          //             <Icon name='delete-sweep' size={28} color={'gray'} />
+          //           </TouchableOpacity>
+          //         </View>
+          //       </View>
+          //     )
+          //   })}
+          // </ScrollView>
+          <View className="bg-gray-200">
+            <FlatList
+              data={dokumenFromBackend}
+              renderItem={renderItem}
+              keyExtractor={item => item.id}
+              nestedScrollEnabled={true}
+              horizontal={true}
+              
+              contentContainerStyle={{marginVertical:20, marginHorizontal:15, paddingEnd:45}}
+              ItemSeparatorComponent={()=> <View className="w-4"></View>}
+              
+            />
+          </View>
+          
         ):(
           <View className="px-4 py-2 items-center bg-white">
             <Text className="font-poppins text-gray mr-4">Tidak ada data</Text>
@@ -334,6 +350,32 @@ const DetailPasienUpload = ({ navigation, route }) => {
       </>
       
     )
+  }
+
+  const renderItem = ({item})=> {
+    return(
+      <View className="bg-white w-40 rounded-md relative p-2 shadow-md">
+      <TouchableOpacity onPress={()=> {
+        setImageViewing(`${PATH_IMG+item.url}`)
+        setVisibleModalPreview(true)
+      }}>
+        <Image source={{uri:`${PATH_IMG+item.url}`}} className="w-full h-40 rounded-md flex-1"
+          resizeMode='cover'
+        />
+      </TouchableOpacity>
+      
+      <Text className="font-poppinsBold text-xs py-1">{item.nama}</Text>
+      <View className="flex-row justify-end items-center mt-2">
+        
+        <TouchableOpacity
+          onPress={()=> konfirmasiHapus(item)}
+        >
+          <Icon name='delete-sweep' size={28} color={'gray'} />
+        </TouchableOpacity>
+      </View>
+    </View>
+    )
+         
   }
 
   const konfirmasiHapus = (val) => {
@@ -420,12 +462,12 @@ const DetailPasienUpload = ({ navigation, route }) => {
               <Text className="font-poppins">{pasien?.kelamin}, usia : {pasien?.usia}</Text>
             </View>
           </View>
-            <ScrollView className="px-4">
+            <ScrollView nestedScrollEnabled={true} className="">
               
               <CardInfo />
 
               <View>
-                <View className="flex-row justify-between items-center py-4">
+                <View className="flex-row justify-between items-center p-4">
                   <TouchableOpacity className="" onPress={()=> setVisibleModalMasterUpload(true)}>
                     <Text className="font-poppins text-primary">Upload 📤</Text>
                   </TouchableOpacity>

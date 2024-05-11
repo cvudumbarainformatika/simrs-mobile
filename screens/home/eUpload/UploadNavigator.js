@@ -59,7 +59,7 @@ const UploadNavigator = () => {
           initialRouteName={ROUTES.UPLOAD_DOK_POLI}
         >
 
-            {/* <Stack.Screen name={ROUTES.HOME} component={HomeScreenV2} options={transition}/> */}
+            <Stack.Screen name={ROUTES.HOME} component={HomeScreenV2} options={transition}/>
             <Stack.Screen name={ROUTES.UPLOAD_DOK_POLI} component={UploadDokumenPoli} options={transition} />
             <Stack.Screen name={ROUTES.UPLOAD_DET_PASIEN} component={DetailPasienUpload} options={transition} />
 

@@ -98,14 +98,16 @@ const HomeScreenV2 = () => {
         if (val.route) {
             if (val.id === 2) { // Poliklinik
                 if (pegawai?.ruang === 'R00003') {
-                    navigation.dispatch(StackActions.push(val.route)) 
+                    handleMenu(val.route)
                 } else if (pegawai.kdgroupnakes === "" || pegawai.kdgroupnakes === null) {
                     alert(`Maaf Aplikasi ${val.name} Hanya Bisa diakses Oleh PERAWAT, BIDAN, atau DOKTER saja`)
                 } else {
-                    navigation.dispatch(StackActions.push(val.route))
+                    // navigation.dispatch(StackActions.push(val.route))
+                    handleMenu(val.route)
                 }
             } else {
-                navigation.dispatch(StackActions.push(val.route))
+                // navigation.dispatch(StackActions.push(val.route))
+                    handleMenu(val.route)
             }
             
         } else {
@@ -115,6 +117,11 @@ const HomeScreenV2 = () => {
         // if (val.id > 1) {
         //     alert(`Aplikasi ${val.name} akan Release pada Update an selanjutnya`)
         // }
+    }
+
+    const handleMenu = (route, params) => {
+        // console.log('val', val)
+        navigation.dispatch(StackActions.replace(route, params))
     }
 
 

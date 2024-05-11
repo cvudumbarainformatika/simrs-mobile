@@ -13,7 +13,7 @@ import { AuthContext } from '../../../context/AuthContext';
 import dayjs from 'dayjs'
 import 'dayjs/locale/id'
 import HeaderComp from './comp/HeaderComp';
-import { useRoute } from '@react-navigation/native';
+import { StackActions, useRoute } from '@react-navigation/native';
 
 const menuFilter = ['Hari ini', 'Kemarin', 'Bulan ini', 'Bulan lalu']
 
@@ -203,7 +203,8 @@ const UploadDokumenPoli = ({ navigation}) => {
 
   function onItemClick (val) {
     // console.log('item click',val);
-    navigation.navigate(ROUTES.UPLOAD_DET_PASIEN, {pasien:val, category, filterDay})
+    // navigation.navigate(ROUTES.UPLOAD_DET_PASIEN, {pasien:val, category, filterDay})
+    navigation.dispatch(StackActions.push(ROUTES.UPLOAD_DET_PASIEN, {pasien:val, category, filterDay}))
   }
 
   const viewHistory = ()=> {
@@ -260,7 +261,7 @@ const UploadDokumenPoli = ({ navigation}) => {
     ): ( */}
       <View style={tw`flex-1 bg-gray-300`}>
 
-      <HeaderComp title="Kunjungan Poliklinik" close={ ()=> navigation.goBack() }/>
+      <HeaderComp title="Kunjungan Poliklinik" close={ ()=> navigation.dispatch(StackActions.replace(ROUTES.HOME)) }/> 
       
 
       {visibleFilter && (<ModalMenuFilter aktif={filterDay} visible={visibleFilter} menus={menuFilter} onClose={()=> setVisibleFilter(false)} />)}
