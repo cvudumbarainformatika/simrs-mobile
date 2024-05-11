@@ -31,16 +31,16 @@ const HeaderUser = (props) => {
               <Text className="font-poppins text-white mr-1 text-xs">{pegawai ? pegawai.nama : 'tunggu ...'}</Text>
             </View>
           </View>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             onPress={props.bellClick}
           >
-            <Icon name={'bell-outline'} size={28} color={tw.color('gray-light')} />
+            <Icon name={'bell-outline'} size={28} color={tw.color('gray-light')} /> */}
             {/* <View style={tw`h-4 w-4 rounded-full absolute bg-negative top-0 right-0`}>
                     <View style={tw`h-4 w-4 justify-center items-center`}>
                         <Text style={tw`text-white text-xs`}>1</Text>
                     </View>
                   </View> */}
-          </TouchableOpacity>
+          {/* </TouchableOpacity> */}
         </View>
       </SafeAreaView>
     </>

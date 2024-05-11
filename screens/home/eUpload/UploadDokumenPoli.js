@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import CategoryButton from './comp/CategoryButton';
 import ListingComp from './comp/ListingComp';
 import { useDispatch, useSelector } from 'react-redux';
-import { getPasienAsync, setCategory, setKodepoli, setQ, setTglAwal, setTglakhir } from '../../../redux/features/pasien/pasienReducer';
+import { getPasienAsync, setCategory, setKodepoli, setPasiens, setQ, setTglAwal, setTglakhir } from '../../../redux/features/pasien/pasienReducer';
 import { getPoliAsync } from '../../../redux/features/master/poliReducer';
 import { AuthContext } from '../../../context/AuthContext';
 
@@ -17,7 +17,7 @@ import { useRoute } from '@react-navigation/native';
 
 const menuFilter = ['Hari ini', 'Kemarin', 'Bulan ini', 'Bulan lalu']
 
-const UploadDokumenPoli = ({ navigation }) => {
+const UploadDokumenPoli = ({ navigation}) => {
 
   const dispatch = useDispatch()
 
@@ -74,7 +74,7 @@ const UploadDokumenPoli = ({ navigation }) => {
     }
     
 
-    console.log('arr', arr);
+    // console.log('arr', arr);
     setAkses(arr)
 
     const sendt = arr.length? arr.map(x => x?.kodepoli) : []
@@ -111,8 +111,15 @@ const UploadDokumenPoli = ({ navigation }) => {
     dispatch(setKodepoli(filt))
   }
 
-  const handleSelectFilterDay = (val) => {
-    // console.log(val);
+  const handleSelectFilterDay = (day) => {
+    // console.log('handleSelectFilterDay', val);
+    // console.log('handleSelectFilterDayRoute', route.params?.filterDay);
+    // const fromRoute = route.params?.filterDay
+    let val = day
+    if (val === undefined || val === null) {
+      val = 'Hari ini'
+    }
+
     setFilterDay(val)
     const currentDate = dayjs().locale('id').format('YYYY-MM-DD')
     if (val==='Hari ini') {
@@ -165,10 +172,13 @@ const UploadDokumenPoli = ({ navigation }) => {
 
 
   useEffect(() => {
-    // console.log('navigation', navigation)
+    
     const subscribe = navigation.addListener("focus", () => {
+      // dispatch(setPasiens([]))
+      // console.log('navigation', route)
       dispatch(setTglAwal(dayjs().locale('id').format('YYYY-MM-DD')))
       dispatch(setTglakhir(dayjs().locale('id').format('YYYY-MM-DD')))
+      // handleSelectFilterDay(route.params?.filterDay)
       dispatch(getPoliAsync())
       onCatChange(category)
     })
@@ -176,6 +186,11 @@ const UploadDokumenPoli = ({ navigation }) => {
         subscribe
     }
   }, [navigation]);
+
+  // useEffect(() => {
+  //   console.log('route.params?.filterDay', route.params?.filterDay)
+    
+  // },[route.params?.filterDay]); 
 
   useEffect(() => {
     settingAkses(pegawai, items)
@@ -188,7 +203,7 @@ const UploadDokumenPoli = ({ navigation }) => {
 
   function onItemClick (val) {
     // console.log('item click',val);
-    navigation.navigate(ROUTES.UPLOAD_DET_PASIEN, {pasien:val, category})
+    navigation.navigate(ROUTES.UPLOAD_DET_PASIEN, {pasien:val, category, filterDay})
   }
 
   const viewHistory = ()=> {

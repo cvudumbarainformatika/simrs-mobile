@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, StatusBar, BackHandler, TouchableOpacity } from 'react-native'
+import { Platform, View, Text, StyleSheet, StatusBar, BackHandler, TouchableOpacity } from 'react-native'
 import React, {useState, useEffect, useRef} from 'react'
 import { Camera } from 'expo-camera'
 import * as FaceDetector from 'expo-face-detector'

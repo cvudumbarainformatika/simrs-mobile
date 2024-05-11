@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Image, Modal, Pressable, TouchableOpacity, Alert, BackHandler } from 'react-native'
+import { View, Text, ScrollView, Image, Modal, Pressable, TouchableOpacity, Alert, BackHandler, Platform } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import HeaderComp from './comp/HeaderComp'
 import { IMGS, ROUTES, tw } from '../../../constants'
@@ -16,7 +16,7 @@ import { useBackHandler } from '@react-native-community/hooks'
 
 const DetailPasienUpload = ({ navigation, route }) => {
 
-  const {pasien, category } = route?.params
+  const {pasien, category, filterDay } = route?.params
 
   const dispatch = useDispatch()
   const [modalOpen, setModalOpen] = useState(false)
@@ -31,7 +31,7 @@ const DetailPasienUpload = ({ navigation, route }) => {
   const [uploadCategory, setUploadCategory] = useState(null)
   const [dokumenFromBackend, setDokumenFromBackend] = useState([])
 
-  // console.log('route', category)
+  // console.log('route', filterDay)
 
   const onModalClose = ()=> {
     setModalOpen(false)
@@ -365,8 +365,9 @@ const DetailPasienUpload = ({ navigation, route }) => {
 
   const handleGoBack = ()=> {
     // dispatch(setCategory(category))
-    console.log('back', category)
-    navigation.navigate(ROUTES.UPLOAD_DOK_POLI, {category})
+    // console.log('back', category)
+    // console.log('back filterDay', filterDay)
+    navigation.navigate(ROUTES.UPLOAD_DOK_POLI, {category, filterDay})
   }
 
   // useEffect(()=> {

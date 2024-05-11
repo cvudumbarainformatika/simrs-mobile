@@ -31,9 +31,10 @@ const HomeScreenV2 = () => {
 
     // const { jadwals, loading, error } = useSelector(state => state.jadwal)
     // const { kategories } = useSelector(state => state.kategory)
-    const { CUTI, IJIN, SAKIT, DL, DISPEN, A, TERLAMBAT, HADIR } = useSelector(state => state.rekapv2)
 
     const [date, setDatex] = useState(dayjs().locale("id"))
+    
+    const { CUTI, IJIN, SAKIT, DL, DISPEN, A, TERLAMBAT, HADIR } = useSelector(state => state.rekapv2)
 
     const callFirst = () => {
         // getMe()
@@ -70,6 +71,10 @@ const HomeScreenV2 = () => {
         }
 
     }, [navigation])
+
+    // useEffect(() => {
+    //     console.log('date :', date)
+    // }, [date])
 
     // const handleNotificationMasuk = async () => {
     //     await Notifications.scheduleNotificationAsync({

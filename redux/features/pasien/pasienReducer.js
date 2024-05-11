@@ -38,6 +38,7 @@ export const pasienReducer = createSlice({
     setCategory: (state, action) => { state.category = action.payload },
     setKodepoli: (state, action) => { state.kodepoli = action.payload },
     setQ: (state, action) => { state.q = action.payload },
+    setPasiens: (state, action) => { state.pasiens = action.payload },
   },
 
   extraReducers:(builder)=> {
@@ -65,7 +66,7 @@ export const pasienReducer = createSlice({
   }
 })
 
-export const { setWaiting, getRekap, setIsError, setError, setTglAwal, setTglakhir, setCategory, setKodepoli, setQ } = pasienReducer.actions;
+export const { setWaiting, getRekap, setIsError, setError, setTglAwal, setTglakhir, setCategory, setKodepoli, setQ, setPasiens } = pasienReducer.actions;
 
 export default pasienReducer.reducer;
 
