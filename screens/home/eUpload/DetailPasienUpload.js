@@ -166,7 +166,7 @@ const DetailPasienUpload = ({ navigation, route }) => {
         setImage(null)
       }
     }).catch(err => {
-        console.log(err)
+        console.log('imgUpload',err)
         setImage(null)
     })
   };
@@ -179,30 +179,29 @@ const DetailPasienUpload = ({ navigation, route }) => {
   const getMasterUploadFromApi = async () => {
 
     await api.get(`/v2/simrs/layananpoli/upload/master`).then(resp => {
-      // console.log('resp', resp);
+      console.log('master resp', resp);
       setMasterUpload(resp.data)
     }).catch(err => {
-        console.log(err)
+        console.log('masterUpload',err)
     })
   }
 
   const getDokumen = async ()=> {
     const params={params:{noreg:pasien?.noreg}}
     await api.get(`/v2/simrs/layananpoli/upload/dokumenBy`,params).then(resp => {
-      // console.log('resp', resp);
+      console.log('get dok resp', resp);
       if (resp.status === 200) {
         updateDokumenFromBackend(resp.data.result)
       }
     }).catch(err => {
-        console.log(err)
+        console.log('getDokumen',err)
     })
   }
 
 
   useEffect(() => {
     const subscribe = navigation.addListener("focus", () => {
-      getMasterUploadFromApi()
-      getDokumen()
+      Promise.all([getMasterUploadFromApi(),getDokumen()])
     })
     return () => {
         subscribe
