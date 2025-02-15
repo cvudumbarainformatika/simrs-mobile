@@ -93,7 +93,7 @@ export const rekapjadwalv2Reducer = createSlice({
                 // let colTerakhirHadir = hadirs.length ? hadirs[hadirs.length - 1].tanggal : false
 
                 let details = []
-                for (let i = 0; i < state.days; i++) {
+                for (let i = 0; i < 31; i++) {
                     // let urut = i + 1
                     // let tgl = urut > 9 ? urut.toString() : `0${urut}`
                     // let bln = dayjs(state.date).month() + 1 > 9 ? dayjs(state.date).month() + 1 : `0${dayjs(state.date).month() + 1}`
@@ -320,7 +320,7 @@ export const getRekapAsync = createAsyncThunk(
     async (bulan) => {
         try {
             const response = await api.get(`/v2/absensi/history/data?bulan=${bulan}`);
-            console.log('getRekapv2Async :', response.data.jadwal)
+            // console.log('getRekapv2Async :', response.data.jadwal)
             return response.data;
         } catch (error) {
             // console.error(error);

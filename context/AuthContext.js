@@ -27,8 +27,8 @@ export const AuthProvider = ({ children }) => {
         let form = {
             email: email,
             password: password,
-            // device: device
-            device: 'ios' 
+            device: device
+            // device: 'ios' 
         }
         setIsLoading(true);
         try {

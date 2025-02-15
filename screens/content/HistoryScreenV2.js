@@ -21,7 +21,7 @@ function HistoryScreenV2({ navigation }) {
     const { rekaps, hadir, waiting, currentmonth, date, days, details,
         CUTI, IJIN, SAKIT, DL, DISPEN, A, TERLAMBAT, HADIR
     } = useSelector(state => state.rekapv2)
-    console.log('rekap', details)
+    // console.log('rekap', details)
     // const [date, setDate] = useState(dayjs().month(currentmonth).locale('id'))
 
     useEffect(() => {
@@ -310,7 +310,7 @@ function HistoryScreenV2({ navigation }) {
                         </View>
                   )}
                   {data?.status === 'A' && (
-                      <View className="border-gray-dark border-b-2 bg-primary"
+                      <View className="border-gray-dark border-b-2 bg-negative"
                         >
                             <View className="items-center p-3">
                                 <Text className=" font-poppinsBold text-md p-2 text-white">ALPHA</Text>
