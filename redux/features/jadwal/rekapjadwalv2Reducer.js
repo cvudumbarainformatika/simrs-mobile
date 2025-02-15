@@ -86,33 +86,64 @@ export const rekapjadwalv2Reducer = createSlice({
                 state.libur = ijins
                 state.alphas = alphas
 
+
+
                 let bukanShift = hadirs.length ? hadirs[0].kategory_id < 3 : false //INI UNTUK KATEGORY BUKAN SHIft
 
                 // let colTerakhirHadir = hadirs.length ? hadirs[hadirs.length - 1].tanggal : false
 
                 let details = []
                 for (let i = 0; i < state.days; i++) {
-                    let urut = i + 1
-                    let tgl = urut > 9 ? urut.toString() : `0${urut}`
-                    let bln = dayjs(state.date).month() + 1 > 9 ? dayjs(state.date).month() + 1 : `0${dayjs(state.date).month() + 1}`
-                    let thn = dayjs(state.date).year()
-                    let tanggal = `${thn}-${bln}-${tgl}`
+                    // let urut = i + 1
+                    // let tgl = urut > 9 ? urut.toString() : `0${urut}`
+                    // let bln = dayjs(state.date).month() + 1 > 9 ? dayjs(state.date).month() + 1 : `0${dayjs(state.date).month() + 1}`
+                    // let thn = dayjs(state.date).year()
+                    // let tanggal = `${thn}-${bln}-${tgl}`
 
-                    let data = hadirs.filter(x => x.tanggal === tanggal)[0]
-                    let hari = dayjs(`${tanggal} 07:00:00`).locale("id").format("dddd")
-                    let msk = data ? data.masuk : false
-                    let masuk = msk ? dayjs(data.created_at).locale("id").format("HH:mm") : false
-                    let plg = data ? data.pulang : false
-                    let pulang = plg ? dayjs(data.updated_at).locale("id").format("HH:mm") : false
-                    let kategory = data ? data.kategory : null
+                    // let data = hadirs.filter(x => x.tanggal === tanggal)[0]
+                    // let hari = dayjs(`${tanggal} 07:00:00`).locale("id").format("dddd")
+                    // let msk = data ? data.masuk : false
+                    // let masuk = msk ? dayjs(data.created_at).locale("id").format("HH:mm") : false
+                    // let plg = data ? data.pulang : false
+                    // let pulang = plg ? dayjs(data.updated_at).locale("id").format("HH:mm") : false
+                    // let kategory = data ? data.kategory : null
 
-                    let dataijin = ijins.filter(x => x.tanggal === tanggal)[0]
-                    let dataalpha = alphas.filter(x => x.tanggal === tanggal)[0]
+                    // let dataijin = ijins.filter(x => x.tanggal === tanggal)[0]
+                    // let dataalpha = alphas.filter(x => x.tanggal === tanggal)[0]
 
-                    let dataprota = false
-                    if (bukanShift) {
-                        dataprota = protas.filter(x => x.tgl_libur === tanggal)[0]
-                    }
+                    // let dataprota = false
+
+
+
+                    // if (bukanShift) {
+                    //     dataprota = protas.filter(x => x.tgl_libur === tanggal)[0]
+                    // }
+
+
+                    const urut = i + 1;
+                    const tgl = urut.toString().padStart(2, '0');
+                    const bln = (dayjs(state.date).month() + 1).toString().padStart(2, '0');
+                    const thn = dayjs(state.date).year();
+                    const tanggal = `${thn}-${bln}-${tgl}`;
+
+                    const data = hadirs.find(x => x.tanggal === tanggal) || {};
+                    const msk = data?.masuk || false;
+                    const masuk = msk ? dayjs(data.created_at).locale("id").format("HH:mm") : false;
+                    const plg = data?.pulang || false;
+                    const pulang = plg ? dayjs(data.updated_at).locale("id").format("HH:mm") : false;
+                    const kategory = data?.kategory || null;
+                    const hari = dayjs(`${tanggal} 07:00:00`).locale("id").format("dddd");
+                    const dataijin = ijins.find(x => x.tanggal === tanggal);
+                    const dataalpha = alphas.find(x => x.tanggal === tanggal);
+                    const dataprota = bukanShift ? protas.find(x => x.tgl_libur === tanggal) : false;
+
+                    // console.log('data', {
+                    //     tanggal,
+                    //     masuk,
+                    //     pulang,
+                    //     kategory,
+                    // });
+                    
 
                     let status = false
                     let terlambat = 0
@@ -121,7 +152,7 @@ export const rekapjadwalv2Reducer = createSlice({
                             status = 'IJIN'
                             terlambat = 0
                         } else {
-                            if (msk) {
+                            if (masuk || pulang) {
                                 status = 'MSK'
                                 terlambat = hitungTelat(data)
                             } else {
@@ -154,7 +185,8 @@ export const rekapjadwalv2Reducer = createSlice({
                         kategory: kategory,
                         not_shift: bukanShift,
                         status: status,
-                        terlambat: terlambat
+                        terlambat: terlambat,
+                        txt: terlambat !== 0 ? 'Terlambat' + toHoursAndMinutes(terlambat) : null,
 
                     }
                     details.push(obj)
@@ -163,6 +195,59 @@ export const rekapjadwalv2Reducer = createSlice({
 
 
                 }
+
+
+                // let details = [];
+
+                // for (let i = 0; i < state.days; i++) {
+                //     const urut = i + 1;
+                //     const tgl = urut.toString().padStart(2, '0');
+                //     const bln = (dayjs(state.date).month() + 1).toString().padStart(2, '0');
+                //     const thn = dayjs(state.date).year();
+                //     const tanggal = `${thn}-${bln}-${tgl}`;
+
+                //     const data = hadirs.find(x => x.tanggal === tanggal) || {};
+                //     const hari = dayjs(`${tanggal} 07:00:00`).locale("id").format("dddd");
+                //     const dataijin = ijins.find(x => x.tanggal === tanggal);
+                //     const dataalpha = alphas.find(x => x.tanggal === tanggal);
+                //     const dataprota = bukanShift ? protas.find(x => x.tgl_libur === tanggal) : false;
+
+                //     let status = 'LIBUR';
+                //     let terlambat = 0;
+
+                //     if (state.tanggalSekarang >= tanggal) {
+                //         if (dataijin) {
+                //             status = 'IJIN';
+                //         } else if (data.masuk) {
+                //             status = 'MSK';
+                //             terlambat = hitungTelat(data);
+                //         } else if (dataprota) {
+                //             status = 'CB';
+                //         } else if (dataalpha) {
+                //             status = 'A';
+                //         } else if (state.tanggalSekarang === tanggal) {
+                //             status = 'WAIT';
+                //         }
+                //     }
+
+                //     details.push({
+                //         tgl,
+                //         tanggal,
+                //         tanggalMasuk: data.masuk ? data.tanggal : false,
+                //         masuk: data.masuk ? dayjs(data.created_at).locale("id").format("HH:mm") : false,
+                //         pulang: data.pulang ? dayjs(data.updated_at).locale("id").format("HH:mm") : false,
+                //         hari,
+                //         ijin: dataijin ? dataijin.flag : false,
+                //         alpha: dataalpha || false,
+                //         prota: !!dataprota,
+                //         kategory: data.kategory || null,
+                //         not_shift: bukanShift,
+                //         status,
+                //         terlambat
+                //     });
+                // }
+
+
                 // this.items.sort((a, b) => a.TAKMASOK - b.TAKMASOK) : this.items = this.items.sort((a, b) => b.TAKMASOK - a.TAKMASOK)
                 state.details = details.length > 0 ?
                     details.sort((a, b) => a.tanggal > b.tanggal ? -1 : 1) : []
@@ -235,7 +320,7 @@ export const getRekapAsync = createAsyncThunk(
     async (bulan) => {
         try {
             const response = await api.get(`/v2/absensi/history/data?bulan=${bulan}`);
-            // console.log('getRekapv2Async :', response.data.jadwal)
+            console.log('getRekapv2Async :', response.data.jadwal)
             return response.data;
         } catch (error) {
             // console.error(error);

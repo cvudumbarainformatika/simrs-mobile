@@ -120,7 +120,7 @@ const HomeScreenV2 = () => {
     }
 
     const handleMenu = (route, params) => {
-        // console.log('val', val)
+        console.log('val', {route, params}) 
         navigation.dispatch(StackActions.replace(route, params))
     }
 
@@ -231,7 +231,7 @@ const HomeScreenV2 = () => {
             {/* <GradientTop  /> */}
             <HeaderUser bellClick={() => alert(`Tidak Ada Notifikasi`)} />
             {/* <AppBtn label="MM" clicked={()=> navigation.navigate(ROUTES.SET_JADWAL_AWAL, {jadwals})} /> */}
-            <ScrollView>
+            <ScrollView horizontal={false} showsVerticalScrollIndicator={false}>
 
                 {/* JAM DIGITAL */}
 

@@ -1,4 +1,4 @@
-import { View, Text, ScrollView } from 'react-native'
+import { View, Text, ScrollView, TouchableOpacity, Modal } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import Icon from 'react-native-vector-icons/AntDesign'
 import { AppBtn, AppBtnIcon, AppLoader, HeaderUser } from '../../components'
@@ -11,6 +11,11 @@ import 'dayjs/locale/id'
 
 
 function HistoryScreenV2({ navigation }) {
+
+
+
+    const [isModal, setIsModal] = useState(false)
+    const [data, setData] = useState(null)
 
     const dispatch = useDispatch()
     const { rekaps, hadir, waiting, currentmonth, date, days, details,
@@ -54,7 +59,16 @@ function HistoryScreenV2({ navigation }) {
                     // console.log('r', )
                     if (item.status !== false) {
                         return (
-                            <View key={i} className="bg-white px-4 py-2 mb-1">
+                            <TouchableOpacity 
+                                key={i} className="bg-white px-4 py-2 mb-1"
+                                onPress={() => {
+                                        console.log('item', item);
+                                        
+                                        setIsModal(true)
+                                        setData(item)
+                                    }
+                                }
+                            >
                                 <View className="flex-row items-center">
                                     <View className="flex-1 flex-row">
                                         <Text className="font-poppinsThin text-primary text-2xl w-8">{item.tgl}</Text>
@@ -65,7 +79,8 @@ function HistoryScreenV2({ navigation }) {
                                         {item.status === 'MSK' && (
                                             <>
                                                 {/* <Text>{item.terlambat}</Text> */}
-                                                <Text className="font-poppins text-xs text-right">AM : {item.masuk}</Text>
+                                                <Text 
+                                                    style={tw`font-poppins text-xs text-right ${item.masuk ? '' : 'text-negative'}`}>AM : {item.masuk || 'TAM'}</Text>
                                                 <Text
                                                     style={tw`font-poppins text-xs text-right ${item.pulang ? '' : 'text-negative'}`}>AP : {item.pulang ? item.pulang : 'TAP'}
                                                 </Text>
@@ -100,7 +115,7 @@ function HistoryScreenV2({ navigation }) {
                                         )}
                                     </View>
                                 </View>
-                            </View>
+                            </TouchableOpacity>
                         )
                     }
 
@@ -178,8 +193,148 @@ function HistoryScreenV2({ navigation }) {
         )
     }
 
+
+
+    const ModalDetailAbsensi=({isModal, data})=> {
+        return (
+          <Modal animationType="slide" transparent={true} visible={isModal}>
+            <View className="h-3/4 w-full bg-gray-100 absolute bottom-0 rounded-t-lg overflow-hidden">
+              <View className="flex-1">
+                  <View className="border-gray-light border-b-2">
+                      <View className="flex-row items-center p-3">
+                        <Text className="flex-1 font-poppinsBold text-lg p-2">Detail Absensi</Text>
+                        <TouchableOpacity className="" onPress={()=>setIsModal(false)}>
+                            <Icon name="close" size={30} color={'black'} />
+                        </TouchableOpacity>
+                      </View>
+                  </View>
+                  <View className="flex-1">
+                    <ScrollView>
+                      <View className="items-center p-3">
+                        <Text className=" font-poppinsBold text-lg">Jadwal</Text>
+                        <Text className=" font-poppins text-lg">{data?.hari}, Tanggal {data?.tanggal} </Text>
+                      </View>
+                      <View className="border-gray-light border-y-2 px-3 py-4">
+                        <View className="flex-row gap-2">
+                          <View className="">
+                            <Text className=" font-poppins text-lg">Kategori</Text>
+                            <Text className=" font-poppins text-lg">Jadwal Msk</Text>
+                            <Text className=" font-poppins text-lg">Jadwal Plg</Text>
+                          </View>
+                          <View className="flex-1">
+                            <Text className=" font-poppinsBold text-lg">: {data?.kategory?.nama}</Text>
+                            <Text className=" font-poppinsBold text-lg">: {data?.kategory?.masuk}</Text>
+                            <Text className=" font-poppinsBold text-lg">: {data?.kategory?.pulang}</Text>
+                          </View>
+                        </View>
+                      </View>
+                      <View className="border-gray-light  px-3 py-4">
+                        {data?.status === 'MSK' && (
+                            <View className="flex-row gap-2">
+                                <View className="flex-1 items-center">
+                                    <Text className=" font-poppins text-lg">ABSEN MSK</Text>
+                                    <Text className=" font-poppinsBold text-xl"
+                                        style={tw`${data?.masuk ? '' : 'text-negative'}`}
+                                    >{data?.masuk || 'TAM'}</Text>
+                                </View>
+                                <View className="flex-1 items-center">
+                                    <Text className=" font-poppins text-lg">ABSEN PLG</Text>
+                                    <Text className=" font-poppinsBold text-xl"
+                                    
+                                        style={tw`${data?.pulang ? '' : 'text-negative'}`}
+                                    >{data?.pulang || 'TAP'}</Text>
+                                </View>
+                            </View>
+                        )}
+                        {data?.status === 'LIBUR' && (
+                            <View className="flex-row gap-2">
+                                <View className="flex-1 items-center">
+                                    <Text className=" font-poppins text-lg">HARI</Text>
+                                    <Text className=" font-poppinsBold text-lg">LIBUR</Text>
+                                </View>
+                                
+                            </View>
+                        )}
+                        {data?.status === 'A' && (
+                            <View className="flex-row gap-2">
+                                <View className="flex-1 items-center">
+                                    <Text className=" font-poppinsBold text-xl text-negative">ALPHA</Text>
+                                </View>
+                                
+                            </View>
+                        )}
+                        {data?.status === 'CB' && (
+                            <View className="flex-row gap-2">
+                                <View className="flex-1 items-center">
+                                    <Text className=" font-poppinsBold text-xl text-primary">CB</Text>
+                                </View>
+                                
+                            </View>
+                        )}
+                        {data?.status === 'IJIN' && (
+                            <View className="flex-row gap-2">
+                                <View className="flex-1 items-center">
+                                    <Text className=" font-poppinsBold text-xl text-primary">{data?.ijin}</Text>
+                                </View>
+                                
+                            </View>
+                        )}
+                        
+                      </View>
+                      
+                    </ScrollView>
+                  </View>
+                  {data?.status === 'MSK' && (
+                      <View className="border-gray-dark border-b-2"
+                            style={tw`${data?.txt ? 'bg-negative' : 'bg-primary'}`}
+                        >
+                            <View className="items-center p-3">
+                                <Text className=" font-poppinsBold text-md p-2 text-white">{data?.txt || 'On Time'}</Text>
+                            </View>
+                        </View>
+                  )}
+                  {data?.status === 'LIBUR' && (
+                      <View className="border-gray-dark border-b-2 bg-red-400"
+                        >
+                            <View className="items-center p-3">
+                                <Text className=" font-poppinsBold text-md p-2 text-white">LIBUR</Text>
+                            </View>
+                        </View>
+                  )}
+                  {data?.status === 'IJIN' && (
+                      <View className="border-gray-dark border-b-2 bg-primary"
+                        >
+                            <View className="items-center p-3">
+                                <Text className=" font-poppinsBold text-md p-2 text-white">{data?.ijin}</Text>
+                            </View>
+                        </View>
+                  )}
+                  {data?.status === 'A' && (
+                      <View className="border-gray-dark border-b-2 bg-primary"
+                        >
+                            <View className="items-center p-3">
+                                <Text className=" font-poppinsBold text-md p-2 text-white">ALPHA</Text>
+                            </View>
+                        </View>
+                  )}
+                  {data?.status === 'CB' && (
+                      <View className="border-gray-dark border-b-2 bg-primary"
+                        >
+                            <View className="items-center p-3">
+                                <Text className=" font-poppinsBold text-md p-2 text-white">CB</Text>
+                            </View>
+                        </View>
+                  )}
+                  
+              </View>
+            </View>
+          </Modal>
+        )
+      }
+
     return (
         <View className="flex-1 bg-gray-light">
+            <ModalDetailAbsensi isModal={isModal} data={data} />
             <HeaderUser />
             <AppLoader visible={waiting} />
             <View className="flex-row items-center px-4 py-3 bg-white mb-2">
@@ -201,5 +356,12 @@ function HistoryScreenV2({ navigation }) {
         </View>
     )
 }
+
+
+
+
+
+
+
 
 export default HistoryScreenV2

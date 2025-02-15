@@ -47,7 +47,8 @@ const BottomTabNavigator = () => {
 
   const routes = (val) => {
     const focusedRoute = getFocusedRouteNameFromRoute(val)
-
+    // console.log('focusedRoute', focusedRoute);
+    
     const arr = [
       ROUTES.SET_JADWAL_AWAL,
       ROUTES.PILIH_KATEGORI_JADWAL_AWAL,
@@ -66,7 +67,7 @@ const BottomTabNavigator = () => {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => {
-        // console.log('bot navigation :', routes(route))
+        // console.log('bot navigation :', route)
         return {
           headerShown: false,
           tabBarActiveTintColor: tw.color('white'),

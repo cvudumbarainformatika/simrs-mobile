@@ -30,7 +30,10 @@ const XenterScreen = ({ navigation }) => {
 
     if (hasPermission === null || hasPermission === false) {
         return <AppAlert visible={hasPermission === null || hasPermission === false} msg="Maaf, Kamu tidak mengizinkan Camera untuk Aplikasi ini."
-            onOk={() => navigation.pop(1)}
+            onOk={() => 
+                // navigation.pop(1)
+                navigation.dispatch(StackActions.replace(ROUTES.HOME))
+            }
         />
     }
 
@@ -48,7 +51,7 @@ const XenterScreen = ({ navigation }) => {
 
             if (size.width === width || size.height === height || X === origin.x) {
                 setScanned(true);
-                console.log('kotak', data);
+                // console.log('kotak', data);
                 // navigation.navigate(ROUTES.KirimQr, { data })
                 navigation.dispatch(StackActions.replace(ROUTES.KirimQr, { data }))
 
@@ -110,7 +113,11 @@ const XenterScreen = ({ navigation }) => {
                     <View className="flex-row items-center justify-between">
                         <View></View>
                         <TouchableOpacity className="bg-dark p-4 rounded-full self-end"
-                            onPress={() => navigation.pop(1)}
+                            onPress={() => 
+                                // navigation.dispatch(StackActions.pop(1))
+                                navigation.dispatch(StackActions.push(ROUTES.HOME))
+                                // navigation.dispatch(StackActions.replace(ROUTES.KirimQr, { data: null }))
+                            }
                         >
                             <Icon name="close" size={30} color="white" />
                         </TouchableOpacity>

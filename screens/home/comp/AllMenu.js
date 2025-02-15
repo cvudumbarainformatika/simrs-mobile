@@ -56,7 +56,7 @@ const AllMenu = (props) => {
 
     return (
         // <View>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
             {menus.map((item, i) => {
                 return (
                     <TouchableOpacity

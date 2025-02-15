@@ -32,9 +32,9 @@ const JadwalScreen = ({ navigation }) => {
     
     updateLib()
 
-    console.log('total Jam:', totalJam)
-    console.log('total libur:', libur)
-    console.log('total masuk:', masuk)
+    // console.log('total Jam:', totalJam)
+    // console.log('total libur:', libur)
+    // console.log('total masuk:', masuk)
     // console.log('jadwal Screen:', jadwals)
   },[libur, masuk])
 
