@@ -411,25 +411,25 @@ const DetailPasienUpload = ({ navigation, route }) => {
     navigation.navigate(ROUTES.UPLOAD_DOK_POLI, {category, filterDay})
   }
 
-  // useEffect(()=> {
-  //   const backHandler = BackHandler.addEventListener(
-  //     'hardwareBackPress',
-  //     handleGoBack,
-  //   );
-  //   return () => backHandler.remove();
-  // },[])
-  useBackHandler(() => {
-    if (category !== undefined || category !== null) {
-      BackHandler.addEventListener(
-        "hardwareBackPress",
-        handleGoBack
-      );
-      // console.log('backHandler')
-      return true
-    }
-    BackHandler.removeEventListener("hardwareBackPress", handleGoBack);
-    return false
-  })
+  useEffect(()=> {
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      handleGoBack,
+    );
+    return () => backHandler.remove();
+  },[])
+  // useBackHandler(() => {
+  //   if (category !== undefined || category !== null) {
+  //     BackHandler.addEventListener(
+  //       "hardwareBackPress",
+  //       handleGoBack
+  //     );
+  //     // console.log('backHandler')
+  //     return true
+  //   }
+  //   BackHandler.removeEventListener("hardwareBackPress", handleGoBack);
+  //   return false
+  // })
 
   return (
     <>

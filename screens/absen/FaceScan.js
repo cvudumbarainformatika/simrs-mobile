@@ -1,7 +1,7 @@
 import { Platform, View, Text, StyleSheet, StatusBar, BackHandler, TouchableOpacity } from 'react-native'
 import React, {useState, useEffect, useRef} from 'react'
 import { Camera } from 'expo-camera'
-import * as FaceDetector from 'expo-face-detector'
+// import * as FaceDetector from 'expo-face-detector'
 import { AppLoader } from '../../components'
 import { ROUTES, tw } from '../../constants'
 import { useContext } from 'react'
@@ -87,7 +87,7 @@ const FaceScan = ({navigation, route}) => {
     return (
         <View style={styles.container}>
             <Text className="font-poppinsBold absolute top-0 left-0 right-0 z-10 bg-white text-center pt-8 pb-2">Scan Wajah</Text>
-            <Camera
+            {/* <Camera
                 style={styles.camera}
                 ratio={'16:9'}
                 type={Camera.Constants.Type.front}
@@ -100,7 +100,7 @@ const FaceScan = ({navigation, route}) => {
                     minDetectionInterval: 300,
                     tracking: true
                 }}
-            >
+            > */}
                 
             {/* <View style={styles.topBar}>
                 <Text style={styles.textcolor}>x: {faceData.length ? faceData[0].bounds.origin.x.toFixed(0) : 0}</Text>
@@ -110,9 +110,9 @@ const FaceScan = ({navigation, route}) => {
                 <Text style={styles.textcolor}>Heigth: {faceData.length ? faceData[0].bounds.size.height.toFixed(0) : 0}</Text>
                 <Text style={styles.textcolor}>width: {faceData.length ? faceData[0].bounds.size.width.toFixed(0) : 0}</Text>
             </View> */}
-            </Camera>
+            {/* </Camera> */}
 
-            {faceData.length? getFaces(): undefined}  
+            {/* {faceData.length? getFaces(): undefined}   */}
 
             <View className="p-4 bg-white absolute bottom-0 left-0 right-0">
                 <Text className="font-poppinsBold text-xs mb-2">🏷️  Rekam Wajah</Text>

@@ -1,5 +1,5 @@
 import { View, Text, Image, ScrollView, Alert, BackHandler } from 'react-native'
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { AppBtn, AppLoader } from '../../components'
 import { IMGS, ROUTES, tw } from '../../constants'
 import { LinearGradient } from 'expo-linear-gradient'
@@ -19,8 +19,13 @@ const SetJadwalAwalScreen = ({ navigation }) => {
         jadwals
     } } = useRoute()
     
-    const { kategories, loading } = useSelector(state => state.kategory)
-    const newKategories = useSelector(state =>sliceKategoriesAwal(state, 2))
+    const { kategories } = useSelector(state => state.kategory)
+    const newKategories = useSelector(state => sliceKategoriesAwal(state, 2))
+    // const newKategories = useMemo(() => {
+    //   return sliceKategoriesAwal({ kategory: { kategories } }, 2)
+    // }, [kategories])
+
+    
 
     const backAction = () => {
         Alert.alert("Tunggu!", "Apakah Kamu ingin membatalkan dan keluar dari aplikasi?", [
@@ -33,18 +38,20 @@ const SetJadwalAwalScreen = ({ navigation }) => {
         return true;
     };
 
-    useBackHandler(() => {
-      if (jadwals.length === 0) {
-         BackHandler.addEventListener(
-          "hardwareBackPress",
-          backAction
-        );
-        // console.log('backHandler')
-        return true
-      }
-      BackHandler.removeEventListener("hardwareBackPress", backAction);
-      return false
-    })
+
+
+    // ✅ versi baru: pakai backHandler.remove()
+      useEffect(() => {
+        if (jadwals.length === 0) {
+          const backHandler = BackHandler.addEventListener(
+            'hardwareBackPress',
+            backAction
+          );
+          console.log('backHandler aktif');
+          return () => backHandler.remove(); // versi baru React Native
+        }
+      }, [jadwals.length]);
+    
 
     
     useEffect(() => {

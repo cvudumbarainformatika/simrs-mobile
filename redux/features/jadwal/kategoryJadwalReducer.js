@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import { api } from "../../../helpers/axiosInterceptor"
+import { createSelector } from '@reduxjs/toolkit'
 
 
 
@@ -52,21 +53,43 @@ export const { getKategories, setLoading, getError } = kategoryJadwalsReducer.ac
 // INI DIKIRIM KE SELECTOR
 
 export const showKategories = (state) => state.kategory.kategories;
-export const sliceKategoriesAwal = (state, payload) => {
-    let newKategories = [...state.kategory.kategories]
-    let obj = {
-        id: 0,
-        nama: 'Shift'
-    }
-    let newArr = newKategories
-    if (newKategories.length > 2) {
-        newArr = newKategories.slice(0, payload)
-        newArr.push(obj)
-        return newArr
+// export const sliceKategoriesAwal = (state, payload) => {
+//     let newKategories = [...state.kategory.kategories]
+//     let obj = {
+//         id: 0,
+//         nama: 'Shift'
+//     }
+//     let newArr = newKategories
+//     if (newKategories.length > 2) {
+//         newArr = newKategories.slice(0, payload)
+//         newArr.push(obj)
+//         return newArr
+//     }
+
+//     return newArr
+// }
+
+export const selectKategories = (state) => state.kategory?.kategories
+
+export const sliceKategoriesAwal = createSelector(
+  [selectKategories, (_, count) => count], // parameter kedua (_ , count) buat ambil payload dari luar
+  (kategories, count) => {
+    if (!Array.isArray(kategories)) return []
+
+    const obj = { id: 0, nama: 'Shift' }
+    let newArr = [...kategories]
+
+    if (kategories.length > 2) {
+      newArr = kategories.slice(0, count)
+      newArr.push(obj)
     }
 
     return newArr
-}
+  }
+)
+
+
+
 // export const showError = (state) => state.jadwal.error;
 
 export default kategoryJadwalsReducer.reducer;

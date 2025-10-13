@@ -5,7 +5,7 @@ import { IMGS, ROUTES, tw } from '../../constants'
 import { AppBtn, AppLoader } from '../../components'
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { useDispatch, useSelector } from 'react-redux'
-import { useBackHandler } from '@react-native-community/hooks'
+// import { useBackHandler } from '@react-native-community/hooks'
 import { getKategoriesAscync } from '../../redux/features/jadwal/kategoryJadwalReducer'
 import { getJadwalsAsync } from '../../redux/features/jadwal/jadwalsReducer'
 import AppLoaderAnim from '../../components/~global/AppLoaderAnim'
@@ -42,20 +42,20 @@ const SetJadwalAwalScreen = ({ navigation }) => {
   };
 
 
-
-  useBackHandler(() => {
+  // ✅ versi baru: pakai backHandler.remove()
+  useEffect(() => {
     if (jadwals.length === 0) {
-      BackHandler.addEventListener(
-        "hardwareBackPress",
+      const backHandler = BackHandler.addEventListener(
+        'hardwareBackPress',
         backAction
       );
-      console.log('backHandler')
-      return true
+      console.log('backHandler aktif');
+      return () => backHandler.remove(); // versi baru React Native
     }
-    // let the default thing happen
-    BackHandler.removeEventListener("hardwareBackPress", backAction);
-    return false
-  })
+  }, [jadwals.length]);
+
+
+ 
 
   return (
     <ScrollView contentContainerStyle={tw`flex-1 items-center justify-center`}>
