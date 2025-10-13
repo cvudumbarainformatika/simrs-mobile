@@ -3,18 +3,18 @@ import React, { createContext, useState } from 'react'
 import { ROUTES } from '../constants';
 import { closeSring, openSring, TRANSITION_HORIZONTAL } from '../constants/transitions';
 import { CardStyleInterpolators, createStackNavigator, TransitionPresets } from '@react-navigation/stack';
-import QrScan from '../screens/absen/QrScan';
+// import QrScan from '../screens/absen/QrScan.bak';
 import LoadingAbsen from '../screens/absen/LoadingAbsen';
 import ScreenAbsenV4 from '../screens/absen/ScreenAbsenV4';
-import { NavigationContainer } from '@react-navigation/native';
+// import { NavigationContainer } from '@react-navigation/native';
 import QrScanV2 from '../screens/absen/QrScanV2';
 import FaceScan from '../screens/absen/FaceScan';
 import AbsenMap from '../screens/absen/AbsenMap';
 import CekLokasi from '../screens/absen/CekLokasi';
-import store from '../redux/store'
-import { Text } from 'react-native';
+// import store from '../redux/store'
+// import { Text } from 'react-native';
 import { AbsenProvider } from '../context/AbsenContext';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+// import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 // console.log('oooi')
 const Stack = createStackNavigator();
