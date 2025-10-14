@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { CameraView, CameraType, useCameraPermissions, FlashMode } from 'expo-camera';
 import { AppAlert, AppLoader } from '../../components';
@@ -54,6 +54,9 @@ const QrScanV2 = ({ navigation, route }) => {
 
     const handleBarCodeScanned = ({ bounds, data }) => {
         let kotak = (bounds === undefined || bounds === 'undefined' || bounds === null || bounds === false);
+
+
+
         if (!kotak) {
             const { origin, size } = bounds;
             setX(origin.x);
@@ -65,12 +68,14 @@ const QrScanV2 = ({ navigation, route }) => {
                 setScanned(true);
                 console.log(data);
                 navigation.navigate(ROUTES.ABSEN_LOADING, { data, status, kategory_id, tanggal, jam });
+                                // Alert.alert("INFORMASI !", data);
             }
         } else {
             if (data) {
                 setScanned(true);
                 console.log('kotak gakbisa ', data);
                 navigation.navigate(ROUTES.ABSEN_LOADING, { data, status, kategory_id, tanggal, jam });
+                // Alert.alert("INFORMASI !", data);
             }
         }
     };
@@ -130,7 +135,7 @@ const QrScanV2 = ({ navigation, route }) => {
                             onPress={handleFlash}
                         >
                             <Icon
-                                name={flash === FlashMode.off ? 'flashlight-off' : 'flashlight'}
+                                name={flash === 'off' ? 'flashlight-off' : 'flashlight'}
                                 size={30}
                                 color="white"
                             />

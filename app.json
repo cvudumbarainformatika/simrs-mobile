@@ -2,7 +2,7 @@
   "expo": {
     "name": "Xenter Rsud MSaleh",
     "slug": "XenterRsudMSaleh",
-    "version": "2.3.1",
+    "version": "2.3.3",
     "orientation": "portrait",
     "icon": "./assets/icon/icon.png",
     "userInterfaceStyle": "light",
@@ -22,7 +22,7 @@
     },
     "android": {
       "package": "com.xenter.rsudmsaleh",
-      "versionCode": 24,
+      "versionCode": 26,
       "softwareKeyboardLayoutMode": "pan",
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon/adaptive-icon-android.png",
@@ -46,7 +46,11 @@
         "expo-build-properties",
         {
           "android": {
-            "usesCleartextTraffic": true
+            "usesCleartextTraffic": true,
+            "compileSdkVersion": 35,
+            "targetSdkVersion": 35,
+            "minSdkVersion": 23,
+            "buildToolsVersion": "35.0.0"
           }
         }
       ],

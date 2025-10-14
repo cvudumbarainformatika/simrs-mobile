@@ -148,42 +148,35 @@ const HomeScreenV2 = () => {
                 <View className="bg-white py-4 pb-5 rounded">
                     <View className="flex-row items-center justify-between space-x-2 px-4">
                         <View className="flex-1 mb-2">
-                            {componentRekap(HADIR, 'Hadir', 'select1')}
+                            {componentRekap(HADIR, 'Hadir', 'select')}
                         </View>
                         <View className="flex-1 mb-2">
-                            {componentRekap(SAKIT, 'Sakit', 'medicinebox')}
+                            {componentRekap(SAKIT, 'Sakit', 'medicine-box')}
                         </View>
                         <View className="flex-1 mb-2">
-                            {componentRekap(IJIN, 'Izin', 'paperclip')}
+                            {componentRekap(IJIN, 'Izin', 'audit')}
                         </View>
                     </View>
                     <View className="flex-row items-center justify-between space-x-2 px-4">
                         <View className="flex-1 mb-2">
-                            {componentRekap(CUTI, 'Cuti', 'rest')}
+                            {componentRekap(CUTI, 'Cuti', 'coffee')}
                         </View>
                         <View className="flex-1 mb-2">
-                            {componentRekap(DL, 'DL', 'rocket1')}
+                            {componentRekap(DL, 'DL', 'rocket')}
                         </View>
                         <View className="flex-1 mb-2">
                             {componentRekap(DISPEN, 'Dispen', 'retweet')}
                         </View>
                     </View>
                     <View className="flex-row items-center justify-between space-x-2 px-4">
-                        <View className="flex-1 mb-2">
+                        <View className="flex-grow mb-2">
                             {componentRekap(A, 'Alpha', 'disconnect')}
                         </View>
                         <View className="flex-grow mb-2">
-                            {componentRekap(TERLAMBAT, 'Terlambat', 'exception1')}
+                            {componentRekap(TERLAMBAT, 'Terlambat', 'exception')}
                         </View>
                     </View>
-                    {/* <View className="flex-row items-center justify-between space-x-4 px-4">
-            <View className="flex-1 mb-2">
-              {componentRekap(0,'Hadir','checkbox-multiple-marked-circle-outline')}
-            </View>
-            <View className="flex-1 mb-2">
-              {componentRekap(0,'Hadir','checkbox-multiple-marked-circle-outline')}
-            </View>
-          </View> */}
+                   
                 </View>
             </>
         )

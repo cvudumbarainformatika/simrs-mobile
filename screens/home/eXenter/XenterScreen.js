@@ -49,12 +49,14 @@ const XenterScreen = ({ navigation }) => {
             if (size.width === width || size.height === height || X === origin.x) {
                 setScanned(true);
                 navigation.dispatch(StackActions.replace(ROUTES.KirimQr, { data }));
+                // Alert.alert("INFORMASI !", data);
             }
         } else {
             if (data) {
                 setScanned(true);
                 console.log('kotak gakbisa ', data);
                 navigation.dispatch(StackActions.replace(ROUTES.KirimQr, { data }));
+                // Alert.alert("INFORMASI !", data);
             }
         }
     };
