@@ -12,3 +12,7 @@ web-build/
 
 # macOS
 .DS_Store
+
+# Native folders for Expo CNG
+/android
+/ios
