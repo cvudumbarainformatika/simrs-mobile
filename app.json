@@ -18,7 +18,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.xenter.rsudmsaleh"
     },
     "android": {
       "package": "com.xenter.rsudmsaleh",
@@ -28,7 +29,9 @@
         "foregroundImage": "./assets/icon/adaptive-icon-android.png",
         "backgroundColor": "#0D5A86"
       },
-      "permissions": []
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "androidStatusBar": {
       "translucent": true
