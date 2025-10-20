@@ -14,6 +14,7 @@ import CekLokasi from '../screens/absen/CekLokasi';
 // import store from '../redux/store'
 // import { Text } from 'react-native';
 import { AbsenProvider } from '../context/AbsenContext';
+import { SafeAreaView } from 'react-native-safe-area-context';
 // import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 // console.log('oooi')
@@ -26,6 +27,7 @@ const NavigationAbsen = () => {
       screenOptions={{
         presentation: 'modal',
         headerShown: false,
+        gestureEnabled: true,
         gestureDirection: 'horizontal',
         transitionSpec: {
           open: openSring,
@@ -52,8 +54,11 @@ const NavigationAbsen = () => {
 const AbsenNavigator = () => {
   console.log('absenNavigator')
   return (
+
     <AbsenProvider>
-      <NavigationAbsen />
+      <SafeAreaView style={{ flex: 1, backgroundColor: '#000' }}>
+        <NavigationAbsen />
+      </SafeAreaView>
     </AbsenProvider>
   )
 };

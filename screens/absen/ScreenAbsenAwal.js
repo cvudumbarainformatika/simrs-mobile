@@ -203,7 +203,7 @@ const ScreenAbsenAwal = ({ navigation }) => {
     }, [navigation, bukaAbsenMasuk, bukaAbsenPulang])
 
     return (
-        <SafeAreaView className="flex-1 justify-center items-center">
+        <View className="flex-1 justify-center items-center">
             <AppLoader visible={waiting} />
             <TouchableOpacity className="absolute top-10 right-4" onPress={() => navigation.navigate(ROUTES.HOME_TAB)}>
                 <Icon name="close" color="black" size={42} />
@@ -310,7 +310,7 @@ const ScreenAbsenAwal = ({ navigation }) => {
                 <Text className={`pt-1 text-negative font-poppins`}>Tidak Ada Jadwal</Text>
                 {/* <Text>{text}</Text> */}
             </View>)}
-        </SafeAreaView>
+        </View>
     )
 }
 

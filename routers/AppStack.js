@@ -54,7 +54,7 @@ const AppStack = () => {
             <>
               <Stack.Screen name={ROUTES.SET_JADWAL_AWAL} component={SetJadwalAwalScreen} options={TRANSITION_HORIZONTAL} initialParams={{ jadwals }} />
               <Stack.Screen name={ROUTES.PILIH_KATEGORI_JADWAL_AWAL} component={PilihKategoriJadwal} options={TRANSITION_HORIZONTAL} />
-              <Stack.Screen name={'BottomNavigator'} component={BottomTabNavigator} options={TRANSITION_HORIZONTAL} />
+              <Stack.Screen name={'gator'} component={BottomTabNavigator} options={TRANSITION_HORIZONTAL} />
               <Stack.Screen name={ROUTES.LOGOUT} component={Logout} options={TRANSITION_HORIZONTAL} />
               <Stack.Screen name={'login_2'} component={LoginScreen} options={TRANSITION_HORIZONTAL} />
             </>

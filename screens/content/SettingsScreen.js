@@ -3,7 +3,6 @@ import React, { useContext, useEffect, useState } from 'react'
 import { IMGS, ROUTES, tw } from '../../constants'
 import { AppBtn, BottomTwoBtn } from '../../components'
 import { AuthContext } from '../../context/AuthContext'
-import { PATH_IMG100 } from '../../config'
 import { ScrollView } from 'react-native-gesture-handler'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 // import { AuthContext } from '../../context/AuthContext'
@@ -34,7 +33,6 @@ const SettingsScreen = ({ navigation }) => {
       <Image 
           source={pegawai
                           ? pegawai.foto === '' || pegawai.foto === null
-                            // ? IMGS.avatarMale :{uri:`${PATH_IMG100}/${pegawai.nip}/${pegawai.foto}`}
                             ? IMGS.avatarMale :{uri:`${pegawai.foto_pegawai}`}
                             : IMGS.avatarMale}
           style={[tw`h-100 w-full bg-gray`, {resizeMode:'contain'}]}

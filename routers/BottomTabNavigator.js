@@ -1,33 +1,21 @@
-import { Easing, StyleSheet, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import { Easing, StyleSheet, TouchableOpacity, View } from 'react-native';
+import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { CardStyleInterpolators } from '@react-navigation/stack';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context'; // ⬅️ tambahkan ini
 
 import { ROUTES, tw } from '../constants';
-import { AbsenScreen, HistoryScreen, HomeScreen } from '../screens';
-import SettingsNavigator from './SettingsNavigator';
-import JadwalNavigator from './JadwalNavigator';
-import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import HomeNavigator from './HomeNavigator';
-import SetJadwalNavigator from './SetJadwalNavigator';
+import JadwalNavigator from './JadwalNavigator';
 import AbsenNavigator from './AbsenNavigator';
+import SettingsNavigator from './SettingsNavigator';
 import HistoryScreenV2 from '../screens/content/HistoryScreenV2';
-// import CustomBottomTabBar from '../components/CustomBottomTabBar';
 
-// CUSTOM TAB BAR =======================
+// CUSTOM TAB BUTTON
 const CustomTab = ({ children, onPress }) => (
-  <View
-    style={{
-      top: -15,
-      justifyContent: 'center',
-      alignItems: 'center'
-    }}
-  >
-    <TouchableOpacity
-      onPress={onPress}
-    >
+  <View style={{ top: -15, justifyContent: 'center', alignItems: 'center' }}>
+    <TouchableOpacity onPress={onPress}>
       <View style={tw`w-18 h-18 bg-dark rounded-full border-4 border-gray-light`}>
         {children}
       </View>
@@ -35,20 +23,12 @@ const CustomTab = ({ children, onPress }) => (
   </View>
 );
 
-const HiddenTab = ({ children }) => (
-
-  <View />
-)
-
-
 const BottomTabNavigator = () => {
-
   const Tab = createBottomTabNavigator();
+  const insets = useSafeAreaInsets(); // ✅ ambil safe area bawah
 
   const routes = (val) => {
-    const focusedRoute = getFocusedRouteNameFromRoute(val)
-    // console.log('focusedRoute', focusedRoute);
-    
+    const focusedRoute = getFocusedRouteNameFromRoute(val);
     const arr = [
       ROUTES.SET_JADWAL_AWAL,
       ROUTES.PILIH_KATEGORI_JADWAL_AWAL,
@@ -58,75 +38,78 @@ const BottomTabNavigator = () => {
       ROUTES.ABSEN_TAB,
       ROUTES.XENTER_NAV,
       ROUTES.UPLOAD_DOK_NAV
-    ]
-
-    let hideBottomTab = arr.some(obj => obj === focusedRoute)
-    return hideBottomTab
-  }
+    ];
+    return arr.includes(focusedRoute);
+  };
 
   return (
     <Tab.Navigator
-      screenOptions={({ route }) => {
-        // console.log('bot navigation :', route)
-        return {
-          headerShown: false,
-          tabBarActiveTintColor: tw.color('white'),
-          tabBarShowLabel: false,
-          tabBarInactiveTintColor: tw.color('gray'),
-          tabBarStyle: styles.tabBarStyle,
-          tabBarHideOnKeyboard: true,
-
-          tabBarIcon: ({ color, size, focused }) => {
-            let iconName;
-            if (route.name === ROUTES.HOME_TAB) {
-              iconName = focused ? "view-dashboard" : "view-dashboard-outline"
-            } else if (route.name === ROUTES.SETTINGS_TAB) {
-              iconName = focused ? "account-cog" : "account-cog-outline"
-            } else if (route.name === ROUTES.HISTORY_TAB) {
-              iconName = focused ? "clipboard-list" : "clipboard-list-outline"
-            } else if (route.name === ROUTES.JADWAL_TAB) {
-              iconName = focused ? "calendar-text" : "calendar-clock-outline"
-            }
-
-            return <Icon name={iconName} size={24} color={color} />
-          },
-          tabBarStyle: routes(route) ?
-            { display: "none" } : styles.tabBarStyle
-        };
-      }
-      }
+      screenOptions={({ route }) => ({
+        headerShown: false,
+        tabBarActiveTintColor: tw.color('white'),
+        tabBarInactiveTintColor: tw.color('gray'),
+        tabBarShowLabel: false,
+        tabBarHideOnKeyboard: true,
+        tabBarStyle: routes(route)
+          ? { display: 'none' }
+          : {
+              position: 'absolute',
+              height: 60 + insets.bottom, // ✅ tambahkan safe area bottom
+              backgroundColor: tw.color('primary'),
+              elevation: 0,
+              borderTopWidth: 0,
+              paddingBottom: insets.bottom, // ✅ isi padding agar tidak tertindas
+            },
+        tabBarIcon: ({ color, focused }) => {
+          let iconName;
+          switch (route.name) {
+            case ROUTES.HOME_TAB:
+              iconName = focused ? 'view-dashboard' : 'view-dashboard-outline';
+              break;
+            case ROUTES.SETTINGS_TAB:
+              iconName = focused ? 'account-cog' : 'account-cog-outline';
+              break;
+            case ROUTES.HISTORY_TAB:
+              iconName = focused ? 'clipboard-list' : 'clipboard-list-outline';
+              break;
+            case ROUTES.JADWAL_TAB:
+              iconName = focused ? 'calendar-text' : 'calendar-clock-outline';
+              break;
+            default:
+              iconName = 'circle';
+          }
+          return <Icon name={iconName} size={24} color={color} />;
+        },
+      })}
       initialRouteName={ROUTES.HOME_TAB}
     >
-
       <Tab.Screen name={ROUTES.HOME_TAB} component={HomeNavigator} />
-
       <Tab.Screen name={ROUTES.JADWAL_TAB} component={JadwalNavigator} />
-      <Tab.Screen name={ROUTES.ABSEN_TAB} component={AbsenNavigator}
+      <Tab.Screen
+        name={ROUTES.ABSEN_TAB}
+        component={AbsenNavigator}
         options={{
           tabBarIcon: ({ focused }) => (
-            <Icon name={'qrcode-scan'} size={32} color={`${focused ? tw.color('gray-light') : tw.color('gray')}`} />
+            <Icon
+              name={'qrcode-scan'}
+              size={32}
+              color={focused ? tw.color('gray-light') : tw.color('gray')}
+            />
           ),
           tabBarButton: (props) => <CustomTab {...props} />,
-          tabBarStyle: { display: "none" }
+          tabBarStyle: { display: 'none' },
         }}
       />
       <Tab.Screen name={ROUTES.HISTORY_TAB} component={HistoryScreenV2} />
-      <Tab.Screen name={ROUTES.SETTINGS_TAB} component={SettingsNavigator} options={{
-        tabBarStyle: { display: "none" }
-      }} />
+      <Tab.Screen
+        name={ROUTES.SETTINGS_TAB}
+        component={SettingsNavigator}
+        options={{
+          tabBarStyle: { display: 'none' },
+        }}
+      />
     </Tab.Navigator>
-  )
-}
+  );
+};
 
-export default BottomTabNavigator
-
-
-const styles = StyleSheet.create({
-  tabBarStyle: {
-    position: 'absolute',
-    height: 60,
-    backgroundColor: tw.color('primary'),
-    elevation: 0,
-    zIndex: 0
-  }
-})
+export default BottomTabNavigator;

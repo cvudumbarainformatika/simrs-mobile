@@ -103,12 +103,12 @@ export default function App() {
 
 
   return (
-    <AuthProvider>
-      <SafeAreaProvider>
-        <StatusBar translucent={true} backgroundColor="transparent" style="light" />
-        <AppNav />
-      </SafeAreaProvider>
-    </AuthProvider>
+    <SafeAreaProvider>
+      <AuthProvider>
+          <StatusBar translucent={true} backgroundColor="transparent" style="light" />
+          <AppNav />
+      </AuthProvider>
+    </SafeAreaProvider>
   );
 }
 

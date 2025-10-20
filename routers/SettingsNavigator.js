@@ -9,6 +9,7 @@ import { HomeScreen, SettingsScreen } from '../screens'
 import { ROUTES } from '../constants';
 import SettingsDetailScreen from '../screens/settings/SettingsDetailScreen';
 import Logout from '../screens/Logout';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 // TRANSITIONS =======================
 const config = {
@@ -46,18 +47,20 @@ const Stack = createStackNavigator();
 const SettingsNavigator = () => {
   // console.log(Stack)
   return (
-      <Stack.Navigator
-          screenOptions={{
-            gestureEnabled: true,
-            headerShown: false,
-            gestureDirection: 'horizontal',
-      }}
-      initialRouteName={ROUTES.LOGIN}
-      >
-      <Stack.Screen name={ROUTES.SETTINGS} component={SettingsScreen} options={transition} />
-      <Stack.Screen name={ROUTES.SETTINGS_DETAIL} component={SettingsDetailScreen} options={transition} />
-      <Stack.Screen name={ROUTES.LOGOUT} component={Logout} options={transition} />
-    </Stack.Navigator>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
+        <Stack.Navigator
+            screenOptions={{
+              gestureEnabled: true,
+              headerShown: false,
+              gestureDirection: 'horizontal',
+        }}
+        initialRouteName={ROUTES.LOGIN}
+        >
+        <Stack.Screen name={ROUTES.SETTINGS} component={SettingsScreen} options={transition} />
+        <Stack.Screen name={ROUTES.SETTINGS_DETAIL} component={SettingsDetailScreen} options={transition} />
+        <Stack.Screen name={ROUTES.LOGOUT} component={Logout} options={transition} />
+      </Stack.Navigator>
+    </SafeAreaView>
   )
 }
 export default SettingsNavigator

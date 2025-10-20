@@ -134,44 +134,46 @@ const ScreenAbsenV4 = ({ navigation }) => {
         // console.log('renderHeader...', libur)
 
         return (
-            <View className="px-3 pt-8 pb-2 bg-white">
-                <View className="flex-row items-center">
-                    <View className="flex-row items-center flex-1">
-                        <TouchableOpacity className="" onPress={() => handleScheduleAndBackToHome()}>
-                            <Icon name="close" color="black" size={28} />
-                        </TouchableOpacity>
-                        <Text className="font-poppinsBold ml-2">Status Absen</Text>
-                    </View>
+            <View className="flex-1 bg-white">
+                <View className="px-3 pt-8 pb-2 bg-white">
                     <View className="flex-row items-center">
-                        <TouchableOpacity className="" onPress={() => setInfo(true)}>
-                            <Icon name="information-variant" color="black" size={30} />
-                        </TouchableOpacity>
+                        <View className="flex-row items-center flex-1">
+                            <TouchableOpacity className="" onPress={() => handleScheduleAndBackToHome()}>
+                                <Icon name="close" color="black" size={28} />
+                            </TouchableOpacity>
+                            <Text className="font-poppinsBold ml-2">Status Absen</Text>
+                        </View>
+                        <View className="flex-row items-center">
+                            <TouchableOpacity className="" onPress={() => setInfo(true)}>
+                                <Icon name="information-variant" color="black" size={30} />
+                            </TouchableOpacity>
+                        </View>
                     </View>
+                    {!libur && (
+                        <View className="mt-2 mx-2">
+                            <View className="flex-row justify-between">
+                                <View>
+                                    <Text className="font-poppins text-xs text-gray">Mulai Absen Masuk</Text>
+                                    <Text className="font-poppins">{dayjs(mulaiWaktuMasuk).format("DD MMM YYYY , HH:mm")}</Text>
+                                </View>
+                                <View>
+                                    <Text className="font-poppins text-xs text-gray text-right">Mulai Absen Pulang</Text>
+                                    <Text className="font-poppins">{dayjs(mulaiWaktuPulang).format("DD MMM YYYY , HH:mm")}</Text>
+                                </View>
+                            </View>
+                            <View className="flex-row justify-between pt-2">
+                                <View>
+                                    <Text className="font-poppins text-xs text-primary">Jadwal Masuk</Text>
+                                    <Text className="font-poppins text-primary">{dayjs(mulaiWaktuMasuk).add(30, 'm').format("dddd , HH:mm")}</Text>
+                                </View>
+                                <View>
+                                    <Text className="font-poppins text-xs text-negative text-right">Jadwal Pulang</Text>
+                                    <Text className="font-poppins text-negative text-right">{dayjs(mulaiWaktuPulang).format("dddd, HH:mm")}</Text>
+                                </View>
+                            </View>
+                        </View>
+                    )}
                 </View>
-                {!libur && (
-                    <View className="mt-2 mx-2">
-                        <View className="flex-row justify-between">
-                            <View>
-                                <Text className="font-poppins text-xs text-gray">Mulai Absen Masuk</Text>
-                                <Text className="font-poppins">{dayjs(mulaiWaktuMasuk).format("DD MMM YYYY , HH:mm")}</Text>
-                            </View>
-                            <View>
-                                <Text className="font-poppins text-xs text-gray text-right">Mulai Absen Pulang</Text>
-                                <Text className="font-poppins">{dayjs(mulaiWaktuPulang).format("DD MMM YYYY , HH:mm")}</Text>
-                            </View>
-                        </View>
-                        <View className="flex-row justify-between pt-2">
-                            <View>
-                                <Text className="font-poppins text-xs text-primary">Jadwal Masuk</Text>
-                                <Text className="font-poppins text-primary">{dayjs(mulaiWaktuMasuk).add(30, 'm').format("dddd , HH:mm")}</Text>
-                            </View>
-                            <View>
-                                <Text className="font-poppins text-xs text-negative text-right">Jadwal Pulang</Text>
-                                <Text className="font-poppins text-negative text-right">{dayjs(mulaiWaktuPulang).format("dddd, HH:mm")}</Text>
-                            </View>
-                        </View>
-                    </View>
-                )}
             </View>
         )
     }
