@@ -1,6 +1,6 @@
 import { View, Text, TouchableOpacity, FlatList, Alert } from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { tw } from '../../constants'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useDispatch, useSelector } from 'react-redux'
@@ -88,13 +88,15 @@ const KategoriJadwalScreen = ({ navigation, route }) => {
     return ()=> clearInterval(interval)
   }, [])
 
+
+  const insets = useSafeAreaInsets();
   return (
 
     <View style={[{
       marginTop: 50,
       backgroundColor: tw.color('gray-light'),
       flex: 1,
-      overflow: 'hidden'
+      overflow: 'hidden',
     }, tw`rounded-t-4`]}>
 
       <AppLoader visible={loading} />
@@ -140,7 +142,18 @@ const KategoriJadwalScreen = ({ navigation, route }) => {
         })}
         <View style={{ paddingBottom: 300 }} />
       </ScrollView>
-      <View style={tw`absolute h-30 w-full bottom-0 bg-white`}>
+      <View 
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          width: '100%',
+          height: '22%',
+          backgroundColor: '#f3f4f6',
+          borderTopLeftRadius: 16,
+          borderTopRightRadius: 16,
+          paddingBottom: insets.bottom, // agar tidak ketutup gesture bar
+        }}
+      >
         <View style={tw`flex-row justify-between`}>
           <TouchableOpacity style={tw`bg-negative h-full w-1/2 justify-center items-center`}
             onPress={() => {

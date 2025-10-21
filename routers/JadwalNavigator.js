@@ -29,6 +29,7 @@ const JadwalNavigator = () => {
             presentation: 'transparentModal',
             cardStyle: {
               backgroundColor: 'transparent',
+              marginBottom: 0, // pastikan tidak ada jarak
             },
             transitionSpec: {
               open: openSring,

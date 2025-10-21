@@ -8,10 +8,10 @@ import { tw } from '../../constants'
 
 import dayjs from 'dayjs'
 import 'dayjs/locale/id'
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 
 
 function HistoryScreenV2({ navigation }) {
-
 
 
     const [isModal, setIsModal] = useState(false)
@@ -196,9 +196,13 @@ function HistoryScreenV2({ navigation }) {
 
 
     const ModalDetailAbsensi=({isModal, data})=> {
+    const insets = useSafeAreaInsets();
         return (
           <Modal animationType="slide" transparent={true} visible={isModal}>
-            <View className="h-3/4 w-full bg-gray-100 absolute bottom-0 rounded-t-lg overflow-hidden">
+           
+            <View className="h-3/4 w-full bg-gray-100 absolute bottom-0 rounded-t-lg overflow-hidden"
+              style={{paddingBottom: insets.bottom}}
+            >
               <View className="flex-1">
                   <View className="border-gray-light border-b-2">
                       <View className="flex-row items-center p-3">
