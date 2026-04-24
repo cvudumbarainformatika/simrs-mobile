@@ -15,4 +15,5 @@ export default {
   avatarWoman: require('../assets/avatar/Woman.jpg'),
   avatarYoungGirl: require('../assets/avatar/YoungGirl.jpg'),
   avatarGrandma: require('../assets/avatar/Grandma.jpg'),
+  splash: require('../assets/splash-screen.png'),
 };

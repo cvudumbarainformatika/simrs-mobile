@@ -1,50 +1,39 @@
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, Dimensions, Image, ImageBackground } from 'react-native'
 import React from 'react'
 import * as Animatable from 'react-native-animatable'
 import * as Progress from 'react-native-progress'
 import { LinearGradient } from 'expo-linear-gradient'
 import { IMGS, tw } from '../../constants'
 
+const { width, height } = Dimensions.get('screen');
+
 const AppLoaderAnim = ({ visible = false }) => {
     return (
-      // visible && (
-    <View style={[styles.container]}>
-      <LinearGradient 
-          className="flex-1 justify-center items-center"
-          colors={[tw.color('secondary'), tw.color('primary')]}
-          start={{ x: 1, y: 0 }}
-          end={{x:1,y:0.9}}
+    <View style={styles.container}>
+      <ImageBackground 
+          source={IMGS.splash}
+          style={styles.background}
+          resizeMode="cover"
       >
-      {/* <Animatable.Image
-        source={IMGS.loadingAnim}
-        animation="fadeIn"
-        className="h-40 w-20"
-        iterationCount={1}
-      /> */}
-      <Animatable.Image
-        source={IMGS.logo}
-        animation="fadeIn"
-        className="h-24 w-24"
-        iterationCount={1}
-      />
-      <Animatable.Text
-        animation="fadeIn"
-        iterateCount={1}
-        className="text-4xl mt-10 text-white text-center font-rubikMaze"
-      >
-        XENTER
-      </Animatable.Text>
-      <Animatable.Text
-        animation="fadeIn"
-        iterateCount={1}
-        className="text-lg mb-10 text-white text-center font-poppinsBold"
-      >
-        UOBK RSUD MOH SALEH
-      </Animatable.Text>
-        <Progress.Circle size={60} indeterminate={true} color={'white'} />
-      </LinearGradient>
+        <LinearGradient 
+            style={styles.overlay}
+            colors={['rgba(15, 23, 42, 0.7)', 'rgba(15, 23, 42, 0.9)']} // Subtle dark overlay
+        >
+            <Animatable.View 
+                animation="pulse" 
+                iterationCount="infinite"
+                style={styles.loaderContainer}
+            >
+                <Progress.Circle 
+                    size={50} 
+                    indeterminate={true} 
+                    color={'#fbbf24'} 
+                    borderWidth={4}
+                />
+            </Animatable.View>
+        </LinearGradient>
+      </ImageBackground>
     </View>
-  // )
   )
 }
 
@@ -52,13 +41,22 @@ export default AppLoaderAnim
 
 const styles = StyleSheet.create({
   container: {
-        flex: 1,
-        position: "absolute",
-        top: 0,
-        bottom: 0,
-        left: 0,
-        right:0,
-        zIndex: 10,
-        justifyContent:'center'
+        width: width,
+        height: height,
+        backgroundColor: '#0f172a',
     },
+    background: {
+        width: '100%',
+        height: '100%',
+    },
+    overlay: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    loaderContainer: {
+        position: 'absolute',
+        bottom: 100,
+        alignItems: 'center',
+    }
   });

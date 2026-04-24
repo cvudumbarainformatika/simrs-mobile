@@ -90,11 +90,15 @@ const SetJadwalAwalScreen = ({ navigation }) => {
             style={tw.style('w-48 h-64')}
             source={IMGS.madSalehMinum}
           /> 
-          <View style={tw`absolute bottom-4 right-4 left-4 flex-row justify-between`}>
-            <AppBtn label="Logout" color="negative" clicked={()=> RootNavigation.navigate(ROUTES.LOGOUT, { tokenExpiry: true })} />
-            <AppBtn label="Lanjutkan" color="dark" clicked={() => {
-                navigation.navigate(ROUTES.PILIH_KATEGORI_JADWAL_AWAL, {newKategories})
-              }} />
+          <View className="absolute bottom-0 left-0 right-0 flex-row w-full pb-12">
+            <View className="flex-1">
+                <AppBtn label="Logout" color="negative" clicked={()=> RootNavigation.navigate(ROUTES.LOGOUT, { tokenExpiry: true })} rounded={false} fullwidth={true} />
+            </View>
+            <View className="flex-1">
+                <AppBtn label="Lanjutkan" color="dark" clicked={() => {
+                    navigation.navigate(ROUTES.PILIH_KATEGORI_JADWAL_AWAL, {newKategories})
+                  }} rounded={false} fullwidth={true} />
+            </View>
           </View>
 
       </LinearGradient>

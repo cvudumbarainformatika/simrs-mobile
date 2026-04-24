@@ -92,8 +92,8 @@ android {
         applicationId 'com.xenter.rsudmsaleh'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 28
-        versionName "2.3.5"
+        versionCode 31
+        versionName "2.4.0"
 
         buildConfigField "String", "REACT_NATIVE_RELEASE_LEVEL", "\"${findProperty('reactNativeReleaseLevel') ?: 'stable'}\""
     }

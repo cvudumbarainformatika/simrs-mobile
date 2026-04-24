@@ -9,7 +9,7 @@
     "splash": {
       "image": "./assets/splash-screen.png",
       "resizeMode": "cover",
-      "backgroundColor": "#0D5A86"
+      "backgroundColor": "#0f172a"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -27,7 +27,7 @@
       "softwareKeyboardLayoutMode": "pan",
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon/adaptive-icon-android.png",
-        "backgroundColor": "#0D5A86"
+        "backgroundColor": "#0f172a"
       },
       "permissions": [
         "android.permission.RECORD_AUDIO"
@@ -41,7 +41,7 @@
         "expo-notifications",
         {
           "icon": "./assets/icon/icon.png",
-          "color": "#0D5A86",
+          "color": "#0f172a",
           "sounds": []
         }
       ],
