@@ -2,14 +2,14 @@
   "expo": {
     "name": "Xenter Rsud MSaleh",
     "slug": "XenterRsudMSaleh",
-    "version": "2.4.1",
+    "version": "2.4.2",
     "orientation": "default",
     "icon": "./assets/icon/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash-screen.png",
       "resizeMode": "cover",
-      "backgroundColor": "#0f172a"
+      "backgroundColor": "#0D5A86"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -23,11 +23,11 @@
     },
     "android": {
       "package": "com.xenter.rsudmsaleh",
-      "versionCode": 32,
+      "versionCode": 33,
       "softwareKeyboardLayoutMode": "pan",
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon/adaptive-icon-android.png",
-        "backgroundColor": "#0f172a"
+        "backgroundColor": "#0D5A86"
       },
       "permissions": [
         "android.permission.RECORD_AUDIO"
@@ -41,7 +41,7 @@
         "expo-notifications",
         {
           "icon": "./assets/icon/icon.png",
-          "color": "#0f172a",
+          "color": "#0D5A86",
           "sounds": []
         }
       ],
